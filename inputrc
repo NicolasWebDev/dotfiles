@@ -1,0 +1,11 @@
+set editing-mode vi
+set show-mode-in-prompt on
+set keymap vi-command
+"c":    backward-char
+"r":    forward-char
+"t":    next-history
+"s":    previous-history
+"h":    vi-change-to
+"j":    vi-char-search
+"l":    vi-change-char
+"k":    vi-subst

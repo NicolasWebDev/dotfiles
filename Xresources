@@ -1,0 +1,100 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!             URXVT CONFIGURATION             !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+urxvt*foreground: #f2f2f2
+urxvt*background: #222222
+urxvt*font:     xft:Deja Vu Sans Mono:bold:pixelsize=16:antialias=true:hinting=true
+urxvt*letterSpace: -1
+urxvt*scrollColor: #5E5E5E
+urxvt*troughColor: #222222
+urxvt*iconFile: /home/sathors/Pictures/icons/terminal-icon-512x512.png
+urxvt*visualBell: True
+urxvt*scrollstyle: plain
+
+! Normal
+! color0    black
+! color1    red
+! color2    green
+! color3    yellow
+! color4    blue
+! color5    purple
+! color6    cyan
+! color7    white
+
+urxvt*color0:    #6c6c6c
+urxvt*color1:    #e9897c
+urxvt*color2:    #b6e77d
+urxvt*color3:    #ecebbe
+urxvt*color4:    #a9cdeb
+urxvt*color5:    #ea96eb
+urxvt*color6:    #c9caec
+urxvt*color7:    #f2f2f2
+
+! Light
+! color8    black
+! color9    red
+! color10    green
+! color11    yellow
+! color12    blue
+! color13    purple
+! color14    cyan
+! color15    white
+
+urxvt*color8:    #747474
+urxvt*color9:    #f99286
+urxvt*color10:    #c3f786
+urxvt*color11:    #fcfbcc
+urxvt*color12:    #b6defb
+urxvt*color13:    #fba1fb
+urxvt*color14:    #d7d9fc
+urxvt*color15:    #e2e2e2
+
+! Normal
+! ! color0    black
+! ! color1    red
+! ! color2    green
+! ! color3    yellow
+! ! color4    blue
+! ! color5    purple
+! ! color6    cyan
+! ! color7    white
+!
+! urxvt*color0:    #6c6c6c
+! urxvt*color1:    #e9897c
+! urxvt*color2:    #b6e77d
+! urxvt*color3:    #ecebbe
+! urxvt*color4:    #a9cdeb
+! urxvt*color5:    #ea96eb
+! urxvt*color6:    #c9caec
+! urxvt*color7:    #f2f2f2
+!
+! ! Light
+! ! color8    black
+! ! color9    red
+! ! color10    green
+! ! color11    yellow
+! ! color12    blue
+! ! color13    purple
+! ! color14    cyan
+! ! color15    white
+!
+! urxvt*color8:    #747474
+! urxvt*color9:    #f99286
+! urxvt*color10:    #c3f786
+! urxvt*color11:    #fcfbcc
+! urxvt*color12:    #b6defb
+! urxvt*color13:    #fba1fb
+! urxvt*color14:    #d7d9fc
+! urxvt*color15:    #e2e2e2
+
+! Xcursor --------------------------------------------------------------------
+Xcursor.theme: Oxygen_Blue
+Xcursor.size:  22
+
+! Xft settings ---------------------------------------------------------------
+Xft.dpi:        96
+Xft.antialias:  true
+Xft.rgba:       rgb
+Xft.hinting:    true
+Xft.hintstyle:  hintslight!

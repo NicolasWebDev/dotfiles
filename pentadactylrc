@@ -1,0 +1,52 @@
+"1.0b6.1 (created: 2011/03/09 09:25:18)
+
+loadplugins '\.(js|penta)$'
+group user
+set guioptions=bCrs
+set showtabline=always
+"colorscheme desert
+colorscheme kolor
+
+" vim: set ft=pentadactyl:
+
+
+" AJOUTS PERSOS
+
+" mettre le bip en visuel au lieu d'avoir celui systeme
+set visualbell
+
+" telecharger un comic sur ebook3000.com
+map -builtin co1 90000<A-m>s/longfiles<CR><CR><A-m>|40000<A-m>sfDo<A-m>|gt
+map -builtin co2 90000<A-m>s/longfiles<CR><CR><A-m>|40000<A-m>sfDo<A-m>|gt90000<A-m>s/longfiles<CR><CR><A-m>|40000<A-m>sfDo<A-m>|gt
+
+" [HJKL] -> {CTSR}
+" ————————————————
+" {cr} = « gauche / droite »
+map -builtin c h
+map -builtin r l
+" {ts} = « haut / bas »
+map -builtin t j
+map -builtin s k
+" {CR} = « haut / bas de l'écran »
+map -builtin C H
+map -builtin R L
+
+"T et S pour descendre/monter d'une demi page
+map -builtin T <C-d>
+map -builtin S <C-u>
+
+
+" {HJKL} <- [CTSR]
+" ————————————————
+" j ouverture dans nouvel onglet
+map -builtin j t
+map -builtin J T
+"utilité ?
+map -builtin l r
+map -builtin L R
+" h = reload
+map -builtin h c
+map -builtin H C
+" C-k = gh (go home)
+map -builtin k s
+map -builtin K S
