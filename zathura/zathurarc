@@ -1,0 +1,8 @@
+map t scroll down
+map s scroll up
+map r navigate next
+map c navigate previous
+
+map + zoom in
+map - zoom out
+map = zoom 0.0
