@@ -19,6 +19,9 @@ set visualbell
 map -builtin co1 90000<A-m>s/longfiles<CR><CR><A-m>|40000<A-m>sfDo<A-m>|gt
 map -builtin co2 90000<A-m>s/longfiles<CR><CR><A-m>|40000<A-m>sfDo<A-m>|gt90000<A-m>s/longfiles<CR><CR><A-m>|40000<A-m>sfDo<A-m>|gt
 
+map <F1> bInstalled<CR>fInstalled<CR>1000<A-m>s<ESC>/Asset feature<CR>1000<A-m>sT1000<A-m>sfAsset<CR>
+map <F2> gg1000<A-m>sfUpgrade2
+
 " [HJKL] -> {CTSR}
 " ————————————————
 " {cr} = « gauche / droite »

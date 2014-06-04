@@ -9,6 +9,12 @@ then
     echo "Je suis sur le Dell Inspiron"
     # hook for finding package providing unknown command
     source /usr/share/doc/pkgfile/command-not-found.bash
+    eval `dircolors -b /usr/share/LS_COLORS`
+    # function to print packages by size
+    pacman-size()
+    {
+        pacman -Qi | awk '/^Name/ {pkg=$3} /Size/ {print $4$5,pkg}' | sort -n
+    }
     #------------------------- PROMPT ---------------------------------
     PS1="${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
     #---------------------------- PATH ------------------------------
@@ -40,16 +46,31 @@ then
     alias mntNexus7='simple-mtpfs /media/Nexus7'
     alias umntNexus7='fusermount -u /media/Nexus7'
 
-    # function to print packages by size
-    pacman-size()
-    {
-        pacman -Qi | awk '/^Name/ {pkg=$3} /Size/ {print $4$5,pkg}' | sort -n
-    }
 
 
-    else
-        echo "Je suis sur un ordi inconnu"
-    fi
+elif [[ `uname -n` == "nicolas-protelcotelsa" ]]
+then
+    echo "Je suis sur l'ordi de ProtelCotelsa"
+    PATH="${PATH}:/opt/openoffice4/program"
+    #------------------------- PROMPT ---------------------------------
+    PS1="${debian_chroot:+($debian_chroot)}\[\033[01;35m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
+    #---------------------------- PATH ------------------------------
+    #------------------------- ALIASES --------------------------------
+    alias backup_olympo_src='[[ -d olympo_src ]] && tar zvcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src || echo "Error, olympo_src doesn'"'"'t exist"'
+    alias update='[[ "${PWD##*/}" = olympo_src ]] && { bzr revert oly_academic/report/__init__.py ; echo "removing patches...done" ; cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
+    alias apply_patches='[[ "${PWD##*/}" = olympo_src ]] && { /bin/cp oly_academic/report/__init__.py.hack oly_academic/report/__init__.py && echo "applying patches...done" ; } || echo "Error : we'"'"'re not in olympo_src"'
+    alias apt='sudo /usr/bin/apt-get install'
+    alias aptu='sudo /usr/bin/apt-get update ; sudo /usr/bin/apt-get upgrade'
+    alias aptr='sudo /usr/bin/apt-get purge'
+    alias apts='/usr/bin/apt-cache search'
+    alias apti='/usr/bin/apt-cache show'
+    alias aptq='/usr/bin/dpkg --get-selections'
+    alias bzrl='/usr/bin/bzr log --forward'
+    export bzr_repo='bzr+ssh://olympoerp@68.169.60.154/home/olympoerp/olympo_src/'
+    export PYTHON_PATH='/opt/openoffice4/program/'
+else
+    echo "Je suis sur un ordi inconnu"
+fi
 
 #------------------------ OTHER ------------------------------------
 # That line is used to enable auto-completion after sudo command.
@@ -60,10 +81,17 @@ export MOZ_DISABLE_PANGO=1
 #export MANPAGER="/usr/bin/vimmanpager"
 export EDITOR=vim
 
+# X Terminal titles
+case "$TERM" in
+    xterm*|rxvt*)
+    PROMPT_COMMAND='echo -ne "\033]0;${PWD##*/}\007"'
+    ;;
+*)
+    ;;
+esac
 #---------------------------- PATH ------------------------------
 
 #------------------------- ALIASES --------------------------------
-eval `dircolors -b /usr/share/LS_COLORS`
 alias be='setxkbmap fr bepo ; echo "keyboard switched to bepo"'
 alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 #alias less=$PAGER
@@ -76,6 +104,7 @@ alias reboot='systemctl reboot'
 alias rsync-backup='rsync -av --progress --delete --stats'
 alias svim='sudo /usr/bin/vim'
 alias mount='mount | column -t'
+alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m - \2|g'"
 
 # to remove beeping in the terminal
 set bell-style none
@@ -85,7 +114,6 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -I'
 alias ln='ln -i'
-alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m - \2|g'"
 
 # prepend TERM=linux ensures that there is no problem connecting via ssh on a
 # machine which doesn't use urxvt as I do

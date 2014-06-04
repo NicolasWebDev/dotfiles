@@ -114,21 +114,25 @@ if has("gui_running")
 	set guioptions-=T
 	colorscheme slate
     set guifont=Monospace\ 10  " use this font
+    " highlight cursor line (must come after colorscheme command to take effect)
+    set cursorline
+    highlight CursorLine guibg=#001000
 endif
 
+" change default color scheme
+colorscheme desert
 
-
-" highlight cursor line
+" highlight cursor line (must come after colorscheme command to take effect)
 set cursorline
-highlight CursorLine guibg=#001000
+"highlight CursorLine ctermbg=darkred
+
+" change the color of the search occurences
+"hi Search cterm=NONE ctermbg=136 ctermfg=blue
 
 " add line number
 set number
 
 set nocompatible        " Utilise les défauts Vim (bien mieux !)
-
-" change default color scheme
-colorscheme desert
 
 " show the line and column number of the cursor position, separated by a
 " comma
@@ -150,37 +154,6 @@ set expandtab
 
 set title           " show title in console title bar
 
-" commande pour mettre un header automatique aux fichiers pascal
-"autocmd bufnewfile *.pas source ~/.header_pascal.txt
-"autocmd bufnewfile *.pas exe "1," . 10 . "g/Program Name :.*/s//Program Name : " .expand("%")
-"autocmd bufnewfile *.pas exe "1," . 10 . "g/Creation Date :.*/s//Creation Date : " .strftime("%d-%m-%Y")
-"autocmd Bufwritepre,filewritepre *.pas execute "normal ma"
-"autocmd Bufwritepre,filewritepre *.pas exe "1," . 10 . "g/Last Modified :.*/s/Last Modified :.*/Last Modified : " .strftime("%c")
-"autocmd bufwritepost,filewritepost *.pas execute "normal `a"
-
-" commande pour mettre un header automatique aux fichiers script shell
-"autocmd bufnewfile *.sh so ~/.header_shell.txt
-"autocmd bufnewfile *.sh exe "1," . 10 . "g/Script Name :.*/s//Script Name : " .expand("%")
-"autocmd bufnewfile *.sh exe "1," . 10 . "g/Creation Date :.*/s//Creation Date : " .strftime("%d-%m-%Y")
-"autocmd Bufwritepre,filewritepre *.sh execute "normal ma"
-"autocmd Bufwritepre,filewritepre *.sh exe "1," . 10 . "g/Last Modified :.*/s/Last Modified :.*/Last Modified : " .strftime("%c")
-"autocmd bufwritepost,filewritepost *.sh execute "normal `a"
-
-" commande pour mettre un header automatique aux fichiers c
-"autocmd bufnewfile *.c so ~/.header_c.txt
-"autocmd bufnewfile *.c exe "1," . 10 . "g/Script Name :.*/s//Script Name : " .expand("%")
-"autocmd bufnewfile *.c exe "1," . 10 . "g/Creation Date :.*/s//Creation Date : " .strftime("%d-%m-%Y")
-"autocmd Bufwritepre,filewritepre *.c execute "normal ma"
-"autocmd Bufwritepre,filewritepre *.c exe "1," . 10 . "g/Last Modified :.*/s/Last Modified :.*/Last Modified : " .strftime("%c")
-"autocmd bufwritepost,filewritepost *.c execute "normal `a"
-
-" commande pour mettre un header automatique aux fichiers h
-"autocmd bufnewfile *.h so ~/.header_c.txt
-"autocmd bufnewfile *.h exe "1," . 10 . "g/Script Name :.*/s//Script Name : " .expand("%")
-"autocmd bufnewfile *.h exe "1," . 10 . "g/Creation Date :.*/s//Creation Date : " .strftime("%d-%m-%Y")
-"autocmd Bufwritepre,filewritepre *.h execute "normal ma"
-"autocmd Bufwritepre,filewritepre *.h exe "1," . 10 . "g/Last Modified :.*/s/Last Modified :.*/Last Modified : " .strftime("%c")
-"autocmd bufwritepost,filewritepost *.h execute "normal `a"
 
 " commande pour mettre les .html en UTF-8
 autocmd bufnewfile,filewritepre *.html set fileencoding=utf-8
