@@ -48,7 +48,7 @@ then
 
 
 
-elif [[ `uname -n` == "nicolas-protelcotelsa" ]]
+elif [[ `uname -n` == "nicolas-envydv7" ]]
 then
     echo "Je suis sur l'ordi de ProtelCotelsa"
     PATH="${PATH}:/opt/openoffice4/program"
@@ -57,7 +57,10 @@ then
     #---------------------------- PATH ------------------------------
     #------------------------- ALIASES --------------------------------
     alias backup_olympo_src='[[ -d olympo_src ]] && tar zvcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src || echo "Error, olympo_src doesn'"'"'t exist"'
-    alias update='[[ "${PWD##*/}" = olympo_src ]] && { bzr revert oly_academic/report/__init__.py ; echo "removing patches...done" ; cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
+    #alias update='[[ "${PWD##*/}" = olympo_src ]] && { bzr revert oly_academic/report/__init__.py ; echo "removing patches...done" ; cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
+    #alias update='[[ "${PWD##*/}" = olympo_src ]] && { cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
+    alias backup_olympo='[[ "${PWD##*/}" = olympo_src ]] && { cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; } || echo "Error : we'"'"'re not in olympo_src"'
+    alias listening_oo='soffice --nologo --nofirststartwizard --headless --norestore --invisible "--accept=socket,host=localhost,port=8100,tcpNoDelay=1;urp;" &'
     alias apply_patches='[[ "${PWD##*/}" = olympo_src ]] && { /bin/cp oly_academic/report/__init__.py.hack oly_academic/report/__init__.py && echo "applying patches...done" ; } || echo "Error : we'"'"'re not in olympo_src"'
     alias apt='sudo /usr/bin/apt-get install'
     alias aptu='sudo /usr/bin/apt-get update ; sudo /usr/bin/apt-get upgrade'
