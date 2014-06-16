@@ -1,2 +1,5 @@
 source /home/nicolas/.vimrc_bepo
 set hlsearch
+set expandtab
+set shiftwidth=4
+set tabstop=4
