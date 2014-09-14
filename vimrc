@@ -124,7 +124,6 @@ colorscheme desert
 
 " highlight cursor line (must come after colorscheme command to take effect)
 set cursorline
-"highlight CursorLine ctermbg=darkred
 
 " change the color of the search occurences
 "hi Search cterm=NONE ctermbg=136 ctermfg=blue

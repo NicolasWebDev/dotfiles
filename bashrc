@@ -51,11 +51,22 @@ then
 elif [[ `uname -n` == "nicolas-envydv7" ]]
 then
     echo "Je suis sur l'ordi de ProtelCotelsa"
-    PATH="${PATH}:/opt/openoffice4/program"
+    export PATH="${PATH}:/opt/openoffice4/program"
     export PYTHON_PATH='/opt/openoffice4/program/'
-    export bzr_repo='bzr+ssh://olympoerp@68.169.60.154/home/olympoerp/olympo_src/'
+    export bzr_repo='bzr+ssh://protel@192.168.2.226/home/protel/olympo_src/'
+    export openerp6ip='192.168.2.77'
+    export RTW='/home/nicolas/openerp/olympo_src/oly_academic_rating/wizard/'
+    export ac='oly_academic'
+    export acra='oly_academic_rating'
+    export aca='oly_academic_assistance'
+    export acb='academic_behavior'
+    export acm='academic_medic'
+    export acro='oly_academic_route'
+    export acs='oly_academic_sale'
     function kill-openerp() { kill -s SIGKILL $(ps aux | grep openerp | grep python | awk '{print $2}'); }
-    function apts() { apt-cache search $1 | grep $1 ; }
+    function kill-eclipse() { kill -s SIGKILL $(ps aux | grep eclipse | awk '{print $2}'); }
+    function kill-listening_oo() { kill -s SIGKILL $(ps aux | grep soffice | head -n -1 | awk '{print $2}'); }
+    function apts() { apt-cache search $1 | sort | grep $1 ; }
     function disable_tp() { xinput set-prop $(xinput | grep TouchPad | cut -d'=' -f2 | cut -f1) "Device Enabled" 0 ; }
     function enable_tp() { xinput set-prop $(xinput | grep TouchPad | cut -d'=' -f2 | cut -f1) "Device Enabled" 1 ; }
     #------------------------- PROMPT ---------------------------------
@@ -64,17 +75,19 @@ then
     #------------------------- ALIASES --------------------------------
     #alias update='[[ "${PWD##*/}" = olympo_src ]] && { bzr revert oly_academic/report/__init__.py ; echo "removing patches...done" ; cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
     #alias update='[[ "${PWD##*/}" = olympo_src ]] && { cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
+    alias sxw2rml='python /home/nicolas/openerp/openerp/addons/base_report_designer/openerp_sxw2rml/openerp_sxw2rml.py'
     alias backup_olympo='[[ "${PWD##*/}" = olympo_src ]] && { cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; } || echo "Error : we'"'"'re not in olympo_src"'
     alias listening_oo='soffice --nologo --nofirststartwizard --headless --norestore --invisible "--accept=socket,host=localhost,port=8100,tcpNoDelay=1;urp;" &'
     alias apply_patches='[[ "${PWD##*/}" = olympo_src ]] && { /bin/cp oly_academic/report/__init__.py.hack oly_academic/report/__init__.py && echo "applying patches...done" ; } || echo "Error : we'"'"'re not in olympo_src"'
     alias branch_remote='bzr branch bzr+ssh://olympoerp@68.169.60.154/home/olympoerp/olympo_src/'
-    alias apt='sudo /usr/bin/apt-get install'
-    alias aptu='sudo /usr/bin/apt-get update ; sudo /usr/bin/apt-get upgrade'
-    alias aptr='sudo /usr/bin/apt-get purge'
+    alias apt='sudo /usr/sbin/apt-fast install'
+    alias aptu='sudo /usr/sbin/apt-fast update ; sudo /usr/sbin/apt-fast upgrade'
+    alias aptr='sudo /usr/sbin/apt-fast purge'
     alias apti='/usr/bin/apt-cache show'
     alias aptq='/usr/bin/dpkg --get-selections'
     alias bzrl='/usr/bin/bzr log --forward'
     alias adt='~/android/eclipse/eclipse'
+    alias pygrep='/bin/grep --color=auto --include="*.py"'
 else
     echo "Je suis sur un ordi inconnu"
 fi
@@ -87,6 +100,8 @@ export MOZ_DISABLE_PANGO=1
 #export PAGER=vimpager
 #export MANPAGER="/usr/bin/vimmanpager"
 export EDITOR=vim
+export BROWSER=firefox
+export HISTSIZE=5000
 
 # X Terminal titles
 case "$TERM" in
@@ -112,6 +127,8 @@ alias rsync-backup='rsync -av --progress --delete --stats'
 alias svim='sudo /usr/bin/vim'
 alias mount='mount | column -t'
 alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m - \2|g'"
+alias grep="grep --color=auto"
+alias egrep="egrep --color=auto"
 
 # to remove beeping in the terminal
 set bell-style none
@@ -164,3 +181,5 @@ export LESS_TERMCAP_us=$(printf '\e[04;38;5;200m') # enter underline mode
 #export LESS_TERMCAP_us=$(printf '\e[04;36m') # enter underline mode - cyan
 
 #-------------------------------------------------------------------
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
