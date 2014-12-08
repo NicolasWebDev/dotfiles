@@ -35,9 +35,9 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 " Uncomment the following to have Vim load indentation rules according to the
 " detected filetype. Per default Debian Vim only load filetype specific
 " plugins.
-"if has("autocmd")
-"  filetype indent on
-"endif
+if has("autocmd")
+    filetype plugin indent on
+endif
 
 " Source a global configuration file if available
 " XXX Deprecated, please move your changes here in /etc/vim/vimrc
@@ -60,20 +60,23 @@ if has("multi_byte")
 "  set fileencodings=ucs-bom,utf-8,latin1
 endif
 
+" disable code folding by default
+set nofoldenable
+
 " line needed to use vim as pager to read the man-pages
 let $PAGER=''
 
 " enable syntax highlightning
 syntax on
 
+" number of commands saved in the history
+set history=1000
+
 " ignore case in searches
 set ignorecase
 " without case when search pattern contains only lowercase. works only when
 " ignorecase is set
 set smartcase
-
-" disable folding by default
-set nofoldenable
 
 " Montrer les commandes en cours dans la ligne de statut
 set showcmd
@@ -98,14 +101,11 @@ set hlsearch
 " ou :make
 set autowrite
 
-" afficher le numero des lignes
-set nu
-
 " Toggle line numbers and fold column for easy copying:
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 
 " text indenting
-set autoindent
+" set autoindent
 " pour indenter automatiquement en C
 " set smartindent
 
@@ -120,7 +120,7 @@ if has("gui_running")
 endif
 
 " change default color scheme
-colorscheme desert
+colorscheme perso
 
 " highlight cursor line (must come after colorscheme command to take effect)
 set cursorline
@@ -153,15 +153,12 @@ set expandtab
 
 set title           " show title in console title bar
 
-
 " commande pour mettre les .html en UTF-8
 autocmd bufnewfile,filewritepre *.html set fileencoding=utf-8
 autocmd bufnewfile,filewritepre *.html set bomb
 " commandes pour le html
 autocmd BufRead *.html map <F3> :!firefox % >/dev/null 2>&1 &<CR><CR>
 autocmd BufNewFile *.html read ~/.vim/skeletons/html.txt | exe "normal ggdd/<title>/e+1\<CR>" | startinsert
-
-set autowrite		" Automatically save before commands like :next and :make
 
 set hidden             " Hide buffers when they are abandoned
 
@@ -172,14 +169,6 @@ set mouse=a		" Enable mouse usage (all modes) in terminals
 " script from this url : http://vim.wikia.com/wiki/Wrap_a_visual_selection_in_an_HTML_tag
 " enables to wrap the visual selection with arbitrary tag
 "au Filetype html,xml source Data/settings/scripts/wrapwithtag.vim
-
-" asked by the plugin vim-latexsuite
-filetype plugin indent on
-set grepprg=grep\ -nH\ $*
-let g:tex_flavor = "latex"
-let g:Tex_DefaultTargetFormat = "pdf"
-
-"set runtimepath=~/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,~/.vim/ter
 
 "set diffexpr=MyDiff()
 "function! MyDiff()
@@ -208,16 +197,29 @@ let g:Tex_DefaultTargetFormat = "pdf"
 
 " @@@@@@@@@@ REGLAGES SPECIALS PYTHON @@@@@@@@@@@@@@@@@@@@@@@@@@
 
-" sert a activer le filetype plugin et le script d'indentation python a chaque
-" démarrage
-filetype plugin indent on
-
 " sert a activer les options relatives aux python si le fichier est reconnu
 " comme tel
-autocmd filetype python
+"autocmd filetype python
 
+"###################################
+" TAGLIST
+"###################################
+set updatetime=1000
 
-" sert a utiliser un script python qui améliore la syntaxe
-autocmd FileType python set complete+=k~/.vim/syntax/python.vim isk+=.,(
-
-
+"###################################
+" AIRLINE
+"###################################
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+let g:Powerline_symbols = 'fancy'
+set laststatus=2 " Always display the statusline in all windows
+set showtabline=2 " Always display the tabline, even if there is only one tab
+set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
+" vim-powerline symbols
+let g:airline_left_sep          = '⮀'
+let g:airline_left_alt_sep      = '⮁'
+let g:airline_right_sep         = '⮂'
+let g:airline_right_alt_sep     = '⮃'
+let g:airline_branch_prefix     = '⭠'
+let g:airline_readonly_symbol   = '⭤'
+let g:airline_linecolumn_prefix = '⭡'
