@@ -4,9 +4,12 @@
 
 urxvt*foreground: #f2f2f2
 urxvt*background: #222222
-urxvt*font:     xft:Deja Vu Sans Mono:bold:pixelsize=16:antialias=true:hinting=true
-urxvt*letterSpace: -1
+!urxvt*boldFont:     xft:InconsolataDz for Powerline:bold:pixelsize=14:hinting=true:antialias=true
+urxvt*font: xft:Inconsolata\\-g for Powerline:pixelsize=14
+!:hinting=true:antialias=true
+!urxvt*italicFont:     xft:Inconsolata-g for Powerline:italic:pixelsize=14:hinting=true:antialias=true
 urxvt*scrollColor: #5E5E5E
+urxvt*letterSpace: -1
 urxvt*troughColor: #222222
 urxvt*iconFile: /home/sathors/Pictures/icons/terminal-icon-512x512.png
 urxvt*visualBell: True
