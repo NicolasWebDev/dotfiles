@@ -51,24 +51,49 @@ then
 elif [[ `uname -n` == "nicolas-envydv7" ]]
 then
     echo "Je suis sur l'ordi de ProtelCotelsa"
-    export PATH="${PATH}:/opt/openoffice4/program"
+    export PATH="${PATH}:/opt/openoffice4/program:$HOME/.cabal/bin"
     export PYTHON_PATH='/opt/openoffice4/program/'
-    export bzr_repo='bzr+ssh://protel@192.168.2.226/home/protel/olympo_src/'
+    export bzr_repo='bzr+ssh://protel@192.168.2.226/home/protel/olympo_src8/'
+    export bzr_repo_extras='bzr+ssh://protel@192.168.2.226/home/protel/olympo_extras8/'
     export openerp6ip='192.168.2.77'
     export RTW='/home/nicolas/openerp/olympo_src/oly_academic_rating/wizard/'
     export ac='oly_academic'
     export acra='oly_academic_rating'
     export aca='oly_academic_assistance'
-    export acb='academic_behavior'
-    export acm='academic_medic'
+    export acb='oly_academic_behavior'
+    export acm='oly_academic_medic'
     export acro='oly_academic_route'
     export acs='oly_academic_sale'
-    function kill-openerp() { kill -s SIGKILL $(ps aux | grep openerp | grep python | awk '{print $2}'); }
-    function kill-eclipse() { kill -s SIGKILL $(ps aux | grep eclipse | awk '{print $2}'); }
-    function kill-listening_oo() { kill -s SIGKILL $(ps aux | grep soffice | head -n -1 | awk '{print $2}'); }
-    function apts() { apt-cache search $1 | sort | grep $1 ; }
-    function disable_tp() { xinput set-prop $(xinput | grep TouchPad | cut -d'=' -f2 | cut -f1) "Device Enabled" 0 ; }
-    function enable_tp() { xinput set-prop $(xinput | grep TouchPad | cut -d'=' -f2 | cut -f1) "Device Enabled" 1 ; }
+    export ism_server='200.125.135.9'
+    export LFS='/mnt/lfs'
+    function kill-openerp()
+    {
+        kill -s SIGKILL $(ps aux | grep openerp | grep python | awk '{print $2}')
+    }
+    function kill-eclipse()
+    {
+        kill -s SIGKILL $(ps aux | grep eclipse | awk '{print $2}')
+    }
+    function kill-listening_oo()
+    {
+        kill -s SIGKILL $(ps aux | grep soffice | head -n -1 | awk '{print $2}')
+    }
+    function apts()
+    {
+        apt-cache search $1 | sort | grep $1
+    }
+    function disable_tp()
+    {
+        xinput set-prop $(xinput | grep TouchPad | cut -d'=' -f2 | cut -f1) "Device Enabled" 0
+    }
+    function enable_tp()
+    {
+        xinput set-prop $(xinput | grep TouchPad | cut -d'=' -f2 | cut -f1) "Device Enabled" 1
+    }
+    function aptq()
+    {
+        [[ $# -eq 0 ]] && /usr/bin/dpkg -l || /usr/bin/dpkg -l | grep $1
+    }
     #------------------------- PROMPT ---------------------------------
     PS1="${debian_chroot:+($debian_chroot)}\[\033[01;35m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
     #---------------------------- PATH ------------------------------
@@ -78,16 +103,17 @@ then
     alias sxw2rml='python /home/nicolas/openerp/openerp/addons/base_report_designer/openerp_sxw2rml/openerp_sxw2rml.py'
     alias backup_olympo='[[ "${PWD##*/}" = olympo_src ]] && { cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; } || echo "Error : we'"'"'re not in olympo_src"'
     alias listening_oo='soffice --nologo --nofirststartwizard --headless --norestore --invisible "--accept=socket,host=localhost,port=8100,tcpNoDelay=1;urp;" &'
+    alias ssh_ism_server='ssh administrador@200.125.135.9'
     alias apply_patches='[[ "${PWD##*/}" = olympo_src ]] && { /bin/cp oly_academic/report/__init__.py.hack oly_academic/report/__init__.py && echo "applying patches...done" ; } || echo "Error : we'"'"'re not in olympo_src"'
     alias branch_remote='bzr branch bzr+ssh://olympoerp@68.169.60.154/home/olympoerp/olympo_src/'
     alias apt='sudo /usr/sbin/apt-fast install'
-    alias aptu='sudo /usr/sbin/apt-fast update ; sudo /usr/sbin/apt-fast upgrade'
+    alias aptu='sudo /usr/sbin/apt-fast update ; sudo /usr/sbin/apt-fast -V upgrade'
     alias aptr='sudo /usr/sbin/apt-fast purge'
     alias apti='/usr/bin/apt-cache show'
-    alias aptq='/usr/bin/dpkg --get-selections'
     alias bzrl='/usr/bin/bzr log --forward'
     alias adt='~/android/eclipse/eclipse'
-    alias pygrep='/bin/grep --color=auto --include="*.py"'
+    alias greppy='/bin/grep --color=auto --include="*.py" -rn'
+    alias grepxml='/bin/grep --color=auto --include="*.xml" -rn'
 else
     echo "Je suis sur un ordi inconnu"
 fi
@@ -129,6 +155,7 @@ alias mount='mount | column -t'
 alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m - \2|g'"
 alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"
+alias notify-send="notify-send -t 100000"
 
 # to remove beeping in the terminal
 set bell-style none
