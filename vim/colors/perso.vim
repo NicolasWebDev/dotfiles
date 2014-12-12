@@ -95,7 +95,7 @@ hi DiffDelete	cterm=bold ctermfg=4 ctermbg=6
 hi DiffText	cterm=bold ctermbg=1
 hi Comment	ctermfg=8
 hi Constant	ctermfg=brown
-hi Special	ctermfg=5
+hi Special	cterm=bold ctermfg=160
 hi Identifier	ctermfg=184
 hi Statement cterm=bold	ctermfg=27
 hi PreProc	ctermfg=5

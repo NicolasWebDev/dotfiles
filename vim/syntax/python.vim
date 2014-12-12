@@ -117,8 +117,10 @@ syn keyword pythonStatement	global assert
 syn keyword pythonStatement	lambda yield
 syn keyword pythonStatement	with nonlocal
 syn keyword pythonStatement	False None True
-syn keyword pythonStatement	def class nextgroup=pythonFunction skipwhite
+syn keyword pythonStatement	def nextgroup=pythonFunction skipwhite
+syn keyword pythonStatement	class nextgroup=pythonClass skipwhite
 syn match   pythonFunction	"\%([^[:cntrl:][:space:][:punct:][:digit:]]\|_\)\%([^[:cntrl:][:punct:][:space:]]\|_\)*" display contained
+syn match   pythonClass	"\%([^[:cntrl:][:space:][:punct:][:digit:]]\|_\)\%([^[:cntrl:][:punct:][:space:]]\|_\)*" display contained
 syn keyword pythonRepeat	for while
 syn keyword pythonConditional	if elif else
 syn keyword pythonPreCondit	import from
@@ -309,6 +311,7 @@ if version >= 508 || !exists("did_python_syn_inits")
   HiLink pythonStatement	Statement
   HiLink pythonPreCondit	Statement
   HiLink pythonFunction		Function
+  HiLink pythonClass        Special
   HiLink pythonConditional	Conditional
   HiLink pythonRepeat		Repeat
   HiLink pythonException	Exception
