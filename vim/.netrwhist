@@ -1,9 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/media/disk'
-let g:netrw_dirhist_2='/home/sathors/.vim'
-let g:netrw_dirhist_3='/home/nicolas/test'
-let g:netrw_dirhist_4='/home/nicolas/.mutt'
-let g:netrw_dirhist_5='/home/nicolas/test'
-let g:netrw_dirhist_6='/home/nicolas/lfs/check_versions.sh'
-let g:netrw_dirhist_7='/home/nicolas/.fonts'
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home'
+let g:netrw_dirhist_2='/home/nicolas'
+let g:netrw_dirhist_3='/home/nicolas/odoo/olympo_src8/oly_asset'
+let g:netrw_dirhist_4='/home/nicolas/odoo/olympo_src8'
+let g:netrw_dirhist_5='/home/nicolas/odoo/olympo_src8/base_table'

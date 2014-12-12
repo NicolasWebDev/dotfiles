@@ -223,3 +223,17 @@ let g:airline_right_alt_sep     = '⮃'
 let g:airline_branch_prefix     = '⭠'
 let g:airline_readonly_symbol   = '⭤'
 let g:airline_linecolumn_prefix = '⭡'
+
+"###################################
+" VCSCOMMAND
+"###################################
+" This enables to open a directory using :e dir/path with netrw, and then
+" use VCSCommands on it.
+let NERDTreeHijackNetrw = 0
+
+"###################################
+" EASYGREP
+"###################################
+let EasyGrepRecursive = 1
+let EasyGrepDefaultUserPattern = "*.py *.xml"
+let EasyGrepMode = 3
