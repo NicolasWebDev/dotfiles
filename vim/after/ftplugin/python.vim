@@ -1,7 +1,6 @@
 " Fichier de configuration de vim reservé au langage python
-echom 'python file read'
-autocmd BufWinEnter *.py loadview | echom 'loadview'
-autocmd BufWinLeave,BufUnload *.py mkview | echom 'mkview'
+autocmd BufWinEnter *.py loadview
+autocmd BufWinLeave,BufUnload *.py mkview
 set foldenable
 set foldmethod=indent
 set foldnestmax=2
