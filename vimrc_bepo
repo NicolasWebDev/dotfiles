@@ -27,6 +27,8 @@ noremap R L
 "noremap S K
 noremap T <C-d>
 noremap S <C-u>
+noremap <C-d> J
+noremap <C-u> K
 " Corollaire : repli suivant / précédent
 noremap zs zj
 noremap zt zk
@@ -66,7 +68,9 @@ noremap [k [s
 " <> en direct
 " ————————————
 noremap « <
+inoremap « <
 noremap » >
+inoremap » >
  
 " Remaper la gestion des fenêtres
 " ———————————————————————————————

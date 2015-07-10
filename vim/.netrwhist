@@ -1,7 +1,10 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
-let g:netrw_dirhist_1='/home'
-let g:netrw_dirhist_2='/home/nicolas'
-let g:netrw_dirhist_3='/home/nicolas/odoo/olympo_src8/oly_asset'
-let g:netrw_dirhist_4='/home/nicolas/odoo/olympo_src8'
-let g:netrw_dirhist_5='/home/nicolas/odoo/olympo_src8/base_table'
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/home/nicolas/test'
+let g:netrw_dirhist_2='/home/nicolas/odoo/olympo_src8'
+let g:netrw_dirhist_3='/home/nicolas/odoo/olympo_src8/base_table'
+let g:netrw_dirhist_4='/home/nicolas/mi_openerp/things_to_propose'
+let g:netrw_dirhist_5='/home/nicolas/odoo/olympo_src8'
+let g:netrw_dirhist_6='/home/nicolas/mi_openerp/trainings/testing'
+let g:netrw_dirhist_7='/home/nicolas/odoo/olympo_src8/oly_sale'
+let g:netrw_dirhist_8='/home/nicolas/dotfiles/vim/after/ftplugin'

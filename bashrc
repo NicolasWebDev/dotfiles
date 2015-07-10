@@ -51,7 +51,7 @@ then
 elif [[ `uname -n` == "nicolas-envydv7" ]]
 then
     echo "Je suis sur l'ordi de ProtelCotelsa"
-    export PATH="${PATH}:/opt/openoffice4/program:$HOME/.cabal/bin"
+    export SONNAR_RUNNER_HOME="/opt/sonar-runner-2.4"
     export PYTHON_PATH='/opt/openoffice4/program/'
     export bzr_repo='bzr+ssh://protel@192.168.2.226/home/protel/olympo_src8/'
     export bzr_repo_extras='bzr+ssh://protel@192.168.2.226/home/protel/olympo_extras8/'
@@ -66,6 +66,12 @@ then
     export acs='oly_academic_sale'
     export ism_server='200.125.135.9'
     export LFS='/mnt/lfs'
+    function preview-markdown()
+    {
+        MD_FILE=$1
+        HTML_FILE="$(basename $MD_FILE .md).html"
+        pandoc -s --css=file:///home/nicolas/.markdown.css $MD_FILE > /tmp/${HTML_FILE} ; firefox /tmp/${HTML_FILE}
+    }
     function kill-openerp()
     {
         kill -s SIGKILL $(ps aux | grep openerp | grep python | awk '{print $2}')
@@ -97,6 +103,7 @@ then
     #------------------------- PROMPT ---------------------------------
     PS1="${debian_chroot:+($debian_chroot)}\[\033[01;35m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
     #---------------------------- PATH ------------------------------
+    PATH="$PATH:/opt/openoffice4/program:$HOME/.cabal/bin:/usr/local/bin:/opt/sonar-runner-2.4/bin:~/.bin"
     #------------------------- ALIASES --------------------------------
     #alias update='[[ "${PWD##*/}" = olympo_src ]] && { bzr revert oly_academic/report/__init__.py ; echo "removing patches...done" ; cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
     #alias update='[[ "${PWD##*/}" = olympo_src ]] && { cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
@@ -110,10 +117,21 @@ then
     alias aptu='sudo /usr/sbin/apt-fast update ; sudo /usr/sbin/apt-fast -V upgrade'
     alias aptr='sudo /usr/sbin/apt-fast purge'
     alias apti='/usr/bin/apt-cache show'
-    alias bzrl='/usr/bin/bzr log --forward'
+    alias bzrl='/usr/bin/bzr log --show-ids'
+    alias bzri='/usr/bin/bzr log --show-ids -r-1 | grep revision-id | cut -d'-' -f3'
     alias adt='~/android/eclipse/eclipse'
     alias greppy='/bin/grep --color=auto --include="*.py" -rn'
     alias grepxml='/bin/grep --color=auto --include="*.xml" -rn'
+    alias compile_junit='javac -cp .:/usr/share/java/junit4.jar'
+    alias hist='history | grep'
+    function unpatch()
+    {
+        for file in $(bzr st | tail -n +2 ) ; do mv -v "$file" "${file}.back" ; done
+    }
+    function patch()
+    {
+        for file in $(bzr st | tail -n +2 | tr -d ' ') ; do dir="$(dirname $file)" ; filename="$(basename $file .back)" ; mv -v ${dir}/${filename}{.back,} ; done
+    }
 else
     echo "Je suis sur un ordi inconnu"
 fi
@@ -128,6 +146,9 @@ export MOZ_DISABLE_PANGO=1
 export EDITOR=vim
 export BROWSER=firefox
 export HISTSIZE=5000
+
+# This disables freezing the terminal with a <CTRL>s.
+stty stop undef
 
 # X Terminal titles
 case "$TERM" in
