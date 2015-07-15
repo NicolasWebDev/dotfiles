@@ -229,5 +229,3 @@ export LESS_TERMCAP_us=$(printf '\e[04;38;5;200m') # enter underline mode
 #export LESS_TERMCAP_us=$(printf '\e[04;36m') # enter underline mode - cyan
 
 #-------------------------------------------------------------------
-
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
