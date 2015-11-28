@@ -66,6 +66,8 @@ then
     export acs='oly_academic_sale'
     export ism_server='200.125.135.9'
     export LFS='/mnt/lfs'
+    export LOST_ITEMS_DATABASE_PASSWORD='lost_items'
+    alias bzrd='bzr cdiff | less -r'
     function preview-markdown()
     {
         MD_FILE=$1
@@ -103,7 +105,7 @@ then
     #------------------------- PROMPT ---------------------------------
     PS1="${debian_chroot:+($debian_chroot)}\[\033[01;35m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
     #---------------------------- PATH ------------------------------
-    PATH="$PATH:/opt/openoffice4/program:$HOME/.cabal/bin:/usr/local/bin:/opt/sonar-runner-2.4/bin:~/.bin"
+    PATH="$HOME/.rbenv/bin:$PATH:/opt/openoffice4/program:$HOME/.cabal/bin:/usr/local/bin:/opt/sonar-runner-2.4/bin:~/.bin"
     #------------------------- ALIASES --------------------------------
     #alias update='[[ "${PWD##*/}" = olympo_src ]] && { bzr revert oly_academic/report/__init__.py ; echo "removing patches...done" ; cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
     #alias update='[[ "${PWD##*/}" = olympo_src ]] && { cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
@@ -124,6 +126,7 @@ then
     alias grepxml='/bin/grep --color=auto --include="*.xml" -rn'
     alias compile_junit='javac -cp .:/usr/share/java/junit4.jar'
     alias hist='history | grep'
+    alias remc='remind -cum -w162,0 ~/.reminders'
     function unpatch()
     {
         for file in $(bzr st | tail -n +2 ) ; do mv -v "$file" "${file}.back" ; done
@@ -229,3 +232,8 @@ export LESS_TERMCAP_us=$(printf '\e[04;38;5;200m') # enter underline mode
 #export LESS_TERMCAP_us=$(printf '\e[04;36m') # enter underline mode - cyan
 
 #-------------------------------------------------------------------
+
+eval "$(rbenv init -)"
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
