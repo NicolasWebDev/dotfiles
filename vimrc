@@ -48,6 +48,10 @@ let maplocalleader="-"
 nnoremap <leader>n :bn<cr>
 nnoremap <leader>p :bp<cr>
 
+set omnifunc=syntaxcomplete#Complete
+" Remap control space to the omni-completion.
+inoremap <C-@> <C-x><C-o>
+
 " Source a global configuration file if available
 " XXX Deprecated, please move your changes here in /etc/vim/vimrc
 "if filereadable("/etc/vim/vimrc.local")
@@ -175,7 +179,6 @@ augroup filetype_html
     autocmd FileType html set bomb
     " commandes pour le html
     autocmd FileType html map <F3> :!firefox % >/dev/null 2>&1 &<CR><CR>
-    autocmd FileType html read ~/.vim/skeletons/html.txt | exe "normal ggdd/<title>/e+1\<CR>" | startinsert
 augroup END
 " }}}
 
@@ -221,6 +224,9 @@ set updatetime=1000
 " AIRLINE {{{
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
+let g:airline_detect_whitespace = 0
+let g:airline_section_warning = ''
+let g:airline_section_x = '%{airline#extensions#tagbar#currenttag()}'
 let g:Powerline_symbols = 'fancy'
 set laststatus=2 " Always display the statusline in all windows
 set showtabline=2 " Always display the tabline, even if there is only one tab
@@ -248,7 +254,7 @@ let EasyGrepMode = 3
 " }}}
 
 " NERDTREE SETTINGS {{{
-noremap <leader>n :NERDTree<cr>
+noremap <leader>n :NERDTreeToggle<cr>
 " }}}
 
 " PATHOGEN {{{
@@ -346,3 +352,5 @@ iabbrev atm @api.multi
 iabbrev atl @api.model
 iabbrev atr @api.returns('')<Left><Left><C-R>=Eatchar('\s')<CR>
 " }}}
+
+let xml_tag_completion_map = "»"
