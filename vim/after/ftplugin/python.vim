@@ -14,6 +14,7 @@ setlocal viewoptions=folds,cursor
 map <buffer> <S-e> :w<CR>:!/usr/bin/env python % <CR>
 " Comment line
 nnoremap <buffer> <LocalLeader>c I# <esc>
+vnoremap <buffer> <LocalLeader>c :s/^# //<esc>
 " Force un hard breaking de la ligne à 80 caractères
 set textwidth=79
 " Highlight lines over 79 characters.
