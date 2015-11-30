@@ -4,50 +4,38 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-if [[ `uname -n` == "ArchInspiron" ]]
+if [[ `uname -n` == "ArchFloe" ]]
 then
-    echo "Je suis sur le Dell Inspiron"
+    echo "I'm on the ThinkPad"
     # hook for finding package providing unknown command
     source /usr/share/doc/pkgfile/command-not-found.bash
-    eval `dircolors -b /usr/share/LS_COLORS`
+    #------------------------- PROMPT ---------------------------------
+    PS1="${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
+    #------------------------- ALIASES --------------------------------
+    ## Pacman aliases ##
+    alias pac='sudo /usr/bin/powerpill -S'
+    alias pacu='sudo /usr/bin/powerpill -Syu'
+    alias pacr='sudo /usr/bin/powerpill -Rsn'
+    alias pacs='/usr/bin/powerpill -Ss'
+    alias pacuu='sudo /usr/bin/powerpill -U *.pkg.*'
+    alias paci='/usr/bin/powerpill -Si'
+    alias paclo='/usr/bin/powerpill -Qdt'   # list all orphaned packages
+    alias pacc='sudo /usr/bin/powerpill -Scc'
+    alias paclf='/usr/bin/powerpill -Ql'
+    alias pacq='/usr/bin/powerpill -Q'
+    # recursively remove ALL orphaned packages
+    alias pacro="/usr/bin/powerpill -Qtdq > /dev/null && sudo /usr/bin/powerpill -Rns \$(/usr/bin/powerpill -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
     # function to print packages by size
     pacman-size()
     {
         pacman -Qi | awk '/^Name/ {pkg=$3} /Size/ {print $4$5,pkg}' | sort -n
     }
-    #------------------------- PROMPT ---------------------------------
-    PS1="${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
-    #---------------------------- PATH ------------------------------
-    # add my scripts in the PATH
-    PATH=$PATH:~/Documents/Informatique/Linux/scripts_persos
-    #------------------------- ALIASES --------------------------------
-    ## Pacman aliases ##
-    alias pac='sudo /usr/bin/pacman -S'
-    alias pacu='sudo /usr/bin/pacman -Syu'
-    alias pacr='sudo /usr/bin/pacman -Rsn'
-    alias pacs='/usr/bin/pacman -Ss'
-    alias pacuu='sudo /usr/bin/pacman -U *.pkg.*'
-    alias paci='/usr/bin/pacman -Si'
-    alias paclo='/usr/bin/pacman -Qdt'   # list all orphaned packages
-    alias pacc='sudo /usr/bin/pacman -Scc'
-    alias paclf='/usr/bin/pacman -Ql'
-    alias pacq='/usr/bin/pacman -Q'
-    # recursively remove ALL orphaned packages
-    alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
 
     ## Yaourt aliases ##
     alias yas='yaourt -Ss'
     alias yag='yaourt -G'
     # list obsolete packages from the AUR
     alias yao='for file in `pacman -Qmq` ; do yas $file | grep "installed:" ; done'
-
-    alias usejava5='JAVA_HOME=/opt/java5; . /opt/java5/jre/bin/usejava.sh'
-    alias usejava='JAVA_HOME=/opt/java; . /opt/java5/jre/bin/usejava.sh'
-    alias mntNexus7='simple-mtpfs /media/Nexus7'
-    alias umntNexus7='fusermount -u /media/Nexus7'
-
-
-
 elif [[ `uname -n` == "nicolas-envydv7" ]]
 then
     echo "Je suis sur l'ordi de ProtelCotelsa"
@@ -135,6 +123,10 @@ then
     {
         for file in $(bzr st | tail -n +2 | tr -d ' ') ; do dir="$(dirname $file)" ; filename="$(basename $file .back)" ; mv -v ${dir}/${filename}{.back,} ; done
     }
+    eval "$(rbenv init -)"
+
+    ### Added by the Heroku Toolbelt
+    export PATH="/usr/local/heroku/bin:$PATH"
 else
     echo "Je suis sur un ordi inconnu"
 fi
@@ -230,10 +222,3 @@ export LESS_TERMCAP_us=$(printf '\e[04;38;5;200m') # enter underline mode
 #export LESS_TERMCAP_so=$(printf '\e[01;33m') # enter standout mode - yellow
 #export LESS_TERMCAP_ue=$(printf '\e[0m') # leave underline mode
 #export LESS_TERMCAP_us=$(printf '\e[04;36m') # enter underline mode - cyan
-
-#-------------------------------------------------------------------
-
-eval "$(rbenv init -)"
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
