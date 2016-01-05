@@ -31,6 +31,11 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 "  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 "    \| exe "normal! g'\"" | endif
 "endif
+"
+
+" Add the current directory to the path recursively. Usefull to make
+" find/sfind work.
+set path=$PWD/**
 
 " Delete all existing views when exiting vim.
 autocmd VimLeave * execute "!rm ".&viewdir."/*"
@@ -42,11 +47,17 @@ if has("autocmd")
     filetype plugin indent on
 endif
 
+set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+
 let maplocalleader="-"
 
 " To change buffer rapidly
 nnoremap <leader>n :bn<cr>
 nnoremap <leader>p :bp<cr>
+
+" Set a timeout on the mappings lower than the default 1s (500ms here)
+set ttimeout
+set ttimeoutlen=500
 
 set omnifunc=syntaxcomplete#Complete
 " Remap control space to the omni-completion.
@@ -118,9 +129,7 @@ set backspace=indent,eol,start
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 
 " text indenting
-" set autoindent
-" pour indenter automatiquement en C
-" set smartindent
+set autoindent
 
 if has("gui_running")
 	" I find the toolbar in the GUI version of vim (gvim) to be somewhat useless visual clutter. This option gets rid of the toolbar.
@@ -147,6 +156,18 @@ set nocompatible        " Utilise les défauts Vim (bien mieux !)
 " show the line and column number of the cursor position, separated by a
 " comma
 set ruler
+
+" Make the command-line completion work like bash, additionaly let choose the
+" option after third tab.
+set wildmenu
+set wildmode=longest,list,full
+
+" Let always one line above/below the cursor.
+if !&scrolloff
+    set scrolloff=1
+endif
+
+set display+=lastline
 
 " INDENTATION ET TABULATIONS
 " A cet effet lire entre autre ce site : http://tedlogan.com/techblog3.html
