@@ -1,0 +1,13 @@
+snippet <fi "field" b
+<field name="${1:field}" />
+endsnippet
+
+snippet odoo_view "odoo view squeleton" b
+<record id="${1:id}" model="ir.ui.view">
+	<field name="name">${2:name}</field>
+	<field name="model">${3:model}</field>
+	<field name="arch" type="xml">
+		${4:body}
+	</field>
+</record>
+endsnippet

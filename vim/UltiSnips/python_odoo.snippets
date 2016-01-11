@@ -1,0 +1,8 @@
+snippet odoo_test_class "testing class"
+class ${1:class_name}(TransactionCase):
+	def setUp(self):
+		super($1, self).setUp()
+
+	def test_test(self):
+		self.assertTrue(False)
+endsnippet
