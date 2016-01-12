@@ -1,9 +1,9 @@
 let g:netrw_dirhistmax  =10
 let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/nicolas/odoo/olympo_src8/l10n_ec_gov'
-let g:netrw_dirhist_2='/home/nicolas/odoo/olympo_src8'
-let g:netrw_dirhist_3='/home/nicolas/odoo/olympo_src8/l10n_ec_gov'
-let g:netrw_dirhist_4='/home/nicolas/odoo/olympo_src8'
+let g:netrw_dirhist_1='/home'
+let g:netrw_dirhist_2='/home/nicolas/odoo_tf/olympo_src8'
+let g:netrw_dirhist_3='/home/nicolas/odoo_tf'
+let g:netrw_dirhist_4='/home/nicolas'
 let g:netrw_dirhist_5='/home/nicolas/odoo_tf/olympo_src8'
-let g:netrw_dirhist_6='/home/nicolas/Downloads/Railscasts Pro episodes 16 -- 417/196-nested-model-form-revised/questionnaire-after'
-let g:netrw_dirhist_7='/home/nicolas/mi_openerp/asset/justice/new_problems_2015-10-12'
+let g:netrw_dirhist_6='/home/nicolas/odoo_tf'
+let g:netrw_dirhist_7='/home/nicolas/odoo_tf/olympo_src8'
