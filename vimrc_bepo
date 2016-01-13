@@ -7,9 +7,6 @@ noremap É W
 " (attention, cela diminue la réactivité du {A}…)
 noremap aé aw
 noremap aÉ aW
-" Pour faciliter les manipulations de fenêtres, on utilise {W} comme un Ctrl+W :
-noremap w <C-w>
-noremap W <C-w><C-w>
  
 " [HJKL] -> {CTSR}
 " ————————————————
@@ -74,12 +71,22 @@ inoremap » >
  
 " Remaper la gestion des fenêtres
 " ———————————————————————————————
-noremap wt <C-w>j
-noremap ws <C-w>k
-noremap wc <C-w>h
-noremap wr <C-w>l
-noremap wd <C-w>c
-noremap wo <C-w>s
-noremap wp <C-w>o
-noremap w<SPACE> :split<CR>
-noremap w<CR> :vsplit<CR>
+noremap <C-w>c <C-w>h
+noremap <C-w>t <C-w>j
+noremap <C-w>s <C-w>k
+noremap <C-w>r <C-w>l
+
+noremap <C-w>h <C-w>c
+noremap <C-w>j <C-w>t
+noremap <C-w>k <C-w>s
+noremap <C-w>l <C-w>r
+
+noremap <C-w>C <C-w>H
+noremap <C-w>T <C-w>J
+noremap <C-w>S <C-w>K
+noremap <C-w>R <C-w>L
+
+noremap <C-w>H <C-w>C
+noremap <C-w>J <C-w>T
+noremap <C-w>K <C-w>S
+noremap <C-w>L <C-w>R
