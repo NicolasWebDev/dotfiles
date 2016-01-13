@@ -10,6 +10,30 @@ require("naughty")
 -- Load Debian menu entries
 require("debian.menu")
 
+-- {{{ TODO
+-- show a cpu usage widget
+-- change the theme
+-- change the background
+-- define a lockscreen mapping
+-- }}}
+
+-- {{{ Perso functions
+function run_once(cmd)
+-- Used to run a command on startup only once.
+    findme = cmd
+    firstspace = cmd:find(" ")
+    if firstspace then
+        findme = cmd:sub(0, firstspace-1)
+    end
+    awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
+end
+-- }}}
+
+-- {{{ Init commands
+-- Swap caps/escape.
+run_once("setxkbmap -option caps:swapescape")
+-- }}}
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -257,7 +281,7 @@ globalkeys = awful.util.table.join(
 
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-    awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
+    awful.key({ modkey, "Shift"   }, "h",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
