@@ -1,2 +1,3 @@
 # ignore swap files
 *.swp
+vim/.netrwhist
