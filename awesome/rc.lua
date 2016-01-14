@@ -35,8 +35,7 @@ end
 -- Swap caps/escape.
 run_once("setxkbmap -option caps:swapescape")
 run_once("urxvtd -q -o")
--- to set the cursor right at least on the background.
-awful.util.spawn_with_shell("xsetroot -cursor_name left_ptr")
+run_once("nm-applet")
 -- }}}
 
 -- {{{ Error handling
