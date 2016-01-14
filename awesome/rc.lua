@@ -11,9 +11,12 @@ require("naughty")
 require("debian.menu")
 
 -- {{{ TODO
--- show a cpu usage widget
--- define a lockscreen mapping
 -- use conky as system monitor
+-- see how to manage two configuration files at the same time
+-- define a cheatsheet of my mappings, that I should have to update
+--      (maybe use only a listing of the keybinding array?, add a description
+--      to it?)
+-- configure vim to set foldmethod=marker on lua files
 -- }}}
 
 -- {{{ Perso functions
@@ -67,6 +70,7 @@ beautiful.init(awful.util.getdir("config") .. "/themes/perso/theme.lua")
 terminal = "urxvtc -e tmux"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = "urxvtc -e " .. editor
+screenlock_cmd = "sflock -f '-*-fixed-*-r-*-*-*-420-*-*-*-*-*-*'"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -221,6 +225,10 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    -- Perso bindings
+    awful.key({ "Control", "Mod1" }, "l", function () awful.util.spawn(screenlock_cmd) end),
+
+    -- Already present bindings
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
@@ -281,7 +289,7 @@ globalkeys = awful.util.table.join(
 
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-    awful.key({ modkey, "Shift"   }, "h",      function (c) c:kill()                         end),
+    awful.key({ modkey,           }, "q",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
