@@ -12,8 +12,9 @@ require("debian.menu")
 
 -- {{{ TODO
 -- show a cpu usage widget
+-- change the theme
+-- change the background
 -- define a lockscreen mapping
--- use conky as system monitor
 -- }}}
 
 -- {{{ Perso functions
@@ -31,7 +32,6 @@ end
 -- {{{ Init commands
 -- Swap caps/escape.
 run_once("setxkbmap -option caps:swapescape")
-run_once("urxvtd -q -o")
 -- }}}
 
 -- {{{ Error handling
@@ -61,12 +61,12 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init(awful.util.getdir("config") .. "/themes/perso/theme.lua")
+beautiful.init(awful.util.getdir("config") .. "/themes/bamboo/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvtc -e tmux"
-editor = os.getenv("EDITOR") or "vim"
-editor_cmd = "urxvtc -e " .. editor
+terminal = "urxvt"
+editor = os.getenv("EDITOR") or "editor"
+editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
