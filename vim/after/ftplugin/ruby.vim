@@ -13,11 +13,10 @@ setlocal viewoptions=folds,cursor
 " Comment line
 nnoremap <buffer> <LocalLeader>c I# <esc>
 " Force un hard breaking de la ligne à 80 caractères
-set textwidth=79
-" Highlight lines over 79 characters.
-highlight OverLength ctermbg=red
-match OverLength /\%80v.\+/
-nnoremap <buffer> <LocalLeader>mo :match OverLength /\%80v.\+/<cr>
+set textwidth=80
+set formatoptions+=t
+" Highlight lines over 80 characters.
+let &l:colorcolumn=join(range(81,999),",")
 
 set softtabstop=2
 set shiftwidth=2

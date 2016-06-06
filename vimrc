@@ -1,6 +1,9 @@
 source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
 " BASIC SETTINGS {{{
+    set relativenumber
+    set numberwidth=1
+
     " Add the current directory to the path recursively. Usefull to make
     " find/sfind work.
     set path=$PWD/**
@@ -19,10 +22,6 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
     let maplocalleader="-"
 
-    " To change buffer rapidly
-    nnoremap <leader>n :bn<cr>
-    nnoremap <leader>p :bp<cr>
-
     " Set a timeout on the mappings lower than the default 1s (500ms here)
     set ttimeout
     set ttimeoutlen=500
@@ -31,13 +30,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " Remap control space to the omni-completion.
     inoremap <C-@> <C-x><C-o>
 
-    " Source a global configuration file if available
-    " XXX Deprecated, please move your changes here in /etc/vim/vimrc
-    "if filereadable("/etc/vim/vimrc.local")
-    "  source /etc/vim/vimrc.local
-    "endif
-
-    " travailler avec de l'unicode par défaut (utf-8)
+    " work with unicode by default (utf-8)
     if has("multi_byte")
       if &termencoding == ""
         let &termencoding = &encoding
@@ -45,7 +38,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
       set encoding=utf-8
       set fileencoding=utf-8
     " bomb adds special characters which poses problems later
-    "  set bomb
+    " set bomb
       setglobal fileencoding=utf-8
     "  setglobal bomb
     "  set fileencodings=ucs-bom,utf-8,latin1
@@ -66,13 +59,6 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " ignorecase is set
     set smartcase
 
-    " Montrer les commandes en cours dans la ligne de statut
-    set showcmd
-
-    " Quand le curseur est positionné sur une parenthèse, crochet, accolade, etc.,
-    " mettre en surbrillance la parenthèse (etc.) correspondante
-    set showmatch
-
     " while typing a search command, show immediately where the so far typed
     " pattern matches
     set incsearch
@@ -85,8 +71,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " when there is a previous search pattern, highlight all its matches
     set hlsearch
 
-    " Sauver automatiquement le buffer d'édition avant les commandes du type :next
-    " ou :make
+    " Save automatically the edition buffer before the commands :next or make
     set autowrite
 
     set backspace=indent,eol,start
@@ -100,31 +85,12 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " text indenting
     set autoindent
 
-    if has("gui_running")
-        " I find the toolbar in the GUI version of vim (gvim) to be somewhat useless visual clutter. This option gets rid of the toolbar.
-        set guioptions-=T
-        colorscheme slate
-        set guifont=Monospace\ 10  " use this font
-        " highlight cursor line (must come after colorscheme command to take effect)
-        set cursorline
-        highlight CursorLine guibg=#001000
-    endif
-
     " change default color scheme
     colorscheme perso
 
     " highlight cursor line (must come after colorscheme command to take effect)
     set cursorline
     set cursorcolumn
-
-    " change the color of the search occurences
-    "hi Search cterm=NONE ctermbg=136 ctermfg=blue
-
-    set nocompatible        " Utilise les défauts Vim (bien mieux !)
-
-    " show the line and column number of the cursor position, separated by a
-    " comma
-    set ruler
 
     " Make the command-line completion work like bash, additionaly let choose the
     " option after third tab.
@@ -141,38 +107,43 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " INDENTATION ET TABULATIONS
     " A cet effet lire entre autre ce site : http://tedlogan.com/techblog3.html
     "
-    set softtabstop=4   " how many columns vim uses when you hit Tab in insert mode
+    " how many columns vim uses when you hit Tab in insert mode
+    set softtabstop=4
 
-    set shiftwidth=4	" largeur de l'indentation
+    " indentation width
+    set shiftwidth=4
 
-    set tabstop=4       " numbers of spaces of tab character. A garder toujours a 8 selon le man de vim afin de ne pas tout deformer entre autre a l'impression.
+    " numbers of spaces of tab character.
+    set tabstop=4
 
     " Characters leading wrapped lines.
-    set showbreak=+++
+    set showbreak=+
 
     " replace tab with spaces
     set expandtab
 
     " <----------------------------
-
-    set title           " show title in console title bar
+    " show title in console title bar
+    set title
 
     noremap <leader>qq :bd<cr>
     noremap <leader>qQ :Bdelete<cr>
 
-    set hidden             " Hide buffers when they are abandoned
-
-    let xml_tag_completion_map = "»"
+    " Hide buffers when they are abandoned.
+    set hidden
 
     set mouse=a		" Enable mouse usage (all modes) in terminals
+" }}}
+
+" ODOO SETTINGS {{{
+" Let copy/paste definitions of fields in the view, and change one line to a
+" field.
+noremap <leader>of I<field name="<esc>ea" /><esc>ld$j
 " }}}
 
 " HTML FILE SETTINGS {{{
 augroup filetype_html
     autocmd!
-    " commande pour mettre les .html en UTF-8
-    autocmd FileType html set fileencoding=utf-8
-    autocmd FileType html set bomb
     " commandes pour le html
     autocmd FileType html map <F3> :!firefox % >/dev/null 2>&1 &<CR><CR>
 augroup END
@@ -226,14 +197,23 @@ execute pathogen#infect()
 
 " SYNTASTIC {{{
 let g:syntastic_python_pylint_post_args = "--rcfile=../.pylintrc"
+let g:syntastic_ruby_checkers = ["mri", "rubocop", "reek"]
 let g:syntastic_mode_map = {'mode': 'active'}
+" }}}
+
+" YOUCOMPLETEME {{{
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-t>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-s>', '<Down>']
+let g:SuperTabDefaultCompletionType = '<C-t>'
 " }}}
 
 " ULTISNIPS {{{
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 let g:UltiSnipsListSnippets="<c-b>"
 
 " If you want :UltiSnipsEdit to split your window.
@@ -241,6 +221,19 @@ let g:UltiSnipsEditSplit="vertical"
 let g:ultisnips_python_style="sphinx"
 " }}}
 
+" XML-EDIT {{{
+let xml_tag_completion_map = "»"
+let g:xml_syntax_folding=1
+au FileType xml setlocal foldmethod=syntax
+au FileType xml setlocal foldnestmax=3
+" }}}
+
+" VIM-MARKDOWN {{{
+" Make folding nicer, showing the second level folded, with the header as a
+" title of the folds.
+let g:vim_markdown_folding_style_pythonic = 1
+set conceallevel=2
+" }}}
 " }}}
 
 " LEARN VIM THE HARD WAY {{{
@@ -290,28 +283,4 @@ augroup filetype_vim
 augroup END
 " }}}
 
-" }}}
-
-" ODOO SETTINGS {{{
-    iabbrev iv8 import openerp as v8
-    nnoremap <leader>of :call MigrateNormalField()<cr>
-    iabbrev #f #---FIELDS FUNCTIONS
-    iabbrev #d #---DEFINITION
-    iabbrev #v #---PRIVATE FUNCTIONS
-    iabbrev #p #---PUBLIC FUNCTIONS
-    iabbrev #o #---OVERWRITE
-    iabbrev #a #---ACTIONS
-    iabbrev #e #---EVENTS
-    iabbrev #c #---CONSTRAINTS
-    iabbrev #s #---SELECTION FUNCTIONS
-    func! Eatchar(pat)
-      let c = nr2char(getchar(0))
-      return (c =~ a:pat) ? '' : c
-    endfunc
-    iabbrev ato @api.one
-    iabbrev atd @api.depends('')<Left><Left><C-R>=Eatchar('\s')<CR>
-    iabbrev atc @api.constrains('')<Left><Left><C-R>=Eatchar('\s')<CR>
-    iabbrev atm @api.multi
-    iabbrev atl @api.model
-    iabbrev atr @api.returns('')<Left><Left><C-R>=Eatchar('\s')<CR>
 " }}}

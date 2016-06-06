@@ -7,8 +7,7 @@ theme = {}
 theme.font          = "sans 8"
 
 theme.bg_normal     = "#222222"
---theme.bg_focus      = "#535d6c"
-theme.bg_focus      = "#1E6685"
+theme.bg_focus      = "#535d6c"
 theme.bg_urgent     = "#ff0000"
 theme.bg_minimize   = "#444444"
 
@@ -17,11 +16,9 @@ theme.fg_focus      = "#ffffff"
 theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
 
---theme.border_width  = "1"
-theme.border_width  = "3"
+theme.border_width  = "1"
 theme.border_normal = "#000000"
---theme.border_focus  = "#535d6c"
-theme.border_focus  = "#1E6685"
+theme.border_focus  = "#535d6c"
 theme.border_marked = "#91231c"
 
 -- There are other variable sets
@@ -96,4 +93,4 @@ theme.layout_dwindle = "/usr/share/awesome/themes/default/layouts/dwindlew.png"
 theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"
 
 return theme
--- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
+-- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80

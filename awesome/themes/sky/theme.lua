@@ -34,8 +34,6 @@ theme.layout_tilebottom      = "/usr/share/awesome/themes/sky/layouts/tilebottom
 theme.layout_tileleft        = "/usr/share/awesome/themes/sky/layouts/tileleft.png"
 theme.layout_tile            = "/usr/share/awesome/themes/sky/layouts/tile.png"
 theme.layout_tiletop         = "/usr/share/awesome/themes/sky/layouts/tiletop.png"
-theme.layout_spiral          = "/usr/share/awesome/themes/sky/layouts/spiral.png"
-theme.layout_dwindle         = "/usr/share/awesome/themes/sky/layouts/dwindle.png"
 
 theme.awesome_icon           = "/usr/share/awesome/themes/sky/awesome-icon.png"
 theme.tasklist_floating_icon = "/usr/share/awesome/themes/sky/layouts/floating.png"
@@ -77,4 +75,4 @@ theme.titlebar_maximized_button_normal_active = "/usr/share/awesome/themes/defau
 theme.titlebar_maximized_button_focus_active = "/usr/share/awesome/themes/default/titlebar/maximized_focus_active.png"
 
 return theme
--- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
+-- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80

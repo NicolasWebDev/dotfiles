@@ -41,6 +41,7 @@ then
 elif [[ `uname -n` == "nicolas-envydv7" ]]
 then
     echo "Je suis sur l'ordi de ProtelCotelsa"
+    export CODECOV_TOKEN=f38ce4dc-b1c0-4f96-abf1-5efcc0f264d2
     export SONNAR_RUNNER_HOME="/opt/sonar-runner-2.4"
     export PYTHON_PATH='/opt/openoffice4/program/'
     export bzr_repo='bzr+ssh://protel@192.168.2.226/home/protel/olympo_src8/'
@@ -57,7 +58,40 @@ then
     export ism_server='200.125.135.9'
     export LFS='/mnt/lfs'
     export LOST_ITEMS_DATABASE_PASSWORD='lost_items'
-    alias bzrd='bzr cdiff | less -r'
+    alias reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgres ; dropdb --if-exists -p 5433 testing ; createdb -p 5433 -T demo testing"'
+    alias suspend='sflock -f "-*-fixed-*-r-*-*-*-420-*-*-*-*-*-*" ; dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend'
+    alias hibernate='sflock -f "-*-fixed-*-r-*-*-*-420-*-*-*-*-*-*" ; dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate'
+    alias bzrc='bzr diffstat | tail -n1 | cut -d',' -f2- | sed "s/^[^[:digit:]]*\([[:digit:]]*\)[^[:digit:]]*\([[:digit:]]*\).*$/\1 - \2/g" | bc'
+    alias bzrm='bzr merge'
+    alias bzrs='bzr status'
+    alias ssh='TERM=xterm ssh'
+    alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
+    alias odoo_server='./openerp-server -c .openerp_serverrc'
+    alias odoo_merge='bzr merge && bzr ci -m "[MRG]" && cd .. && ./run_tests.py -m oly_customize && cd - && bzr push'
+    function bzrd()
+    {
+        bzr cdiff "$1" | less -r
+    }
+    alias bzrp='bzr push'
+    alias screens_mirror="xrandr --output LVDS1 --mode 1440x900 --output VGA1 --mode 1440x900 --same-as LVDS1"
+    alias screens_split="xrandr --output LVDS1 --mode 1600x900 --output VGA1 --mode 1440x900 --left-of LVDS1"
+    alias screens_detach="xrandr --output VGA1 --off --output LVDS1 --mode 1600x900"
+    alias vimtodo="vim /home/nicolas/todo.txt-cli/todo.txt"
+    alias vimbashrc="vim $HOME/.bashrc ; source $HOME/.bashrc"
+    alias vimsomeday="vim /home/nicolas/todo.txt-cli/someday_maybe.txt"
+    alias vimreminders="vim $HOME/.reminders"
+    alias backup_work_pc='sudo rsync -aSAXv --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/home/nicolas/.gvfs","/home/nicolas/.cache"} --delete / /media/backup_work/backup_work'
+    alias t='todo.sh'
+    function find_tests_time()
+    {
+        cat $1 | grep 'Ran' | cut -d' ' -f2- | sed 's/Ran //' | sed 's/tests in //' | sed 's/s$//' | sed 's/test in //' | sed 's/^\(.*:\) \([[:digit:]]\+\) \([[:digit:]]\+\)\.\([[:digit:]]\+\)/echo "\1 \2 tests at" $(echo "scale=1; \2 \/ \3.\4" | bc) "tests\/second"/' | bash | sort -nr -k5
+    }
+    function test_rc_lua()
+    {
+        Xephyr -ac -br -noreset -screen 800x600 :1 &
+        sleep 1
+        DISPLAY=:1.0 awesome -c ~/.config/awesome/rc.lua.new
+    }
     function preview-markdown()
     {
         MD_FILE=$1
@@ -95,7 +129,7 @@ then
     #------------------------- PROMPT ---------------------------------
     PS1="${debian_chroot:+($debian_chroot)}\[\033[01;35m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
     #---------------------------- PATH ------------------------------
-    PATH="$HOME/.rbenv/bin:$PATH:/opt/openoffice4/program:$HOME/.cabal/bin:/usr/local/bin:/opt/sonar-runner-2.4/bin:~/.bin"
+    PATH="$HOME/.rbenv/bin:$PATH:/opt/openoffice4/program:$HOME/.cabal/bin:/usr/local/bin:/opt/sonar-runner-2.4/bin:~/.bin:$HOME/todo.txt-cli:$HOME/IT/perso/exercism/bin"
     #------------------------- ALIASES --------------------------------
     #alias update='[[ "${PWD##*/}" = olympo_src ]] && { bzr revert oly_academic/report/__init__.py ; echo "removing patches...done" ; cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
     #alias update='[[ "${PWD##*/}" = olympo_src ]] && { cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
@@ -113,6 +147,7 @@ then
     alias bzri='/usr/bin/bzr log --show-ids -r-1 | grep revision-id | cut -d'-' -f3'
     alias adt='~/android/eclipse/eclipse'
     alias greppy='/bin/grep --color=auto --include="*.py" -rn'
+    alias greprb='/bin/grep --color=auto --include="*.rb" -rn'
     alias grepxml='/bin/grep --color=auto --include="*.xml" -rn'
     alias compile_junit='javac -cp .:/usr/share/java/junit4.jar'
     alias hist='history | grep'
@@ -174,6 +209,7 @@ alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m -
 alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"
 alias notify-send="notify-send -t 100000"
+alias term_colors='for x in 0 1 4 5 7 8; do for i in `seq 30 37`; do for a in `seq 40 47`; do echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "; done; echo; done; done; echo "";'
 
 # to remove beeping in the terminal
 set bell-style none

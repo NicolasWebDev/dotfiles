@@ -1,13 +1,115 @@
-snippet <fi "field" b
-<field name="${1:field}" />
+global !p
+def id_field_to_string(field_id_name, snip):
+	"""
+	Replace "my_long_field_id" with "My Long Field".
+	"""
+	field_id_name = re.sub('_id$', '', field_id_name)
+	snip.rv = " ".join(comp.title() for comp in field_id_name.split('_'))
+
+def convert_model_to_id(model, suffix='_form_view'):
+	return model.replace('.', '_') + suffix
+endglobal
+
+snippet <f "field" b
+<field name="${1:field}"$2
 endsnippet
 
-snippet odoo_view "odoo view squeleton" b
-<record id="${1:id}" model="ir.ui.view">
-	<field name="name">${2:name}</field>
-	<field name="model">${3:model}</field>
+snippet odoo_date_filters "two filters for an odoo date" b
+<field name="$1" string="`!p id_field_to_string(t[1], snip)` Before" filter_domain="[('$1', '&lt;=', self)]" />
+<field name="$1" string="`!p id_field_to_string(t[1], snip)` After" filter_domain="[('$1', '&gt;=', self)]" />
+endsnippet
+
+snippet odoo_number_filters "two filters for a float or an integer" b
+<field name="$1" string="`!p id_field_to_string(t[1], snip)` Smaller" filter_domain="[('$1', '&lt;=', self)]" />
+<field name="$1" string="`!p id_field_to_string(t[1], snip)` Bigger" filter_domain="[('$1', '&gt;=', self)]" />
+endsnippet
+
+snippet odoo_form "odoo form view" b
+<record id="`!p snip.rv = convert_model_to_id(t[1])`" model="ir.ui.view">
+	<field name="name">${1/(.*)/$1.form.view/}</field>
+	<field name="model">${1:model}</field>${2:
+	<field name="inherit_id" ref="$3.`!p snip.rv = convert_model_to_id(t[1])`" />}
+	<field name="type">form</field>
 	<field name="arch" type="xml">
-		${4:body}
+		<form>
+			${4:<group>
+				$5
+			</group>}
+		</form>
 	</field>
 </record>
+endsnippet
+
+snippet odoo_tree "odoo tree view" b
+<record id="`!p snip.rv = convert_model_to_id(t[1], '_tree_view')`" model="ir.ui.view">
+	<field name="name">${1/(.*)/$1.tree.view/}</field>
+	<field name="model">${1:model}</field>
+	<field name="type">tree</field>
+	<field name="arch" type="xml">
+		<tree${2: string="$3"}>
+			$4
+		</tree>
+	</field>
+</record>
+endsnippet
+
+snippet odoo_filter "a filter element" b
+<filter string="$1" ${2: domain="[('$3', '$4', $5)]"}${6: context="{'${7:group_by}': '$8'}"} />
+endsnippet
+
+snippet odoo_search "odoo search view" b
+<record id="`!p snip.rv = convert_model_to_id(t[1], '_search_view')`" model="ir.ui.view">
+	<field name="name">${1/(.*)/$1.search.view/}</field>
+	<field name="model">${1:model}</field>
+	<field name="type">search</field>
+	<field name="arch" type="xml">
+		<search>
+			$4
+			<group expand="0" name="filters" string="Filter...">
+			</group>
+			<group expand="0" string="Group By...">
+			</group>
+		</search>
+	</field>
+</record>
+endsnippet
+
+snippet odoo_xml "odoo xml skeleton" b
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE openerp SYSTEM "../oly_customize/odoo.dtd">
+<openerp>
+	<data>
+		$1
+	</data>
+</openerp>
+endsnippet
+
+snippet odoo_action "odoo action" b
+<record id="`!p snip.rv = convert_model_to_id(t[2], '_action')`" model="ir.actions.act_window">
+	<field name="name">$1</field>
+	<field name="res_model">${2:model}</field>
+	<field name="view_type">form</field>
+	<field name="view_mode">tree,form</field>
+	<field name="context">{${4:'$5': $6}}</field>
+	<field name="domain">[${7:('$8', '$9', $10)}]</field>
+</record>
+endsnippet
+
+snippet btn_obj "normal object button" b
+<button string="$1" name="action_$2" type="object"${3: confirm="${4:Are you sure?}"} icon="gtk-execute" />
+endsnippet
+
+snippet btn_cancel "A cancel button" b
+<button name="cancel" icon="STOCK_CANCEL" type="special" string="Cancel" class="oe_highlight" />
+endsnippet
+
+snippet odoo_report "An odoo report element" b
+<report
+	id="$1"
+	model="$2"
+	string="$3"
+	report_type="qweb-html"
+	name="${4:module}.${5:filename}"
+	file="$4.$5"
+	/>
 endsnippet

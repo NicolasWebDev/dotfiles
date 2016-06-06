@@ -18,9 +18,12 @@ vnoremap <buffer> <LocalLeader>c :s/^# //<esc>
 " Force un hard breaking de la ligne à 80 caractères
 set textwidth=79
 " Highlight lines over 79 characters.
-highlight OverLength ctermbg=red
-match OverLength /\%80v.\+/
-nnoremap <buffer> <LocalLeader>mo :match OverLength /\%80v.\+/<cr>
+let &l:colorcolumn=join(range(80,999),",")
+
+" Snap at me abbreviations to force me to use snippets.
+for var in ['assertFalse', 'assertTrue', 'assertEqual', 'assertRaisesRegexp', 'api', 'def']
+    exec "iabbrev " . var . " 'Bam: You should use a snippet, dummy!'"
+endfor
 
 " ROPE {{{
 nnoremap <buffer> <LocalLeader>rn :RopeRename<cr>
