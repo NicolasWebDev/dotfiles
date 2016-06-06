@@ -88,6 +88,7 @@ hi VisualNOS	cterm=bold,underline
 hi WarningMsg	ctermfg=1
 hi WildMenu	ctermfg=0 ctermbg=3
 hi Folded	ctermfg=darkgrey ctermbg=NONE
+highlight ColorColumn ctermbg=236
 hi FoldColumn	ctermfg=darkgrey ctermbg=NONE
 hi DiffAdd	ctermbg=4
 hi DiffChange	ctermbg=5
