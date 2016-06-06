@@ -37,5 +37,8 @@ fi
 # xterm -geometry 80x20+494-0 &
 # exec xterm -geometry 80x66+0+0 -name login
 
+# switch escape and caps lock
 setxkbmap -option caps:escape
+# run urxvtd
+urxvtd -q -o -f
 exec mate-session
