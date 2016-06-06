@@ -68,6 +68,7 @@ beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 terminal = "urxvtc"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
+screenlock_cmd = "sflock -c ' ' -h"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -238,6 +239,10 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    -- Perso bindings
+    awful.key({ "Control", "Mod1" }, "l", function () awful.util.spawn(screenlock_cmd) end),
+
+    -- Already present bindings
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
