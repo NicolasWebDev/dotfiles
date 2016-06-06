@@ -79,16 +79,6 @@ def _check_${1:field}(self):
 	raise ValidationError('${3:error_message}')
 endsnippet
 
-snippet test "a test" b
-@api.one
-def _compute_${1:field}(self):
-	${2:self.$1}
-endsnippet
-
-snippet field "an odoo field" b
-${1:field} = fields.${2:type}(${3:string='$4'}${5:required=True})
-endsnippet
-
 snippet '> "print '>>>>>>>>>>>>>>>>>>>'" b
 print '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 endsnippet
@@ -99,4 +89,20 @@ def ${1:method}(self, ${2:arg1}):
 	${4:TODO: Docstring for $1.}`!p
 write_function_docstring(t, snip) `
 	${0:pass}
+endsnippet
+
+snippet plist "print a list for debugging" b
+print 'Elements of list ${1:my_list}'
+for elt in sorted($1):
+	print elt
+endsnippet
+
+snippet pdict "print a dict for debugging" b
+print 'Elements of dict ${1:my_dict}'
+for key in sorted($1):
+	print '-> {}: {}'.format(key, $1[key])
+endsnippet
+
+snippet pv "print a variable for debugging" b
+print '${1:my_var}:', $1
 endsnippet
