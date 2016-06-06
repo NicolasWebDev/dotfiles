@@ -26,53 +26,22 @@ from builtins import *  # noqa
 from ycm.test_utils import MockVimModule
 MockVimModule()
 
-from nose.tools import ok_
-from ycm.paths import EndsWithPython
+import sys
+from mock import MagicMock
+from hamcrest import assert_that, is_in, is_not
+
+from ycm.youcompleteme import YouCompleteMe
 
 
-def EndsWithPython_Good( path ):
-  ok_( EndsWithPython( path ) )
+class YouCompleteMe_test():
+
+  def setUp( self ):
+    self.ycm = YouCompleteMe( MagicMock( spec_set = dict ) )
 
 
-def EndsWithPython_Bad( path ):
-  ok_( not EndsWithPython( path ) )
+  def tearDown( self ):
+    self.ycm.OnVimLeave()
 
 
-def EndsWithPython_Python2Paths_test():
-  python_paths = [
-    'python',
-    'python2',
-    '/usr/bin/python2.6',
-    '/home/user/.pyenv/shims/python2.7',
-    r'C:\Python26\python.exe'
-  ]
-
-  for path in python_paths:
-    yield EndsWithPython_Good, path
-
-
-
-def EndsWithPython_Python3Paths_test():
-  python_paths = [
-    'python3',
-    '/usr/bin/python3.3',
-    '/home/user/.pyenv/shims/python3.3',
-    r'C:\Python33\python.exe'
-  ]
-
-  for path in python_paths:
-    yield EndsWithPython_Good, path
-
-
-def EndsWithPython_BadPaths_test():
-  not_python_paths = [
-    None,
-    '',
-    '/opt/local/bin/vim',
-    r'C:\Program Files\Vim\vim74\gvim.exe',
-    '/usr/bin/python2.5',
-    '/home/user/.pyenv/shims/python3.2',
-  ]
-
-  for path in not_python_paths:
-    yield EndsWithPython_Bad, path
+  def YcmCoreNotImported_test( self ):
+    assert_that( 'ycm_core', is_not( is_in( sys.modules ) ) )
