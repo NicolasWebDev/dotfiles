@@ -7,24 +7,26 @@
 if [[ `uname -n` == "ArchFloe" ]]
 then
     echo "I'm on the ThinkPad"
+    export PATH="$HOME/.rbenv/bin:$PATH"
+    eval "$(rbenv init -)"
     # hook for finding package providing unknown command
     source /usr/share/doc/pkgfile/command-not-found.bash
     #------------------------- PROMPT ---------------------------------
     PS1="${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
     #------------------------- ALIASES --------------------------------
     ## Pacman aliases ##
-    alias pac='sudo /usr/bin/powerpill -S'
-    alias pacu='sudo /usr/bin/powerpill -Syu'
-    alias pacr='sudo /usr/bin/powerpill -Rsn'
-    alias pacs='/usr/bin/powerpill -Ss'
-    alias pacuu='sudo /usr/bin/powerpill -U *.pkg.*'
-    alias paci='/usr/bin/powerpill -Si'
-    alias paclo='/usr/bin/powerpill -Qdt'   # list all orphaned packages
-    alias pacc='sudo /usr/bin/powerpill -Scc'
-    alias paclf='/usr/bin/powerpill -Ql'
-    alias pacq='/usr/bin/powerpill -Q'
+    alias pac='sudo /usr/bin/pacman -S'
+    alias pacu='sudo /usr/bin/pacman -Syu'
+    alias pacr='sudo /usr/bin/pacman -Rsn'
+    alias pacs='/usr/bin/pacman -Ss'
+    alias pacuu='sudo /usr/bin/pacman -U *.pkg.*'
+    alias paci='/usr/bin/pacman -Si'
+    alias paclo='/usr/bin/pacman -Qdt'   # list all orphaned packages
+    alias pacc='sudo /usr/bin/pacman -Scc'
+    alias paclf='/usr/bin/pacman -Ql'
+    alias pacq='/usr/bin/pacman -Q'
     # recursively remove ALL orphaned packages
-    alias pacro="/usr/bin/powerpill -Qtdq > /dev/null && sudo /usr/bin/powerpill -Rns \$(/usr/bin/powerpill -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
+    alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
     # function to print packages by size
     pacman-size()
     {
