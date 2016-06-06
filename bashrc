@@ -7,7 +7,7 @@
 if [[ `uname -n` == "ArchFloe" ]]
 then
     echo "I'm on the ThinkPad"
-    export PATH="$HOME/.rbenv/bin:$PATH"
+    export PATH="$HOME/.rbenv/bin:$HOME/todo.txt-cli:$PATH"
     eval "$(rbenv init -)"
     # hook for finding package providing unknown command
     source /usr/share/doc/pkgfile/command-not-found.bash
@@ -42,29 +42,10 @@ elif [[ `uname -n` == "nicolas-envydv7" ]]
 then
     echo "Je suis sur l'ordi de ProtelCotelsa"
     export CODECOV_TOKEN=f38ce4dc-b1c0-4f96-abf1-5efcc0f264d2
-    export SONNAR_RUNNER_HOME="/opt/sonar-runner-2.4"
-    export PYTHON_PATH='/opt/openoffice4/program/'
-    export bzr_repo='bzr+ssh://protel@192.168.2.226/home/protel/olympo_src8/'
-    export bzr_repo_extras='bzr+ssh://protel@192.168.2.226/home/protel/olympo_extras8/'
-    export openerp6ip='192.168.2.77'
-    export RTW='/home/nicolas/openerp/olympo_src/oly_academic_rating/wizard/'
-    export ac='oly_academic'
-    export acra='oly_academic_rating'
-    export aca='oly_academic_assistance'
-    export acb='oly_academic_behavior'
-    export acm='oly_academic_medic'
-    export acro='oly_academic_route'
-    export acs='oly_academic_sale'
-    export ism_server='200.125.135.9'
-    export LFS='/mnt/lfs'
-    export LOST_ITEMS_DATABASE_PASSWORD='lost_items'
     alias reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgres ; dropdb --if-exists -p 5433 testing ; createdb -p 5433 -T demo testing"'
     alias suspend='sflock -f "-*-fixed-*-r-*-*-*-420-*-*-*-*-*-*" ; dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend'
     alias hibernate='sflock -f "-*-fixed-*-r-*-*-*-420-*-*-*-*-*-*" ; dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate'
     alias bzrc='bzr diffstat | tail -n1 | cut -d',' -f2- | sed "s/^[^[:digit:]]*\([[:digit:]]*\)[^[:digit:]]*\([[:digit:]]*\).*$/\1 - \2/g" | bc'
-    alias bzrm='bzr merge'
-    alias bzrs='bzr status'
-    alias ssh='TERM=xterm ssh'
     alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
     alias odoo_server='./openerp-server -c .openerp_serverrc'
     alias odoo_merge='bzr merge && bzr ci -m "[MRG]" && cd .. && ./run_tests.py -m oly_customize && cd - && bzr push'
@@ -72,47 +53,17 @@ then
     {
         bzr cdiff "$1" | less -r
     }
-    alias bzrp='bzr push'
     alias screens_mirror="xrandr --output LVDS1 --mode 1440x900 --output VGA1 --mode 1440x900 --same-as LVDS1"
     alias screens_split="xrandr --output LVDS1 --mode 1600x900 --output VGA1 --mode 1440x900 --left-of LVDS1"
     alias screens_detach="xrandr --output VGA1 --off --output LVDS1 --mode 1600x900"
-    alias vimtodo="vim /home/nicolas/todo.txt-cli/todo.txt"
-    alias vimbashrc="vim $HOME/.bashrc ; source $HOME/.bashrc"
-    alias vimsomeday="vim /home/nicolas/todo.txt-cli/someday_maybe.txt"
-    alias vimreminders="vim $HOME/.reminders"
     alias backup_work_pc='sudo rsync -aSAXv --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/home/nicolas/.gvfs","/home/nicolas/.cache"} --delete / /media/backup_work/backup_work'
-    alias t='todo.sh'
     function find_tests_time()
     {
         cat $1 | grep 'Ran' | cut -d' ' -f2- | sed 's/Ran //' | sed 's/tests in //' | sed 's/s$//' | sed 's/test in //' | sed 's/^\(.*:\) \([[:digit:]]\+\) \([[:digit:]]\+\)\.\([[:digit:]]\+\)/echo "\1 \2 tests at" $(echo "scale=1; \2 \/ \3.\4" | bc) "tests\/second"/' | bash | sort -nr -k5
     }
-    function test_rc_lua()
-    {
-        Xephyr -ac -br -noreset -screen 800x600 :1 &
-        sleep 1
-        DISPLAY=:1.0 awesome -c ~/.config/awesome/rc.lua.new
-    }
-    function preview-markdown()
-    {
-        MD_FILE=$1
-        HTML_FILE="$(basename $MD_FILE .md).html"
-        pandoc -s --css=file:///home/nicolas/.markdown.css $MD_FILE > /tmp/${HTML_FILE} ; firefox /tmp/${HTML_FILE}
-    }
     function kill-openerp()
     {
         kill -s SIGKILL $(ps aux | grep openerp | grep python | awk '{print $2}')
-    }
-    function kill-eclipse()
-    {
-        kill -s SIGKILL $(ps aux | grep eclipse | awk '{print $2}')
-    }
-    function kill-listening_oo()
-    {
-        kill -s SIGKILL $(ps aux | grep soffice | head -n -1 | awk '{print $2}')
-    }
-    function apts()
-    {
-        apt-cache search $1 | sort | grep $1
     }
     function disable_tp()
     {
@@ -122,44 +73,22 @@ then
     {
         xinput set-prop $(xinput | grep TouchPad | cut -d'=' -f2 | cut -f1) "Device Enabled" 1
     }
-    function aptq()
-    {
-        [[ $# -eq 0 ]] && /usr/bin/dpkg -l || /usr/bin/dpkg -l | grep $1
-    }
     #------------------------- PROMPT ---------------------------------
     PS1="${debian_chroot:+($debian_chroot)}\[\033[01;35m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
     #---------------------------- PATH ------------------------------
-    PATH="$HOME/.rbenv/bin:$PATH:/opt/openoffice4/program:$HOME/.cabal/bin:/usr/local/bin:/opt/sonar-runner-2.4/bin:~/.bin:$HOME/todo.txt-cli:$HOME/IT/perso/exercism/bin"
+    PATH="$HOME/.rbenv/bin:$PATH:$HOME/.cabal/bin:/usr/local/bin:/opt/sonar-runner-2.4/bin:~/.bin:$HOME/IT/perso/exercism/bin"
     #------------------------- ALIASES --------------------------------
-    #alias update='[[ "${PWD##*/}" = olympo_src ]] && { bzr revert oly_academic/report/__init__.py ; echo "removing patches...done" ; cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
-    #alias update='[[ "${PWD##*/}" = olympo_src ]] && { cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; echo "bzr update" ; bzr update ; } || echo "Error : we'"'"'re not in olympo_src"'
-    alias sxw2rml='python /home/nicolas/openerp/openerp/addons/base_report_designer/openerp_sxw2rml/openerp_sxw2rml.py'
-    alias backup_olympo='[[ "${PWD##*/}" = olympo_src ]] && { cd .. ; echo -n "backup creation..." ; tar zcf olympo_src_`date +%Y-%h-%d_%Hh%M`.tar.gz olympo_src ; echo "done" ; cd olympo_src ; } || echo "Error : we'"'"'re not in olympo_src"'
-    alias listening_oo='soffice --nologo --nofirststartwizard --headless --norestore --invisible "--accept=socket,host=localhost,port=8100,tcpNoDelay=1;urp;" &'
-    alias ssh_ism_server='ssh administrador@200.125.135.9'
-    alias apply_patches='[[ "${PWD##*/}" = olympo_src ]] && { /bin/cp oly_academic/report/__init__.py.hack oly_academic/report/__init__.py && echo "applying patches...done" ; } || echo "Error : we'"'"'re not in olympo_src"'
-    alias branch_remote='bzr branch bzr+ssh://olympoerp@68.169.60.154/home/olympoerp/olympo_src/'
     alias apt='sudo /usr/sbin/apt-fast install'
     alias aptu='sudo /usr/sbin/apt-fast update ; sudo /usr/sbin/apt-fast -V upgrade'
     alias aptr='sudo /usr/sbin/apt-fast purge'
     alias apti='/usr/bin/apt-cache show'
     alias bzrl='/usr/bin/bzr log --show-ids'
     alias bzri='/usr/bin/bzr log --show-ids -r-1 | grep revision-id | cut -d'-' -f3'
-    alias adt='~/android/eclipse/eclipse'
     alias greppy='/bin/grep --color=auto --include="*.py" -rn'
     alias greprb='/bin/grep --color=auto --include="*.rb" -rn'
     alias grepxml='/bin/grep --color=auto --include="*.xml" -rn'
-    alias compile_junit='javac -cp .:/usr/share/java/junit4.jar'
     alias hist='history | grep'
     alias remc='remind -cum -w162,0 ~/.reminders'
-    function unpatch()
-    {
-        for file in $(bzr st | tail -n +2 ) ; do mv -v "$file" "${file}.back" ; done
-    }
-    function patch()
-    {
-        for file in $(bzr st | tail -n +2 | tr -d ' ') ; do dir="$(dirname $file)" ; filename="$(basename $file .back)" ; mv -v ${dir}/${filename}{.back,} ; done
-    }
     eval "$(rbenv init -)"
 
     ### Added by the Heroku Toolbelt
@@ -193,6 +122,12 @@ esac
 #---------------------------- PATH ------------------------------
 
 #------------------------- ALIASES --------------------------------
+alias firefox='firefox-aurora'
+alias t='todo.sh'
+alias vimtodo="vim $HOME/todo.txt-cli/todo.txt"
+alias vimbashrc="vim $HOME/.bashrc ; source $HOME/.bashrc"
+alias vimsomeday="vim $HOME/todo.txt-cli/someday_maybe.txt"
+alias vimreminders="vim $HOME/.reminders"
 alias be='setxkbmap fr bepo ; echo "keyboard switched to bepo"'
 alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 #alias less=$PAGER
@@ -210,7 +145,18 @@ alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"
 alias notify-send="notify-send -t 100000"
 alias term_colors='for x in 0 1 4 5 7 8; do for i in `seq 30 37`; do for a in `seq 40 47`; do echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "; done; echo; done; done; echo "";'
-
+function test_rc_lua()
+{
+    Xephyr -ac -br -noreset -screen 800x600 :1 &
+    sleep 1
+    DISPLAY=:1.0 awesome -c ~/.config/awesome/rc.lua.new
+}
+function preview-markdown()
+{
+    MD_FILE=$1
+    HTML_FILE="$(basename $MD_FILE .md).html"
+    pandoc -s --css=file://$HOME/.markdown.css $MD_FILE > /tmp/${HTML_FILE} ; firefox /tmp/${HTML_FILE}
+}
 # to remove beeping in the terminal
 set bell-style none
 
