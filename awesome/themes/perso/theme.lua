@@ -58,7 +58,7 @@ theme.bg_urgent = "#34353488"
 -- }}}
 
 -- {{{ Borders
-theme.border_width  = "1"
+theme.border_width  = "2"
 --theme.border_width  = "2"
 --theme.border_normal = "#34353488"
 --theme.border_normal = "#2d4113"
