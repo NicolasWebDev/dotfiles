@@ -128,6 +128,7 @@ alias vimtodo="vim $HOME/todo.txt-cli/todo.txt"
 alias vimbashrc="vim $HOME/.bashrc ; source $HOME/.bashrc"
 alias vimsomeday="vim $HOME/todo.txt-cli/someday_maybe.txt"
 alias vimreminders="vim $HOME/.reminders"
+alias ping="ping www.archlinux.org"
 alias be='setxkbmap fr bepo ; echo "keyboard switched to bepo"'
 alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 #alias less=$PAGER
