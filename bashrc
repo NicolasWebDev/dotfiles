@@ -16,15 +16,18 @@ then
     #------------------------- ALIASES --------------------------------
     ## Pacman aliases ##
     alias pac='sudo /usr/bin/pacman -S'
+    alias ya='/usr/bin/yaourt -S'
     alias pacu='sudo /usr/bin/pacman -Syu'
-    alias pacr='sudo /usr/bin/pacman -Rsn'
+    alias yau='/usr/bin/yaourt -Sya'
+    alias pacr='sudo /usr/bin/pacman -Rs'
     alias pacs='/usr/bin/pacman -Ss'
+    alias yas='/usr/bin/yaourt -Ss'
     alias pacuu='sudo /usr/bin/pacman -U *.pkg.*'
     alias paci='/usr/bin/pacman -Si'
     alias paclo='/usr/bin/pacman -Qdt'   # list all orphaned packages
     alias pacc='sudo /usr/bin/pacman -Scc'
     alias paclf='/usr/bin/pacman -Ql'
-    alias pacq='/usr/bin/pacman -Q'
+    alias pacq='/usr/bin/pacman -Q | grep'
     # recursively remove ALL orphaned packages
     alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
     # function to print packages by size
