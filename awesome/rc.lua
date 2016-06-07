@@ -29,10 +29,9 @@ end
 run_once("setxkbmap -option caps:swapescape")
 run_once("urxvtd -q -o")
 run_once("nm-applet")
-run_once("mate-volume-control-applet")
 run_once("zeal")
 run_once("rescuetime")
-run_once("fluxgui")
+run_once("redshift")
 run_once("pidgin")
 -- }}}
 
