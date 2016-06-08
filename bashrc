@@ -18,7 +18,7 @@ then
     alias pac='sudo /usr/bin/pacman -S'
     alias ya='/usr/bin/yaourt -S'
     alias pacu='sudo /usr/bin/pacman -Syu'
-    alias yau='/usr/bin/yaourt -Sya'
+    alias yau='/usr/bin/yaourt -Syua'
     alias pacr='sudo /usr/bin/pacman -Rs'
     alias pacs='/usr/bin/pacman -Ss'
     alias yas='/usr/bin/yaourt -Ss'
@@ -91,7 +91,6 @@ then
     alias greprb='/bin/grep --color=auto --include="*.rb" -rn'
     alias grepxml='/bin/grep --color=auto --include="*.xml" -rn'
     alias hist='history | grep'
-    alias remc='remind -cum -w162,0 ~/.reminders'
     eval "$(rbenv init -)"
 
     ### Added by the Heroku Toolbelt
@@ -105,8 +104,7 @@ fi
 complete -cf sudo
 
 export MOZ_DISABLE_PANGO=1
-#export PAGER=vimpager
-#export MANPAGER="/usr/bin/vimmanpager"
+export PAGER="less -r"
 export EDITOR=vim
 export BROWSER=firefox
 export HISTSIZE=5000
@@ -140,6 +138,7 @@ alias ls='ls --color=auto'
 alias lc='ls --color=auto --format=single-column'
 alias mkdir='mkdir -pv'
 alias poweroff='systemctl poweroff'
+alias remc='remind -cum -w162,0 ~/.reminders'
 alias reboot='systemctl reboot'
 alias rsync-backup='rsync -av --progress --delete --stats'
 alias svim='sudo /usr/bin/vim'
