@@ -169,6 +169,10 @@ alias mv='mv -i'
 alias rm='rm -I'
 alias ln='ln -i'
 
+# --- KEYCHAIN ---
+# Used to keep rsa keys opened once for each boot.
+eval $(keychain --eval --quiet id_rsa)
+
 # prepend TERM=linux ensures that there is no problem connecting via ssh on a
 # machine which doesn't use urxvt as I do
 
