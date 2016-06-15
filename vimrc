@@ -2,6 +2,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
 " BASIC SETTINGS {{{
     set relativenumber
+    set number
     set numberwidth=1
 
     " Add the current directory to the path recursively. Usefull to make
