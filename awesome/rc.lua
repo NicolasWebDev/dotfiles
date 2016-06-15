@@ -33,6 +33,7 @@ run_once("zeal")
 run_once("rescuetime")
 run_once("redshift")
 run_once("pidgin")
+run_once("slack")
 -- }}}
 
 -- {{{ Error handling
