@@ -1,6 +1,8 @@
 source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
 " BASIC SETTINGS {{{
+    " to make the mouse work inside of tmux.
+    set ttymouse=xterm2
     set relativenumber
     set number
     set numberwidth=1
