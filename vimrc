@@ -154,6 +154,25 @@ augroup END
 
 " ADDONS SETTINGS {{{
 
+" VIM-PLUG {{{
+call plug#begin('~/.vim/plugged')
+Plug 'scrooloose/nerdcommenter'
+Plug 'python-rope/ropevim'
+Plug 'ervandew/supertab'
+Plug 'scrooloose/syntastic'
+Plug 'SirVer/ultisnips'
+Plug 'tpope/vim-bundler'
+Plug 'kchmck/vim-coffee-script'
+Plug 'dkprice/vim-easygrep'
+Plug 'plasticboy/vim-markdown'
+Plug 'tpope/vim-rails'
+Plug 'slim-template/vim-slim'
+Plug 'honza/vim-snippets'
+Plug 'sukima/xmledit'
+Plug 'Valloric/YouCompleteMe'
+call plug#end()
+" }}}
+
 " TAGLIST {{{
 set updatetime=1000
 " }}}
@@ -192,10 +211,6 @@ let EasyGrepMode = 3
 
 " NERDTREE SETTINGS {{{
 noremap <leader>n :NERDTreeToggle<cr>
-" }}}
-
-" PATHOGEN {{{
-execute pathogen#infect()
 " }}}
 
 " SYNTASTIC {{{
