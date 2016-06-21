@@ -88,9 +88,7 @@ then
     alias bzrl='/usr/bin/bzr log --show-ids'
     alias bzri='/usr/bin/bzr log --show-ids -r-1 | grep revision-id | cut -d'-' -f3'
     alias greppy='/bin/grep --color=auto --include="*.py" -rn'
-    alias greprb='/bin/grep --color=auto --include="*.rb" -rn'
     alias grepxml='/bin/grep --color=auto --include="*.xml" -rn'
-    alias hist='history | grep'
     eval "$(rbenv init -)"
 
     ### Added by the Heroku Toolbelt
@@ -135,16 +133,21 @@ alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 #alias less=$PAGER
 alias ll='ls --color=auto -l'
 alias ls='ls --color=auto'
+alias greprb='/bin/grep --color=auto --include="*.rb" -rn'
 alias lc='ls --color=auto --format=single-column'
+alias hist='history | grep'
 alias mkdir='mkdir -pv'
 alias poweroff='systemctl poweroff'
+alias youtube-dl-sub='youtube-dl --write-sub --sub-lang en --sub-format vtt'
 alias remc='remind -cum -w162,0 ~/.reminders'
 alias reboot='systemctl reboot'
+alias backup_thinkpad='sudo rsync -aSAXv --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/home/sathors/.gvfs","/home/sathors/.cache"} --delete / /mnt/backup/backup_thinkpad'
 alias rsync-backup='rsync -av --progress --delete --stats'
 alias svim='sudo /usr/bin/vim'
 alias mount='mount | column -t'
 alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m - \2|g'"
 alias grep="grep --color=auto"
+alias sort_someday="awk '{print \$NF,\$0}' ~/todo.txt-cli/someday_maybe.txt | sort -nr | cut -f2- -d' ' > ~/todo.txt-cli/someday_maybe.txt.back ; mv -f ~/todo.txt-cli/someday_maybe.txt{.back,}"
 alias egrep="egrep --color=auto"
 alias notify-send="notify-send -t 100000"
 alias suspend="sflock -c ' ' -h ; systemctl suspend"
