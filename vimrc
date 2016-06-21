@@ -202,6 +202,7 @@ execute pathogen#infect()
 let g:syntastic_aggregate_errors = 1
 let g:syntastic_python_pylint_post_args = "--rcfile=../.pylintrc"
 let g:syntastic_ruby_checkers = ["mri", "rubocop", "reek"]
+let g:syntastic_scss_checkers = ["scss", "stylelint"]
 let g:syntastic_javascript_checkers = ["eslint"]
 let g:syntastic_mode_map = {'mode': 'active'}
 " }}}
