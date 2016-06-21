@@ -13,11 +13,11 @@ setlocal viewoptions=folds,cursor
 " Comment line
 nnoremap <buffer> <LocalLeader>c I# <esc>
 " Force un hard breaking de la ligne à 80 caractères
-set textwidth=80
-set formatoptions+=t
+setlocal textwidth=80
+setlocal formatoptions+=t
 " Highlight lines over 80 characters.
 let &l:colorcolumn=join(range(81,999),",")
 
-set softtabstop=2
-set shiftwidth=2
-set tabstop=2
+setlocal softtabstop=2
+setlocal shiftwidth=2
+setlocal tabstop=2

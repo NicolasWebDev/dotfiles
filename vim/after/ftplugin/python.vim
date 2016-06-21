@@ -16,7 +16,7 @@ map <buffer> <S-e> :w<CR>:!/usr/bin/env python % <CR>
 nnoremap <buffer> <LocalLeader>c I# <esc>
 vnoremap <buffer> <LocalLeader>c :s/^# //<esc>
 " Force un hard breaking de la ligne à 80 caractères
-set textwidth=79
+setlocal textwidth=79
 " Highlight lines over 79 characters.
 let &l:colorcolumn=join(range(80,999),",")
 
