@@ -169,6 +169,7 @@ Plug 'tpope/vim-rails'
 Plug 'slim-template/vim-slim'
 Plug 'sukima/xmledit'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
+Plug 'killphi/vim-ruby-refactoring' | Plug 'tmhedberg/matchit'
 call plug#end()
 " }}}
 
