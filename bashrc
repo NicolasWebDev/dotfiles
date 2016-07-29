@@ -106,6 +106,7 @@ export PAGER="less -r"
 export EDITOR=vim
 export BROWSER=firefox
 export HISTSIZE=5000
+export DO=104.236.197.222
 
 # This disables freezing the terminal with a <CTRL>s.
 stty stop undef
@@ -133,6 +134,7 @@ alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 #alias less=$PAGER
 alias ll='ls --color=auto -l'
 alias ls='ls --color=auto'
+alias b='bundle exec'
 alias greprb='/bin/grep --color=auto --include="*.rb" -rn'
 alias lc='ls --color=auto --format=single-column'
 alias hist='history | grep'
@@ -140,6 +142,7 @@ alias mkdir='mkdir -pv'
 alias poweroff='systemctl poweroff'
 alias youtube-dl-sub='youtube-dl --write-sub --sub-lang en --sub-format vtt'
 alias remc='remind -cum -w162,0 ~/.reminders'
+alias remd='remind -z -k"notify-send -u critical -t 60000 %s &" ~/.reminders'
 alias remc2='remind -cu2 -m -w162,0 ~/.reminders'
 alias reboot='systemctl reboot'
 alias screen_hdmi='xrandr | grep -q "HDMI-1 connected" && xrandr --output eDP-1 --off --output HDMI-1 --auto || echo "HDMI-1 is not connected"'
