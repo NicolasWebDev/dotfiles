@@ -32,7 +32,6 @@ run_once("nm-applet")
 run_once("zeal")
 run_once("rescuetime")
 run_once("redshift")
-run_once("pidgin")
 run_once("slack")
 run_once("remind -z5 -k'notify-send -u critical -t 60000 %s &' ~/.reminders")
 -- }}}
