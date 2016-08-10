@@ -1,0 +1,106 @@
+#folder-hook 'protelcotelsa.com' 'source ~/.mutt/mail_protelcotelsa'
+#folder-hook 'free.fr' 'source ~/.mutt/free_sathors'
+folder-hook . "push <collapse-all>"
+source ~/.mutt/free_sathors
+#source ~/.mutt/mail_protelcotelsa
+#source ~/.mutt/free_envolavelo
+
+macro index <f2> '<sync-mailbox><imap-logout-all><enter-command>source ~/.mutt/free_sathors<enter><change-folder>!<enter>'
+macro index <f3> '<sync-mailbox><imap-logout-all><enter-command>source ~/.mutt/mail_protelcotelsa<enter><change-folder>!<enter>'
+
+### GENERAL SETTINGS
+#set index_format  = '%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s'
+set editor="vim -c 'setlocal spell'"
+set index_format  = '%4C %Z %M %d %-15.15L (%?l?%4l&%4c?) %s'
+set date_format='%d/%m/%y'
+set tmpdir="~/.tmp"
+set alias_file=~/.mutt/aliases
+set certificate_file=~/.mutt/certificates
+set smart_wrap   # don't wrap mid word
+set pager_context=5     # retain 5 lines of previous page when scrolling
+set sort_alias=alias
+set delete=yes  # automatically delete messages marked for deletion on exit
+set sig_on_top=yes
+auto_view text/html # autoview html
+alternative_order text/plain text/enriched text/html  # save html for last
+set sort=threads # sort messages as threads
+set sort_aux=last-date-received # then sort by date
+set beep_new=yes  # beep when new messages arrive in mailbox
+source $alias_file
+set mailcap_path    = ~/.mutt/mailcap
+set include       # include message in reply automatically
+
+# Prefer Plain text to html, html to word etc ...
+alternative_order text/plain text/html application/vnd.msword application/msword
+
+# Store message headers locally to speed things up.
+# If hcache is a folder, Mutt will create sub cache folders for each account which may speeds things even more up.
+set header_cache = ~/.cache/mutt
+
+# Store messages locally to speed things up, like searching message bodies.
+# Can be the same folder as header_cache.
+# This will cost important disk usage according to your e-mail amount.
+set message_cachedir = "~/.cache/mutt"
+
+# How often to check for new mail (time in seconds).
+set mail_check = 600
+
+# Show lines of the mailbox above opened mails.
+set pager_index_lines=10
+
+# Wrap emails when displaying them.
+set wrap=72
+
+# If a thread has unread messages, don't collapse it.
+set nocollapse_unread
+
+######################################################
+# bepo
+bind browser,attach t next-entry
+bind browser,attach s previous-entry
+bind generic,index t next-entry
+bind generic,index s previous-entry
+bind generic,index T next-page
+bind generic,index S previous-page
+bind pager t next-line
+bind pager s previous-line
+bind pager \CT next-entry
+bind pager \CS previous-entry
+bind index,attach j tag-entry
+bind index J tag-pattern
+bind index ^J untag-pattern
+bind index <Esc>j tag-thread
+bind attach k save-entry
+bind index G imap-fetch-mail
+######################################################
+
+# Palette for use with the Linux console.  Black background.
+
+color hdrdefault blue default
+color quoted blue default
+color signature blue default
+color attachment red default
+color message brightred default
+color error brightred default
+color indicator default red
+color status brightgreen black
+color tree white default
+color normal white default
+color markers red default
+color search white default
+color tilde brightmagenta default
+color index blue default ~F
+set my_new_pattern="~N|~O"
+set my_github_notifications_pattern='~f notifications@github.com'
+set my_newsletters_pattern="`~/.mutt/group_to_filter.rb ~/.mutt/newsletters_group`"
+set my_clients_pattern="`~/.mutt/group_to_filter.rb ~/.mutt/clients_group`"
+set my_codex_pattern="`~/.mutt/group_to_filter.rb ~/.mutt/codex_group`"
+color index brightwhite default $my_new_pattern
+color index green default $my_github_notifications_pattern
+color index red default $my_clients_pattern
+color index blue default $my_codex_pattern
+color index magenta default $my_newsletters_pattern
+color index brightmagenta default "(~N | ~O) ($my_newsletters_pattern)"
+color index brightgreen default "(~N | ~O) $my_github_notifications_pattern"
+color index brightred default "(~N | ~O) ($my_clients_pattern)"
+color index brightblue default "(~N | ~O) ($my_codex_pattern)"

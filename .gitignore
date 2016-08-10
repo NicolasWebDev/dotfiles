@@ -1,3 +1,9 @@
 # ignore swap files
 *.swp
 vim/.netrwhist
+mutt/aliases
+mutt/*_group
+mutt/free_sathors
+mutt/free_envolavelo
+mutt/mail_protelcotelsa
+mutt/signature_*

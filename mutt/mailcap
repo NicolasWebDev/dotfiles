@@ -1,0 +1,11 @@
+text/html; firefox '%s' &; test=test -n "$DISPLAY"; needsterminal;
+text/html; elinks -dump ; copiousoutput;
+image/jpeg; feh %s
+image/png; feh %s
+application/msword; lowriter %s
+application/excel; localc %s
+application/vnd.oasis.opendocument.spreadsheet; localc %s
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; localc %s
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; loffice %s
+application/pdf; evince %s
+video/quicktime; vlc %s
