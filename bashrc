@@ -124,6 +124,7 @@ esac
 #------------------------- ALIASES --------------------------------
 alias firefox='firefox-aurora'
 alias t='todo.sh'
+alias vimwaiting="vim $HOME/todo.txt-cli/waiting.txt"
 alias vimtodo="vim $HOME/todo.txt-cli/todo.txt"
 alias vimbashrc="vim $HOME/.bashrc ; source $HOME/.bashrc"
 alias vimsomeday="vim $HOME/todo.txt-cli/someday_maybe.txt"
