@@ -90,17 +90,16 @@ color markers red default
 color search white default
 color tilde brightmagenta default
 color index blue default ~F
-set my_new_pattern="~N|~O"
-set my_github_notifications_pattern='~f notifications@github.com'
-set my_newsletters_pattern="`~/.mutt/group_to_filter.rb ~/.mutt/newsletters_group`"
-set my_clients_pattern="`~/.mutt/group_to_filter.rb ~/.mutt/clients_group`"
-set my_codex_pattern="`~/.mutt/group_to_filter.rb ~/.mutt/codex_group`"
-color index brightwhite default $my_new_pattern
-color index green default $my_github_notifications_pattern
-color index red default $my_clients_pattern
-color index blue default $my_codex_pattern
-color index magenta default $my_newsletters_pattern
-color index brightmagenta default "(~N | ~O) ($my_newsletters_pattern)"
-color index brightgreen default "(~N | ~O) $my_github_notifications_pattern"
-color index brightred default "(~N | ~O) ($my_clients_pattern)"
-color index brightblue default "(~N | ~O) ($my_codex_pattern)"
+alias -group codex codex `tr '\n' ' ' < ~/.mutt/codex_group`
+alias -group newsletters newsletters `tr '\n' ' ' < ~/.mutt/newsletters_group`
+alias -group clients clients `tr '\n' ' ' < ~/.mutt/clients_group`
+#`
+color index brightwhite default "~N | ~O"
+color index green default "~f notifications@github.com"
+color index red default "%f clients | %t clients"
+color index blue default "%f codex | %t codex"
+color index magenta default "%f newsletters | %t newsletters"
+color index brightgreen default "(~N | ~O) ~f notifications@github.com"
+color index brightred default "(~N | ~O) (%f clients | %t clients)"
+color index brightblue default "(~N | ~O) (%f codex | %t codex)"
+color index brightmagenta default "(~N | ~O) (%f newsletters | %t newsletters)"
