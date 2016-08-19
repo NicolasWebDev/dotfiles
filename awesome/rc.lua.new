@@ -28,11 +28,11 @@ end
 -- Swap caps/escape.
 run_once("setxkbmap -option caps:swapescape")
 run_once("urxvtd -q -o")
+run_once("whatsie")
 run_once("nm-applet")
 run_once("zeal")
 run_once("rescuetime")
 run_once("redshift")
-run_once("pidgin")
 run_once("slack")
 run_once("remind -z5 -k'notify-send -u critical -t 60000 %s &' ~/.reminders")
 -- }}}
@@ -599,8 +599,20 @@ awful.rules.rules = {
     { rule = { class = "gimp" },
       properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { tag = tags[1][2] } },
+    { rule = { class = "Firefox" }, properties = { tag = tags[1] } },
+    { rule = { class = "Slack" }, properties = { tag = tags[8] } },
+    { rule = { class = "Whatsie" }, properties = { tag = tags[8] } },
+    { rule = { class = "qBittorrent" }, properties = { tag = tags[6] } },
+    { rule = { class = "Uget-gtk" }, properties = { tag = tags[6] } },
+    { rule = { class = "Pdfpc", role = "presentation" },
+      properties = {opacity = 1 }, callback = function(c) 
+          --awful.client.movetoscreen
+          awful.client.movetotag(tags[1][9], c)
+          awful.client.movetoscreen(c) end},
+
+    --presenter console 
+    { rule = { class = "Pdfpc", role = "presenter" },
+      properties = { tag = tags[1][9], switchtotag = true, opacity = 1} },
 }
 -- }}}
 
