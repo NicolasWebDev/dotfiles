@@ -169,7 +169,9 @@ Plug 'plasticboy/vim-markdown'
 Plug 'tpope/vim-rails'
 Plug 'slim-template/vim-slim'
 Plug 'sukima/xmledit'
+Plug 'tmhedberg/matchit'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
+Plug 'Sathors/vim-blockle' | Plug 'tmhedberg/matchit'
 Plug 'killphi/vim-ruby-refactoring' | Plug 'tmhedberg/matchit'
 call plug#end()
 " }}}
@@ -273,7 +275,6 @@ nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lel
 nnoremap <leader>' viw<esc>a'<esc>hbi'<esc>lel
 vnoremap <leader>' <esc>`<i'<esc>`>a'<esc>
 vnoremap <leader>" <esc>`<i"<esc>`>a"<esc>
-nnoremap <leader>bp :execute "aboveleft split " . bufname("#")<cr>
 nnoremap <leader>w :execute "match Error " . '/\s\+$/'<cr>
 nnoremap <leader>W :execute "match none"<cr>
 nnoremap / /\v
