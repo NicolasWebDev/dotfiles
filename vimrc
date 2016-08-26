@@ -160,6 +160,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'python-rope/ropevim'
 Plug 'ervandew/supertab'
 Plug 'scrooloose/syntastic'
+Plug 'syngan/vim-vimlint' | Plug 'ynkdir/vim-vimlparser'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'tpope/vim-bundler'
 Plug 'kchmck/vim-coffee-script'
@@ -220,6 +221,7 @@ let g:syntastic_ruby_checkers = ["mri", "rubocop", "reek"]
 let g:syntastic_lua_checkers = ["luac", "luacheck"]
 let g:syntastic_scss_checkers = ["scss_lint"]
 let g:syntastic_javascript_checkers = ["eslint"]
+let g:syntastic_vim_checkers = ["vint", "vimlint"]
 let g:syntastic_mode_map = {'mode': 'active'}
 " }}}
 
