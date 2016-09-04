@@ -5,7 +5,7 @@
 autocmd BufWinEnter *.rb loadview
 autocmd BufWinLeave,BufUnload *.rb mkview
 setlocal foldenable
-setlocal foldmethod=indent
+setlocal foldmethod=syntax
 setlocal foldnestmax=2
 
 setlocal viewoptions=folds,cursor
