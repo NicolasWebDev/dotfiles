@@ -134,7 +134,7 @@ alias ping="ping www.archlinux.org"
 alias be='setxkbmap fr bepo ; echo "keyboard switched to bepo"'
 alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 #alias less=$PAGER
-alias ll='ls --color=auto -l'
+alias ll='ls --color=auto -lX'
 alias vimgtd="cd $HOME/todo.txt-cli ; vim waiting.txt -o someday_maybe.txt -c ':vs projects.txt' -c ':wincmd j' -c ':vs todo.txt'"
 alias ls='ls --color=auto'
 alias b='bundle exec'
