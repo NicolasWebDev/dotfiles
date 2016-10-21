@@ -168,11 +168,18 @@ function test_rc_lua()
     sleep 1
     DISPLAY=:1.0 awesome -c ~/.config/awesome/rc.lua.new
 }
+function markdown2html()
+{
+    MD_FILE=$1
+    HTML_FILE=$2
+    pandoc -s --css=file://$HOME/.markdown.css $MD_FILE > $HTML_FILE
+}
 function preview-markdown()
 {
     MD_FILE=$1
-    HTML_FILE="$(basename $MD_FILE .md).html"
-    pandoc -s --css=file://$HOME/.markdown.css $MD_FILE > /tmp/${HTML_FILE} ; firefox /tmp/${HTML_FILE}
+    HTML_FILE="/tmp/$(basename $MD_FILE .md).html"
+    markdown2html $MD_FILE $HTML_FILE
+    firefox $HTML_FILE
 }
 # to remove beeping in the terminal
 set bell-style none
