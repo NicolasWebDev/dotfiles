@@ -7,6 +7,9 @@ source ~/.mutt/free_sathors
 
 macro index <f2> '<sync-mailbox><imap-logout-all><enter-command>source ~/.mutt/free_sathors<enter><change-folder>!<enter>'
 macro index <f3> '<sync-mailbox><imap-logout-all><enter-command>source ~/.mutt/mail_protelcotelsa<enter><change-folder>!<enter>'
+macro index,pager I \
+    "<enter-command>unset wait_key<enter>\v/html<enter>|~/.mutt/open-with-firefox-mutt<enter>q<read-thread>" \
+    "Open first html in firefox"
 
 ### GENERAL SETTINGS
 #set index_format  = '%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s'
@@ -21,8 +24,8 @@ set pager_context=5     # retain 5 lines of previous page when scrolling
 set sort_alias=alias
 set delete=yes  # automatically delete messages marked for deletion on exit
 set sig_on_top=yes
-auto_view text/html # autoview html
-alternative_order text/plain text/enriched text/html  # save html for last
+auto_view text/html
+alternative_order text/html text/enriched text/text
 set sort=threads # sort messages as threads
 set sort_aux=last-date-received # then sort by date
 set beep_new=yes  # beep when new messages arrive in mailbox
