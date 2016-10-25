@@ -484,6 +484,8 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey,           }, "r",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "c",     function () awful.tag.incmwfact(-0.05)    end),
+    awful.key({ modkey, "Shift"   }, "d",     function () awful.util.spawn_with_shell("bash -i -c 'screen_detach'") end),
+    awful.key({ modkey, "Shift"   }, "h",     function () awful.util.spawn_with_shell("bash -i -c 'screen_hdmi'") end),
     awful.key({ modkey, "Shift"   }, "c",     function () awful.tag.incnmaster( 1)      end),
     awful.key({ modkey, "Shift"   }, "r",     function () awful.tag.incnmaster(-1)      end),
     awful.key({ modkey, "Control" }, "c",     function () awful.tag.incncol( 1)         end),
