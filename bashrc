@@ -50,7 +50,6 @@ then
     alias hibernate='sflock -f "-*-fixed-*-r-*-*-*-420-*-*-*-*-*-*" ; dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate'
     alias bzrc='bzr diffstat | tail -n1 | cut -d',' -f2- | sed "s/^[^[:digit:]]*\([[:digit:]]*\)[^[:digit:]]*\([[:digit:]]*\).*$/\1 - \2/g" | bc'
     alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
-    alias odoo_server='./openerp-server -c .openerp_serverrc'
     alias odoo_merge='bzr merge && bzr ci -m "[MRG]" && cd .. && ./run_tests.py -m oly_customize && cd - && bzr push'
     function bzrd()
     {
@@ -123,6 +122,9 @@ esac
 #---------------------------- PATH ------------------------------
 
 #------------------------- ALIASES --------------------------------
+alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
+alias reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgres ; dropdb --if-exists -p 5434 testing ; createdb -p 5434 -T demo testing"'
+alias odoo_server='./odoo.py -c .openerp_serverrc'
 alias firefox='firefox-aurora'
 alias t='todo.sh'
 alias vimwaiting="vim $HOME/todo.txt-cli/waiting.txt"
