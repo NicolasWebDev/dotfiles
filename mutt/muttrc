@@ -52,7 +52,7 @@ set mail_check = 600
 set pager_index_lines=10
 
 # Wrap emails when displaying them.
-set wrap=72
+set wrap=80
 
 # If a thread has unread messages, don't collapse it.
 set nocollapse_unread
