@@ -26,6 +26,9 @@ for var in ['assertFalse', 'assertTrue', 'assertEqual', 'assertRaisesRegexp', 'a
 endfor
 
 " ROPE {{{
+" To enable the opening of a project, in the directory containing the
+" currently edited file.
+let g:ropevim_guess_project=1
 nnoremap <buffer> <LocalLeader>rn :RopeRename<cr>
 vnoremap <buffer> <LocalLeader>rl :RopeExtractVariable<cr>
 vnoremap <buffer> <LocalLeader>rm :RopeExtractMethod<cr>
