@@ -8,4 +8,4 @@
 	dc = diff --cached
 	co = checkout
 	br = branch
-	lf = log --graph --all --full-history --format='%C(yellow) %h %Cblue %an %C(white) %C(auto) %d %s'
+	lf = log --graph --all --full-history --format='%C(yellow) %h %Cgreen %ad %Cblue %an %C(white) %C(auto) %d %s' --date=format:'%Y-%m-%d %H:%M:%S'
