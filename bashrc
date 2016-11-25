@@ -51,10 +51,6 @@ then
     alias bzrc='bzr diffstat | tail -n1 | cut -d',' -f2- | sed "s/^[^[:digit:]]*\([[:digit:]]*\)[^[:digit:]]*\([[:digit:]]*\).*$/\1 - \2/g" | bc'
     alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
     alias odoo_merge='bzr merge && bzr ci -m "[MRG]" && cd .. && ./run_tests.py -m oly_customize && cd - && bzr push'
-    function bzrd()
-    {
-        bzr cdiff "$1" | less -r
-    }
     alias screens_mirror="xrandr --output LVDS1 --mode 1440x900 --output VGA1 --mode 1440x900 --same-as LVDS1"
     alias screens_split="xrandr --output LVDS1 --mode 1600x900 --output VGA1 --mode 1440x900 --right-of LVDS1"
     alias screens_detach="xrandr --output VGA1 --off --output LVDS1 --mode 1600x900"
@@ -62,10 +58,6 @@ then
     function find_tests_time()
     {
         cat $1 | grep 'Ran' | cut -d' ' -f2- | sed 's/Ran //' | sed 's/tests in //' | sed 's/s$//' | sed 's/test in //' | sed 's/^\(.*:\) \([[:digit:]]\+\) \([[:digit:]]\+\)\.\([[:digit:]]\+\)/echo "\1 \2 tests at" $(echo "scale=1; \2 \/ \3.\4" | bc) "tests\/second"/' | bash | sort -nr -k5
-    }
-    function kill-openerp()
-    {
-        kill -s SIGKILL $(ps aux | grep openerp | grep python | awk '{print $2}')
     }
     function disable_tp()
     {
@@ -123,7 +115,7 @@ esac
 
 #------------------------- ALIASES --------------------------------
 alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
-alias reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgres ; dropdb --if-exists -p 5434 testing ; createdb -p 5434 -T demo testing"'
+alias odoo_reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgres ; dropdb --if-exists -p 5434 testing ; createdb -p 5434 -T demo testing"'
 alias odoo_server='./odoo.py -c .openerp_serverrc'
 alias firefox='firefox-aurora'
 alias t='todo.sh'
@@ -164,6 +156,10 @@ alias egrep="egrep --color=auto"
 alias notify-send="notify-send -t 100000"
 alias suspend="sflock -c ' ' -h ; systemctl suspend"
 alias term_colors='for x in 0 1 4 5 7 8; do for i in `seq 30 37`; do for a in `seq 40 47`; do echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "; done; echo; done; done; echo "";'
+function bzrd()
+{
+    bzr diff "$1" | less -r
+}
 function test_rc_lua()
 {
     Xephyr -ac -br -noreset -screen 800x600 :1 &
@@ -182,6 +178,10 @@ function preview-markdown()
     HTML_FILE="/tmp/$(basename $MD_FILE .md).html"
     markdown2html $MD_FILE $HTML_FILE
     firefox $HTML_FILE
+}
+function odoo-kill()
+{
+    kill -s SIGKILL $(ps aux | grep openerp | grep python | awk '{print $2}')
 }
 # to remove beeping in the terminal
 set bell-style none
