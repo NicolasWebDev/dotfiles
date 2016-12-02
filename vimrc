@@ -174,6 +174,7 @@ Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
 Plug 'Sathors/vim-blockle' | Plug 'tmhedberg/matchit'
 Plug 'killphi/vim-ruby-refactoring' | Plug 'tmhedberg/matchit'
 Plug 'freitass/todo.txt-vim'
+Plug 'bitc/vim-hdevtools'
 call plug#end()
 " }}}
 
