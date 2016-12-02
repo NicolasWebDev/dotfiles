@@ -148,6 +148,7 @@ alias screen_mirror="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mo
 alias screen_split="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --right-of eDP-1"
 alias rsync-backup='rsync -av --progress --delete --stats'
 alias svim='sudo /usr/bin/vim'
+alias dfh='df -h'
 alias mount='mount | column -t'
 alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m - \2|g'"
 alias grep="grep --color=auto"
