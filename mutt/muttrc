@@ -66,6 +66,7 @@ bind generic,index t next-entry
 bind generic,index s previous-entry
 bind generic,index T next-page
 bind generic,index S previous-page
+bind generic,index p search-opposite
 bind pager t next-line
 bind pager s previous-line
 bind pager \CT next-entry
