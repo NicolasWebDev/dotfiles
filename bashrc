@@ -78,8 +78,6 @@ then
     alias apti='/usr/bin/apt-cache show'
     alias bzrl='/usr/bin/bzr log --show-ids'
     alias bzri='/usr/bin/bzr log --show-ids -r-1 | grep revision-id | cut -d'-' -f3'
-    alias greppy='/bin/grep --color=auto --include="*.py" -rn'
-    alias grepxml='/bin/grep --color=auto --include="*.xml" -rn'
     eval "$(rbenv init -)"
 
     ### Added by the Heroku Toolbelt
@@ -129,6 +127,8 @@ alias be='setxkbmap fr bepo ; echo "keyboard switched to bepo"'
 alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 #alias less=$PAGER
 alias ll='ls --color=auto -lX'
+alias greppy='/bin/grep --color=auto --include="*.py" -rn'
+alias grepxml='/bin/grep --color=auto --include="*.xml" -rn'
 alias vimgtd="cd $HOME/todo.txt-cli ; vim waiting.txt -o someday_maybe.txt -c ':vs projects.txt' -c ':wincmd j' -c ':vs todo.txt'"
 alias ls='ls --color=auto'
 alias b='bundle exec'
