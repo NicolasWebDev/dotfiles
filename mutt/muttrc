@@ -32,6 +32,7 @@ set beep_new=yes  # beep when new messages arrive in mailbox
 source $alias_file
 set mailcap_path    = ~/.mutt/mailcap
 set include       # include message in reply automatically
+set send_charset    = "utf-8:iso-8859-1:us-ascii" # because else message is received garbled in tefa's computer
 
 # Prefer Plain text to html, html to word etc ...
 alternative_order text/plain text/html application/vnd.msword application/msword
