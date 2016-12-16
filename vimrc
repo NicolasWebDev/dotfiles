@@ -216,6 +216,7 @@ let EasyGrepMode = 3
 
 " NERDTREE SETTINGS {{{
 noremap <leader>n :NERDTreeToggle<cr>
+let NERDTreeIgnore = ['\.pyc$']
 " }}}
 
 " SYNTASTIC {{{
