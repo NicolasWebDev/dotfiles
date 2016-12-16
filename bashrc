@@ -24,6 +24,7 @@ then
     alias yas='/usr/bin/yaourt -Ss'
     alias pacuu='sudo /usr/bin/pacman -U *.pkg.*'
     alias paci='/usr/bin/pacman -Si'
+    alias yai='/usr/bin/yaourt -Si'
     alias paclo='/usr/bin/pacman -Qdt'   # list all orphaned packages
     alias pacc='sudo /usr/bin/pacman -Scc'
     alias paclf='/usr/bin/pacman -Ql'
