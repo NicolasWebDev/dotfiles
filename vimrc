@@ -176,11 +176,12 @@ Plug 'killphi/vim-ruby-refactoring' | Plug 'tmhedberg/matchit'
 Plug 'freitass/todo.txt-vim'
 Plug 'bitc/vim-hdevtools'
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 call plug#end()
 " }}}
 
 " TAGLIST {{{
-set updatetime=1000
+set updatetime=250
 " }}}
 
 " AIRLINE {{{
