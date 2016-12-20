@@ -175,6 +175,7 @@ Plug 'Sathors/vim-blockle' | Plug 'tmhedberg/matchit'
 Plug 'killphi/vim-ruby-refactoring' | Plug 'tmhedberg/matchit'
 Plug 'freitass/todo.txt-vim'
 Plug 'bitc/vim-hdevtools'
+Plug 'tpope/vim-fugitive'
 call plug#end()
 " }}}
 
