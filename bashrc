@@ -181,6 +181,12 @@ function preview-markdown()
     markdown2html $MD_FILE $HTML_FILE
     firefox $HTML_FILE
 }
+function lpr_preview ()
+{
+    lpr -P pdf_printer "$@"
+    sleep 1
+    evince /var/spool/cups-pdf/sathors/sathors.pdf &
+}
 function odoo-kill()
 {
     kill -s SIGKILL $(ps aux | grep openerp | grep python | awk '{print $2}')
