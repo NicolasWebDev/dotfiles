@@ -118,6 +118,8 @@ alias odoo_reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgre
 alias odoo_server='./odoo.py -c .openerp_serverrc'
 alias firefox='firefox-aurora'
 alias t='todo.sh'
+alias tree1='tree -L 1'
+alias tree2='tree -L 2'
 alias vimwaiting="vim $HOME/todo.txt-cli/waiting.txt"
 alias vimtodo="vim $HOME/todo.txt-cli/todo.txt"
 alias vimbashrc="vim $HOME/.bashrc ; source $HOME/.bashrc"
