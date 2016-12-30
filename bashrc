@@ -206,6 +206,10 @@ alias ln='ln -i'
 # Used to keep rsa keys opened once for each boot.
 eval $(keychain --eval --quiet id_rsa)
 
+# --- DIRCOLORS ---
+# Set the colors used by ls and tree.
+eval $(dircolors -b $HOME/.dircolors)
+
 # prepend TERM=linux ensures that there is no problem connecting via ssh on a
 # machine which doesn't use urxvt as I do
 
