@@ -120,6 +120,7 @@ alias odoo_server='./odoo.py -c .openerp_serverrc'
 alias firefox='firefox-aurora'
 alias t='todo.sh'
 alias tree1='tree -L 1'
+alias v='vim'
 alias tree2='tree -L 2'
 alias vimwaiting="vim $HOME/todo.txt-cli/waiting.txt"
 alias vimtodo="vim $HOME/todo.txt-cli/todo.txt"
