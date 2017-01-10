@@ -8,6 +8,7 @@ if [[ `uname -n` == "ArchFloe" ]]
 then
     echo "I'm on the ThinkPad"
     export PATH="$HOME/.rbenv/bin:$HOME/todo.txt-cli:$HOME/work/my_scripts:$HOME/.cabal/bin:$PATH"
+    export RUBYLIB="$HOME/work/my_scripts:$RUBYLIB"
     eval "$(rbenv init -)"
     # hook for finding package providing unknown command
     source /usr/share/doc/pkgfile/command-not-found.bash
