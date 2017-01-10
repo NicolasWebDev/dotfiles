@@ -195,6 +195,11 @@ function odoo-kill()
 {
     kill -s SIGKILL $(ps aux | grep openerp | grep python | awk '{print $2}')
 }
+
+function du_sorted()
+{
+    du -hs "$@" | sort -hr
+}
 # to remove beeping in the terminal
 set bell-style none
 
