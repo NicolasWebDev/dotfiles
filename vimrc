@@ -236,6 +236,7 @@ let g:syntastic_mode_map = {'mode': 'active'}
 
 " YOUCOMPLETEME {{{
 " make YCM compatible with UltiSnips (using supertab)
+let g:UltiSnipsSnippetDirectories = ['~/.vim/UltiSnips', 'UltiSnips']
 let g:ycm_key_list_select_completion = ['<C-t>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-s>', '<Down>']
 let g:SuperTabDefaultCompletionType = '<C-t>'
