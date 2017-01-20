@@ -178,6 +178,7 @@ Plug 'freitass/todo.txt-vim'
 Plug 'bitc/vim-hdevtools'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+Plug 'chrisbra/Recover.vim'
 call plug#end()
 " }}}
 
