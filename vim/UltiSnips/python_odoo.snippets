@@ -167,6 +167,18 @@ snippet con "odoo context"
 context={'$1': $2}
 endsnippet
 
+snippet sase "self.assertEqual" b
+self.assertEqual(${1:actual}, ${2:expected})
+endsnippet
+
+snippet sasf "self.assertFalse" b
+self.assertFalse($1)
+endsnippet
+
+snippet sast "self.assertTrue" b
+self.assertTrue($1)
+endsnippet
+
 snippet ase "assertEqual" b
 assertEqual(${1:actual}, ${2:expected})
 endsnippet
