@@ -204,7 +204,7 @@ function lpr_preview ()
 {
     lpr -P pdf_printer "$@"
     sleep 1
-    evince /var/spool/cups-pdf/sathors/sathors.pdf &
+    evince $(ls -t /var/spool/cups-pdf/sathors/*.pdf | head -n1) &
 }
 function odoo-kill()
 {
