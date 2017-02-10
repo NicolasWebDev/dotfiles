@@ -134,7 +134,7 @@ alias vimgtd="cd $HOME/todo.txt-cli ; vim waiting.txt -o someday_maybe.txt -c ':
 alias ls='ls --color=auto'
 alias b='bundle exec'
 alias greprb='/bin/grep --color=auto --include="*.rb" -rn'
-alias greprails='/bin/grep --color=auto -rnI --exclude-dir="log" --exclude-dir=".git"'
+alias greprails='/bin/grep --color=auto -rnI --exclude-dir="log" --exclude-dir=".git" --exclude-dir="coverage"'
 alias gitc='git commit'
 alias gita='git add'
 alias gits='git status'
