@@ -137,6 +137,8 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
     noremap <leader>qq :bd<cr>
     noremap <leader>qQ :Bdelete<cr>
+    " Save with <leader>s.
+    noremap <Leader>s :update<CR>
 
     " Hide buffers when they are abandoned.
     set hidden
@@ -281,8 +283,10 @@ nnoremap <leader>- ddp
 nnoremap <leader>_ ddkP
 inoremap <leader><c-u> <esc>viwUi
 nnoremap <leader><c-u> viwU
+" Edit vimrc in another pane.
 nnoremap <leader>ev :split $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
+" Source vimrc file
+nnoremap <leader>rv :source $MYVIMRC<cr>
 iabbrev fs self, cr, uid, ids, context=None):<cr>
 iabbrev fc cr, uid, ids, context=context)<cr>
 nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lel
