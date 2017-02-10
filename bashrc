@@ -150,9 +150,13 @@ alias hist='history | grep'
 alias mkdir='mkdir -pv'
 alias poweroff='systemctl poweroff'
 alias youtube-dl-sub='youtube-dl --write-sub --sub-lang en --sub-format vtt'
-alias remc='remind -cum -w162,0 ~/.reminders'
+function remc() {
+    remind -cum -w$(tput cols),0 ~/.reminders
+}
+function remc2() {
+    remind -cu2 -m -w$(tput cols)162,0 ~/.reminders
+}
 alias remd='remind -z -k"notify-send -u critical -t 60000 %s &" ~/.reminders'
-alias remc2='remind -cu2 -m -w162,0 ~/.reminders'
 alias reboot='systemctl reboot'
 alias screen_hdmi='xrandr | grep -q "HDMI-1 connected" && xrandr --output eDP-1 --off --output HDMI-1 --auto || echo "HDMI-1 is not connected"'
 alias screen_detach='xrandr --output eDP-1 --auto --output HDMI-1 --off'
