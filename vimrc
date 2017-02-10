@@ -1,3 +1,9 @@
+" TODO
+" - remove all french comments
+" - put mappings together
+" - put the bepo mappings here
+" - resolve linting errors
+
 source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
 " BASIC SETTINGS {{{
