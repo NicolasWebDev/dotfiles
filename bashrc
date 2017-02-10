@@ -32,11 +32,7 @@ then
     alias pacq='/usr/bin/pacman -Q | grep'
     # recursively remove ALL orphaned packages
     alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
-    # function to print packages by size
-    pacman-size()
-    {
-        pacman -Qi | awk '/^Name/ {pkg=$3} /Size/ {print $4$5,pkg}' | sort -n
-    }
+    alias pacman_size='pacgraph -c' # print installed packages by size
 
     ## Yaourt aliases ##
     alias yas='yaourt -Ss'
