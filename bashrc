@@ -154,7 +154,7 @@ function remc() {
     remind -cum -w$(tput cols),0 ~/.reminders
 }
 function remc2() {
-    remind -cu2 -m -w$(tput cols)162,0 ~/.reminders
+    remind -cu2 -m -w$(tput cols),0 ~/.reminders
 }
 alias remd='remind -z -k"notify-send -u critical -t 60000 %s &" ~/.reminders'
 alias reboot='systemctl reboot'
