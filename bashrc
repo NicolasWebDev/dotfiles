@@ -118,6 +118,7 @@ alias t='todo.sh'
 alias tree1='tree -L 1'
 alias v='vim'
 alias tree2='tree -L 2'
+alias psgrep='ps aux | grep -v grep | grep'
 alias vimwaiting="vim $HOME/todo.txt-cli/waiting.txt"
 alias vimtodo="vim $HOME/todo.txt-cli/todo.txt"
 alias vimbashrc="vim $HOME/.bashrc ; source $HOME/.bashrc"
