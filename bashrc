@@ -131,7 +131,7 @@ alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 alias ll='ls --color=auto -lX'
 alias greppy='/bin/grep --color=auto --include="*.py" -rn'
 alias grepxml='/bin/grep --color=auto --include="*.xml" -rn'
-alias vimgtd="cd $HOME/todo.txt-cli ; vim waiting.txt -o someday_maybe.txt -c ':vs projects.txt' -c ':wincmd j' -c ':vs todo.txt'"
+alias vimgtd="cd $HOME/todo.txt-cli ; vim waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt'"
 alias ls='ls --color=auto'
 alias b='bundle exec'
 alias greprb='/bin/grep --color=auto --include="*.rb" -rn'
