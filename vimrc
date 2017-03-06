@@ -164,6 +164,8 @@ augroup END
 
 " VIM-PLUG {{{
 call plug#begin('~/.vim/plugged')
+Plug 'chrisbra/csv.vim'
+Plug 'dhruvasagar/vim-table-mode'
 Plug 'scrooloose/nerdcommenter'
 Plug 'python-rope/ropevim'
 Plug 'ervandew/supertab'
