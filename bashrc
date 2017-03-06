@@ -122,6 +122,7 @@ alias psgrep='ps aux | grep -v grep | grep'
 alias vimwaiting="vim $HOME/todo.txt-cli/waiting.txt"
 alias scanimage="scanimage --device 'pixma:04A9176C_A5C6D3'"
 alias vimtodo="vim $HOME/todo.txt-cli/todo.txt"
+alias ssh='TERM=xterm-256color ssh'
 alias vimbashrc="vim $HOME/.bashrc ; source $HOME/.bashrc"
 alias vimsomeday="vim $HOME/todo.txt-cli/someday_maybe.txt"
 alias vimreminders="vim $HOME/.reminders"
