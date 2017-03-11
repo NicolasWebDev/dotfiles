@@ -1,7 +1,23 @@
 snippet t "Task" b
-(${1:p}) #${2:cat} +${3:project} $0
+($0) #${3:cat} +${2:project} ${1:description}
 endsnippet
 
-snippet m "Movie" b
-(${1:p}) #o +movies 2x1 "${2:name}"
+snippet tt "protel" b
+($0) #t +protel ${1:description}
+endsnippet
+	
+snippet tp "perso" b
+($0) #p +${2:perso} ${1:description}
+endsnippet
+	
+snippet tw "work" b
+($0) #w +${2:kahas} ${1:description}
+endsnippet
+	
+snippet to "optional" b
+($0) #o +${2:project} ${1:description}
+endsnippet
+	
+snippet tm "Movie" b
+($0) #o +movies 2x1 "${1:name}"
 endsnippet
