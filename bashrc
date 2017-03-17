@@ -235,6 +235,13 @@ eval $(keychain --eval --quiet id_rsa)
 # Set the colors used by ls and tree.
 eval $(dircolors -b $HOME/.dircolors)
 
+if [ -f /usr/lib/bash-git-prompt/gitprompt.sh ]; then
+	# To only show the git prompt in or under a repository directory
+	#GIT_PROMPT_ONLY_IN_REPO=1
+	GIT_PROMPT_THEME=Custom
+	source /usr/lib/bash-git-prompt/gitprompt.sh
+fi
+
 # prepend TERM=linux ensures that there is no problem connecting via ssh on a
 # machine which doesn't use urxvt as I do
 

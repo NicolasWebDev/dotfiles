@@ -8,7 +8,7 @@
 
 dir=~/dotfiles                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
-files="Xresources abcde.conf bash_profile bashrc fonts gvimrc inputrc less pentadactyl pentadactylrc vim vimrc vimrc_bepo vrapperrc xinitrc"    # list of files/folders to symlink in homedir
+files="Xresources abcde.conf bash_profile bashrc fonts gvimrc inputrc less pentadactyl pentadactylrc vim vimrc vimrc_bepo vrapperrc xinitrc git-prompt-colors.sh"    # list of files/folders to symlink in homedir
 
 ##########
 
