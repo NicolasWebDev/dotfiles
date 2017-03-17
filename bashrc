@@ -159,6 +159,18 @@ function remc() {
 function remc2() {
     remind -cu2 -m -w$(tput cols),0 ~/.reminders
 }
+function todo_time ()
+{
+    grep -v "^x" todo.txt-cli/todo.txt | grep "$1.*\*[0-9]\+" | sed 's/.*\*\([0-9]\+\)/\1/' | awk '{s+=$1} END {printf("%02d:%02d", int(s/60),s % 60)}'
+}
+function todo_times ()
+{
+    echo "A:        $(todo_time '(A)')"
+    echo "B:        $(todo_time '(B)')"
+    echo "C:        $(todo_time '(C)')"
+    echo "D:        $(todo_time '(D)')"
+    echo "Total:    $(todo_time)"
+}
 alias remd='remind -z -k"notify-send -u critical -t 60000 %s &" ~/.reminders'
 alias reboot='systemctl reboot'
 alias screen_hdmi='xrandr | grep -q "HDMI-1 connected" && xrandr --output eDP-1 --off --output HDMI-1 --auto || echo "HDMI-1 is not connected"'
