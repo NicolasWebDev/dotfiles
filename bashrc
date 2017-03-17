@@ -208,6 +208,12 @@ function markdown2html()
     HTML_FILE=$2
     pandoc -s --css=file://$HOME/.markdown.css $MD_FILE > $HTML_FILE
 }
+function markdown2pdf()
+{
+    MD_FILE=$1
+    PDF_FILE=$2
+    pandoc -V geometry:margin=1in -s --css=file://$HOME/.markdown.css $MD_FILE -o $PDF_FILE
+}
 function preview-markdown()
 {
     MD_FILE=$1
