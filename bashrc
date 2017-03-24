@@ -194,7 +194,7 @@ alias suspend="sflock -c ' ' -h ; systemctl suspend"
 alias term_colors='for x in 0 1 4 5 7 8; do for i in `seq 30 37`; do for a in `seq 40 47`; do echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "; done; echo; done; done; echo "";'
 export GAD_IP=181.112.151.237
 function guard_python() {
-    watchmedo shell-command --patterns="*.py" --command='[ ${watch_event_type} = modified ] && green -r'
+    watchmedo shell-command -R --patterns="*.py" --command='[ ${watch_event_type} = modified ] && green -r'
 }
 function bzrd()
 {
