@@ -159,6 +159,10 @@ function remc() {
 function remc2() {
     remind -cu2 -m -w$(tput cols),0 ~/.reminders
 }
+function pomodori2time()
+{
+    printf "%02d:%02.f\n" $(echo "$1 * 32.5 / 60" | bc) $(echo "$1 * 32.5 % 60" | bc)
+}
 function todo_time ()
 {
     grep -v "^x" todo.txt-cli/todo.txt | grep "$1.*\*[0-9]\+" | sed 's/.*\*\([0-9]\+\)/\1/' | awk '{s+=$1} END {printf("%02d:%02d", int(s/60),s % 60)}'
