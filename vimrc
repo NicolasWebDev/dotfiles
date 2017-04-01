@@ -237,7 +237,7 @@ let NERDTreeIgnore = ['\.pyc$']
 " SYNTASTIC {{{
 let g:syntastic_aggregate_errors = 1
 let g:syntastic_python_pylint_post_args = "--rcfile=../.pylintrc"
-let g:syntastic_ruby_checkers = ["mri", "rubocop", "reek"]
+let g:syntastic_ruby_checkers = ["mri", "rubocop", "reek", 'flog']
 let g:syntastic_lua_checkers = ["luac", "luacheck"]
 let g:syntastic_scss_checkers = ["scss_lint"]
 let g:syntastic_javascript_checkers = ["eslint"]
