@@ -1,4 +1,4 @@
-# VIM Table Mode v4.6.4.4 [![Build Status](https://travis-ci.org/dhruvasagar/vim-table-mode.png?branch=master)](https://travis-ci.org/dhruvasagar/vim-table-mode)
+# VIM Table Mode v4.6.6 [![Build Status](https://travis-ci.org/dhruvasagar/vim-table-mode.png?branch=master)](https://travis-ci.org/dhruvasagar/vim-table-mode)
 
 An awesome automatic table creator & formatter allowing one to create neat
 tables as you type.
@@ -17,10 +17,11 @@ There are several ways to do this
    href="https://github.com/tpope/vim-pathogen">pathogen.vim</a>, then
    add a git submodule for your plugin:
 
-   ```sh
+```sh
 $ cd ~/.vim
 $ git submodule add git@github.com:dhruvasagar/vim-table-mode.git bundle/table-mode
-   ```
+```
+
 3. Copy all files under autoload/, plugin/, doc/ to respective
    ~/.vim/autoload/, ~/.vim/plugin and ~/.vim/doc under UNIX or
    vimfiles/autoload/, vimfiles/plugin/ and vimfiles/doc under WINDOWS and
@@ -28,7 +29,7 @@ $ git submodule add git@github.com:dhruvasagar/vim-table-mode.git bundle/table-m
 
 ### Creating table on-the-fly
 
-To start using the plugin in the on-the-fly mode use `:TableModeToggle` mapped to <kbd>\<Leader\>tm</kbd> by default (which means <kbd>\\</kbd> <kbd>t</kbd> <kbd>m</kbd> if you didn't override the <Leader> by `:let mapleader = ","` to have <kbd>,</kbd> <kbd>t</kbd> <kbd>m</kbd>).
+To start using the plugin in the on-the-fly mode use `:TableModeToggle` mapped to <kbd>\<Leader\>tm</kbd> by default (which means <kbd>\\</kbd> <kbd>t</kbd> <kbd>m</kbd> if you didn't override the <Leader> by `:let mapleader = ','` to have <kbd>,</kbd> <kbd>t</kbd> <kbd>m</kbd>).
 
 > Tip :
 > You can use the following to quickly enable / disable table mode in insert
@@ -87,7 +88,7 @@ Corner separators are adjustable:
 
 For Markdown-compatible tables use
 
-    let g:table_mode_corner="|"
+    let g:table_mode_corner='|'
 
 
     |-----------------|--------------------------|------------|
@@ -100,8 +101,8 @@ For Markdown-compatible tables use
 
 To get ReST-compatible tables use
 
-    let g:table_mode_corner_corner="+"
-    let g:table_mode_header_fillchar="="
+    let g:table_mode_corner_corner='+'
+    let g:table_mode_header_fillchar='='
 
 
     +-----------------+--------------------------+------------+

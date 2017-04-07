@@ -45,6 +45,8 @@ call s:SetGlobalOptDefault('table_mode_echo_cell_map', '<Leader>t?')
 call s:SetGlobalOptDefault('table_mode_sort_map', '<Leader>ts')
 
 call s:SetGlobalOptDefault('table_mode_syntax', 1)
+call s:SetGlobalOptDefault('table_mode_auto_align', 1)
+call s:SetGlobalOptDefault('table_mode_update_time', 500)
 
 function! s:TableEchoCell() "{{{1
   if tablemode#table#IsRow('.')
