@@ -167,8 +167,13 @@ function todo_time ()
 {
     grep -v "^x" todo.txt-cli/todo.txt | grep "$1.*\*[0-9]\+" | sed 's/.*\*\([0-9]\+\)/\1/' | awk '{s+=$1} END {printf("%02d:%02d", int(s/60),s % 60)}'
 }
+function validate_todo_format()
+{
+    ! (grep -v "^@" todo.txt-cli/todo.txt | grep -v "^x " | grep -v "^([A-D]) #[a-z] +[a-z_]\+ .* \*[0-9]\+")
+}
 function todo_times ()
 {
+    validate_todo_format || return 1
     echo "A:        $(todo_time '(A)')"
     echo "B:        $(todo_time '(B)')"
     echo "C:        $(todo_time '(C)')"
