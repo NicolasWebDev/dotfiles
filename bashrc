@@ -148,6 +148,9 @@ alias gitdc='git diff --cached'
 alias gitco='git checkout'
 alias gitbr='git branch'
 alias gitlf="git log --graph --all --full-history --format='%C(yellow) %h %Cgreen %ad %Cblue %an %C(white) %C(auto) %d %s' --date=format:'%Y-%m-%d %H:%M:%S'"
+function github {
+    git clone --depth 1 https://github.com/$1
+}
 alias lc='ls --color=auto --format=single-column'
 alias hist='history | grep'
 alias mkdir='mkdir -pv'
