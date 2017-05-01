@@ -191,6 +191,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'chrisbra/Recover.vim'
 Plug 'tmhedberg/SimpylFold'
 Plug 'sunaku/vim-ruby-minitest'
+Plug 'Chiel92/vim-autoformat'
 call plug#end()
 " }}}
 
