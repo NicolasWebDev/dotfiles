@@ -130,6 +130,9 @@ alias ping="ping www.archlinux.org"
 alias be='setxkbmap fr bepo ; echo "keyboard switched to bepo"'
 alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 #alias less=$PAGER
+# To avoid spotify muting chrome, per the issue
+# https://github.com/serialoverflow/blockify/issues/92
+alias spotify='PULSE_PROP="module-stream-restore.id=spotify" /usr/bin/spotify'
 alias ll='ls --color=auto -lX'
 alias greppy='/bin/grep --color=auto --include="*.py" -rn'
 alias grepxml='/bin/grep --color=auto --include="*.xml" -rn'
