@@ -84,10 +84,7 @@ print '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 endsnippet
 
 snippet defm "method with docstrings" b
-def ${1:method}(self, ${2:arg1}):
-	"""
-	${4:TODO: Docstring for $1.}`!p
-write_function_docstring(t, snip) `
+def ${1:method}(self${2:, ${3:arg1}}):
 	${0:pass}
 endsnippet
 
@@ -106,3 +103,16 @@ endsnippet
 snippet pv "print a variable for debugging" b
 print '${1:my_var}:', $1
 endsnippet
+
+snippet defc "class method" b
+@classmethod
+def ${1:function}(cls${2:, ${3:arg1}}):
+	${0:pass}
+endsnippet
+
+snippet defs "static method" b
+@staticmethod
+def ${1:function}(${2:arg1}):
+	${0:pass}
+endsnippet
+
