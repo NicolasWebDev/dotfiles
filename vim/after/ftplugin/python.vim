@@ -4,9 +4,6 @@
 " after opening (useful while reloading the file).
 autocmd BufWinEnter *.py loadview
 autocmd BufWinLeave,BufUnload *.py mkview
-setlocal foldenable
-setlocal foldmethod=indent
-setlocal foldnestmax=2
 
 setlocal viewoptions=folds,cursor
 
