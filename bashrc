@@ -150,7 +150,7 @@ alias gitd='git diff'
 alias gitdc='git diff --cached'
 alias gitco='git checkout'
 alias gitbr='git branch'
-alias gitlf="git log --graph --all --full-history --format='%C(yellow) %h %Cgreen %ad %Cblue %an %C(white) %C(auto) %d %s' --date=format:'%Y-%m-%d %H:%M:%S'"
+alias gitlf="git lf"
 function github {
     git clone --depth 1 https://github.com/$1
 }
