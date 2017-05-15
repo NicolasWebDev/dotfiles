@@ -2,6 +2,13 @@
 !             URXVT CONFIGURATION             !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+!To resize fonts on the fly.
+URxvt.perl-ext-common: resize-font
+URxvt.resize-font.smaller: C-Down
+URxvt.resize-font.bigger: C-Up
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+
 urxvt*foreground: #f2f2f2
 urxvt*background: #222222
 !urxvt*boldFont:     xft:InconsolataDz for Powerline:bold:pixelsize=14:hinting=true:antialias=true
