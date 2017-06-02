@@ -175,7 +175,7 @@ function todo_time ()
 }
 function validate_todo_format()
 {
-    ! (grep -v "^@" todo.txt-cli/todo.txt | grep -v "^x " | grep -v "^([A-D]) #[a-z] +[a-z_]\+ .* \*[0-9]\+")
+    ! (grep -v "^@" todo.txt-cli/todo.txt | grep -v "^x " | grep -v "^([A-D]).* #[a-z] +[a-z_]\+ .* \*[0-9]\+")
 }
 function todo_times ()
 {
