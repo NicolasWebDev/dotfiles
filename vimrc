@@ -193,6 +193,7 @@ Plug 'tmhedberg/SimpylFold'
 Plug 'sunaku/vim-ruby-minitest'
 Plug 'Chiel92/vim-autoformat'
 Plug 'othree/html5.vim'
+Plug 'StanAngeloff/php.vim'
 call plug#end()
 " }}}
 
