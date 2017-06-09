@@ -245,6 +245,7 @@ let g:syntastic_ruby_checkers = ["mri", "rubocop", "reek", 'flog']
 let g:syntastic_sh_checkers = ['bashate', 'sh', 'shellcheck']
 let g:syntastic_lua_checkers = ["luac", "luacheck"]
 let g:syntastic_scss_checkers = ["scss_lint"]
+let g:syntastic_css_checkers = ["stylelint"]
 let g:syntastic_javascript_checkers = ["eslint"]
 let g:syntastic_vim_checkers = ["vint", "vimlint"]
 let g:syntastic_mode_map = {'mode': 'active'}
