@@ -194,6 +194,7 @@ Plug 'sunaku/vim-ruby-minitest'
 Plug 'Chiel92/vim-autoformat'
 Plug 'othree/html5.vim'
 Plug 'StanAngeloff/php.vim'
+Plug 'pangloss/vim-javascript'
 call plug#end()
 " }}}
 
@@ -247,6 +248,7 @@ let g:syntastic_lua_checkers = ["luac", "luacheck"]
 let g:syntastic_scss_checkers = ["scss_lint"]
 let g:syntastic_css_checkers = ["stylelint"]
 let g:syntastic_javascript_checkers = ["eslint"]
+let g:syntastic_javascript_eslint_exe='yarn run eslint --'
 let g:syntastic_vim_checkers = ["vint", "vimlint"]
 let g:syntastic_mode_map = {'mode': 'active'}
 " }}}
