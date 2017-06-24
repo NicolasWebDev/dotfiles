@@ -94,6 +94,7 @@ export EDITOR=vim
 export BROWSER=firefox
 export HISTSIZE=5000
 export DO=104.236.197.222
+export CALIBRE_USE_SYSTEM_THEME="true"
 source "$HOME/.secrets.sh"
 # Completion file for tmuxinator.
 source "$HOME/.tmuxinator.bash"
