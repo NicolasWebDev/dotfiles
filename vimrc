@@ -144,6 +144,12 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     set hidden
 
     set mouse=a		" Enable mouse usage (all modes) in terminals
+
+    augroup anki
+        autocmd BufRead ~/docs/lists/anki.md vnoremap <buffer> c1 <Esc>`>a}}<Esc>`<i{{c1::<Esc>
+        autocmd BufRead ~/docs/lists/anki.md vnoremap <buffer> c2 <Esc>`>a}}<Esc>`<i{{c2::<Esc>
+        autocmd BufRead ~/docs/lists/anki.md vnoremap <buffer> c3 <Esc>`>a}}<Esc>`<i{{c3::<Esc>
+    augroup END
 " }}}
 
 " ODOO SETTINGS {{{
