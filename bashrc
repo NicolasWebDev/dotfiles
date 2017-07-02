@@ -260,7 +260,7 @@ function odoo-kill()
 
 function du_sorted()
 {
-    du -hs "$@" | sort -hr
+    du -hs "$@" | sort -h
 }
 # to remove beeping in the terminal
 set bell-style none
