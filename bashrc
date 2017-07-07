@@ -168,6 +168,10 @@ function remc() {
 function remc2() {
     remind -cu2 -m -w$(tput cols),0 ~/.reminders
 }
+function project_time()
+{
+    pomodori2time $(grep -c "$1" ~/work/documentation/journal.md)
+}
 function pomodori2time()
 {
     printf "%02d:%02.f\n" $(echo "$1 * 32.5 / 60" | bc) $(echo "$1 * 32.5 % 60" | bc)
