@@ -201,6 +201,7 @@ Plug 'Chiel92/vim-autoformat'
 Plug 'othree/html5.vim'
 Plug 'StanAngeloff/php.vim'
 Plug 'pangloss/vim-javascript'
+Plug 'Yggdroot/indentLine'
 call plug#end()
 " }}}
 
@@ -285,6 +286,12 @@ let xml_tag_completion_map = "»"
 let g:xml_syntax_folding=1
 au FileType xml setlocal foldmethod=syntax
 au FileType xml setlocal foldnestmax=3
+" }}}
+
+" INDENTLINE {{{
+let g:indentLine_concealcursor=0
+let g:indentLine_char = '┆'
+let g:indentLine_color_term = 239
 " }}}
 
 " VIM-MARKDOWN {{{
