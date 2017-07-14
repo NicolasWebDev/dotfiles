@@ -216,7 +216,9 @@ alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m -
 alias grep="grep --color=auto"
 alias sort_someday="awk '{print \$NF,\$0}' ~/todo.txt-cli/someday_maybe.txt | sort -nr | cut -f2- -d' ' > ~/todo.txt-cli/someday_maybe.txt.back ; mv -f ~/todo.txt-cli/someday_maybe.txt{.back,}"
 alias egrep="egrep --color=auto"
-alias notify-send="notify-send -t 100000"
+alias notify-send="notify-send -t 10000"
+export TERM_ICON="/usr/share/icons/Mint-X/apps/96/bash.svg"
+alias notify-completion="/usr/bin/notify-send -t 10000 -i $TERM_ICON Task completed ; beep"
 alias suspend="sflock -c ' ' -h ; systemctl suspend"
 alias term_colors='for x in 0 1 4 5 7 8; do for i in `seq 30 37`; do for a in `seq 40 47`; do echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "; done; echo; done; done; echo "";'
 export GAD_IP=181.112.151.237
