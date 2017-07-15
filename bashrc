@@ -137,13 +137,9 @@ alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 # https://github.com/serialoverflow/blockify/issues/92
 alias spotify='PULSE_PROP="module-stream-restore.id=spotify" /usr/bin/spotify'
 alias ll='ls --color=auto -lX'
-alias greppy='/bin/grep --color=auto --include="*.py" -rn'
-alias grepxml='/bin/grep --color=auto --include="*.xml" -rn'
 alias vimgtd="cd $HOME/todo.txt-cli ; vim waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt'"
 alias ls='ls --color=auto'
 alias b='bundle exec'
-alias greprb='/bin/grep --color=auto --include="*.rb" -rn'
-alias greprails='/bin/grep --color=auto -rnI --exclude-dir="log" --exclude-dir="tmp" --exclude-dir=".git" --exclude-dir="coverage" --exclude-dir="public"'
 alias gitc='git commit -v'
 alias gitcm='git commit -m'
 alias gita='git add'
