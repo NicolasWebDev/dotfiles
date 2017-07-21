@@ -203,6 +203,7 @@ Plug 'StanAngeloff/php.vim'
 Plug 'takac/vim-hardtime'
 Plug 'pangloss/vim-javascript'
 Plug 'Yggdroot/indentLine'
+Plug 'mileszs/ack.vim'
 call plug#end()
 " }}}
 
@@ -216,6 +217,12 @@ let g:hardtime_allow_different_key = 1
 
 " TAGLIST {{{
 set updatetime=250
+" }}}
+
+" ACK.VIM {{{
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
 " }}}
 
 " AIRLINE {{{
