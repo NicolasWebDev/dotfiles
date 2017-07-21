@@ -200,9 +200,18 @@ Plug 'sunaku/vim-ruby-minitest'
 Plug 'Chiel92/vim-autoformat'
 Plug 'othree/html5.vim'
 Plug 'StanAngeloff/php.vim'
+Plug 'takac/vim-hardtime'
 Plug 'pangloss/vim-javascript'
 Plug 'Yggdroot/indentLine'
 call plug#end()
+" }}}
+
+" VIM-HARDTIME {{{
+let g:hardtime_default_on = 1
+let g:list_of_normal_keys = ["c", "t", "s", "r", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_visual_keys = ["c", "t", "s", "r", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:hardtime_ignore_quickfix = 1
+let g:hardtime_allow_different_key = 1
 " }}}
 
 " TAGLIST {{{
