@@ -10,6 +10,7 @@ then
     export PATH="$HOME/.rbenv/bin:$HOME/todo.txt-cli:$HOME/work/my_scripts:$HOME/.cabal/bin:$HOME/.local/bin:$PATH"
     export RUBYLIB="$HOME/work/my_scripts:$RUBYLIB"
     eval "$(rbenv init -)"
+    source /usr/share/nvm/init-nvm.sh
     # hook for finding package providing unknown command
     source /usr/share/doc/pkgfile/command-not-found.bash
     #------------------------- PROMPT ---------------------------------
