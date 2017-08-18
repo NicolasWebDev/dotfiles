@@ -270,8 +270,9 @@ let g:syntastic_sh_checkers = ['bashate', 'sh', 'shellcheck']
 let g:syntastic_lua_checkers = ["luac", "luacheck"]
 let g:syntastic_scss_checkers = ["scss_lint"]
 let g:syntastic_css_checkers = ["stylelint"]
-let g:syntastic_javascript_checkers = ["eslint"]
-"let g:syntastic_javascript_eslint_exe='yarn run eslint --'
+let g:syntastic_javascript_checkers = ["eslint", "flow"]
+let g:syntastic_javascript_eslint_exe='yarn run eslint --'
+let g:syntastic_javascript_flow_exe='yarn run -s 2>/dev/null flow -- status'
 let g:syntastic_vim_checkers = ["vint", "vimlint"]
 let g:syntastic_mode_map = {'mode': 'active'}
 " }}}
