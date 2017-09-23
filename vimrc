@@ -170,6 +170,7 @@ augroup END
 
 " VIM-PLUG {{{
 call plug#begin('~/.vim/plugged')
+Plug 'moll/vim-node'
 Plug 'chrisbra/csv.vim'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'scrooloose/nerdcommenter'
@@ -202,9 +203,15 @@ Plug 'othree/html5.vim'
 Plug 'StanAngeloff/php.vim'
 Plug 'takac/vim-hardtime'
 Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 Plug 'Yggdroot/indentLine'
 Plug 'mileszs/ack.vim'
 call plug#end()
+" }}}
+
+" VIM-JAVASCRIPT {{{
+" Enable syntax highlightning of flow types.
+let g:javascript_plugin_flow = 1
 " }}}
 
 " VIM-HARDTIME {{{
