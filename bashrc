@@ -92,7 +92,7 @@ complete -cf sudo
 export MOZ_DISABLE_PANGO=1
 export PAGER="less -r"
 export EDITOR=vim
-export BROWSER=firefox
+export BROWSER=/usr/bin/chromium
 export HISTSIZE=5000
 export DO=104.236.197.222
 export CALIBRE_USE_SYSTEM_THEME="true"
@@ -237,20 +237,20 @@ function markdown2html()
 {
     MD_FILE=$1
     HTML_FILE=$2
-    pandoc -s --css=file://$HOME/.markdown.css $MD_FILE > $HTML_FILE
+    pandoc -s --css=file://$HOME/work/markdown.css $MD_FILE > $HTML_FILE
 }
 function markdown2pdf()
 {
     MD_FILE=$1
     PDF_FILE=$2
-    pandoc -V geometry:margin=1in -s --css=file://$HOME/.markdown.css $MD_FILE -o $PDF_FILE
+    pandoc -V geometry:margin=1in -s --css=file://$HOME/work/markdown.css $MD_FILE -o $PDF_FILE
 }
 function preview-markdown()
 {
     MD_FILE=$1
     HTML_FILE="/tmp/$(basename $MD_FILE .md).html"
     markdown2html $MD_FILE $HTML_FILE
-    firefox $HTML_FILE
+    $BROWSER $HTML_FILE
 }
 function lpr_preview ()
 {
