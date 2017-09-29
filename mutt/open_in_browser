@@ -1,7 +1,5 @@
 #! /bin/bash
 
-FF_ARGS=""
-FF_LOCK="$HOME/.local/var/run/firefox5.lock"
 TEMP=`mktemp --suffix=.html`
 
 if [ -z "$DISPLAY" ]
@@ -9,6 +7,7 @@ then
     echo "No display"
     exit 1
 fi
+
 cat > $TEMP
 
-firefox $FF_ARGS file://$TEMP
+$BROWSER file://$TEMP

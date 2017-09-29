@@ -8,7 +8,7 @@ source ~/.mutt/free_sathors
 macro index <f2> '<sync-mailbox><imap-logout-all><enter-command>source ~/.mutt/free_sathors<enter><change-folder>!<enter>'
 macro index <f3> '<sync-mailbox><imap-logout-all><enter-command>source ~/.mutt/mail_protelcotelsa<enter><change-folder>!<enter>'
 macro index,pager I \
-    "<enter-command>unset wait_key<enter>\v/html<enter>|~/.mutt/open-with-firefox-mutt<enter>q<read-thread>" \
+    "<enter-command>unset wait_key<enter>\v/html<enter>|~/.mutt/open_in_browser<enter>q<read-thread>" \
     "Open first html in firefox"
 
 ### GENERAL SETTINGS
