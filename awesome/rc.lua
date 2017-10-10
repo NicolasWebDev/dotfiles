@@ -29,9 +29,11 @@ end
 run_once("setxkbmap -option caps:swapescape")
 run_once("urxvtd -q -o")
 run_once("whatsie")
+run_once("slack")
 run_once("nm-applet")
 run_once("zeal")
 run_once("redshift")
+run_once("gnome-pomodoro")
 run_once("remind -z5 -k'notify-send -u critical -t 60000 %s &' ~/.reminders")
 -- }}}
 
