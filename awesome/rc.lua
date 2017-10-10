@@ -425,6 +425,7 @@ globalkeys = awful.util.table.join(
     -- Perso bindings
     awful.key({ "Control", "Mod1" }, "l", function () awful.util.spawn(screenlock_cmd) end),
     awful.key({ }, "XF86AudioPlay", function () awful.util.spawn("playerctl play-pause") end),
+    awful.key({ modkey,           }, "Pause", function () awful.util.spawn("gnome-pomodoro --pause-resume") end),
     awful.key({ }, "XF86AudioNext", function () awful.util.spawn("playerctl next") end),
     awful.key({ }, "XF86AudioPrev", function () awful.util.spawn("playerctl previous") end),
     -- Multimedia keys for alsawidget
