@@ -206,6 +206,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'Yggdroot/indentLine'
 Plug 'mileszs/ack.vim'
+Plug 'NicolasWebDev/journal-vim'
 call plug#end()
 " }}}
 
