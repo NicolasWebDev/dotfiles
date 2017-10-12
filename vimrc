@@ -170,6 +170,7 @@ augroup END
 
 " VIM-PLUG {{{
 call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-abolish'
 Plug 'moll/vim-node'
 Plug 'chrisbra/csv.vim'
 Plug 'dhruvasagar/vim-table-mode'
