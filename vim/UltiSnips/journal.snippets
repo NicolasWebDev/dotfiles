@@ -1,21 +1,41 @@
-snippet $t "protel pomodoro"
+snippet $ht "protel time pomodoro"
 $`!p import time; snip.rv = time.strftime('%H:%M')`_protel
 
 $0
 endsnippet
 
-snippet $s "selecta pomodoro"
+snippet $t "protel pomodoro"
+$protel
+
+$0
+endsnippet
+
+snippet $hs "selecta time pomodoro"
 $`!p import time; snip.rv = time.strftime('%H:%M')`_selecta
 
 $0
 endsnippet
 
-snippet $w "work pomodoro" b
+snippet $s "selecta pomodoro"
+$selecta
+
+$0
+endsnippet
+
+snippet $hw "work time pomodoro" b
 $`!p import time; snip.rv = time.strftime('%H:%M')`_work
 
 $0
 endsnippet
 
-snippet $ "pomodoro" b
-$`!p import time; snip.rv = time.strftime('%H:%M')`_$0
+snippet $w "work pomodoro"
+$work
+
+$0
+endsnippet
+
+snippet $h "time pomodoro" b
+$`!p import time; snip.rv = time.strftime('%H:%M')`_$1
+
+$0
 endsnippet
