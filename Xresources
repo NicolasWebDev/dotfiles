@@ -24,81 +24,39 @@ urxvt*scrollstyle: plain
 
 !URxvt.keysym.C-0xFF09: \033[27;5;9~
 
-! Normal
-! color0    black
-! color1    red
-! color2    green
-! color3    yellow
-! color4    blue
-! color5    purple
-! color6    cyan
-! color7    white
+#include "/home/sathors/.xcolors/belge"
 
-urxvt*color0:    #6c6c6c
-urxvt*color1:    #e9897c
-urxvt*color2:    #b6e77d
-urxvt*color3:    #ecebbe
-urxvt*color4:    #3facff
-urxvt*color5:    #ea96eb
-urxvt*color6:    #c9caec
-urxvt*color7:    #f2f2f2
-
-! Light
-! color8    black
-! color9    red
-! color10    green
-! color11    yellow
-! color12    blue
-! color13    purple
-! color14    cyan
-! color15    white
-
-urxvt*color8:    #747474
-urxvt*color9:    #f99286
-urxvt*color10:    #c3f786
-urxvt*color11:    #fcfbcc
-urxvt*color12:    #87ccff
-urxvt*color13:    #fba1fb
-urxvt*color14:    #d7d9fc
-urxvt*color15:    #e2e2e2
-
-! Normal
-! ! color0    black
-! ! color1    red
-! ! color2    green
-! ! color3    yellow
-! ! color4    blue
-! ! color5    purple
-! ! color6    cyan
-! ! color7    white
-!
-! urxvt*color0:    #6c6c6c
-! urxvt*color1:    #e9897c
-! urxvt*color2:    #b6e77d
-! urxvt*color3:    #ecebbe
-! urxvt*color4:    #a9cdeb
-! urxvt*color5:    #ea96eb
-! urxvt*color6:    #c9caec
-! urxvt*color7:    #f2f2f2
-!
-! ! Light
-! ! color8    black
-! ! color9    red
-! ! color10    green
-! ! color11    yellow
-! ! color12    blue
-! ! color13    purple
-! ! color14    cyan
-! ! color15    white
-!
-! urxvt*color8:    #747474
-! urxvt*color9:    #f99286
-! urxvt*color10:    #c3f786
-! urxvt*color11:    #fcfbcc
-! urxvt*color12:    #b6defb
-! urxvt*color13:    #fba1fb
-! urxvt*color14:    #d7d9fc
-! urxvt*color15:    #e2e2e2
+! Gruvbox palette
+URxvt.color24:  #076678
+URxvt.color66:  #427b58
+URxvt.color88:  #9d0006
+URxvt.color96:  #8f3f71
+URxvt.color100: #79740e
+URxvt.color108: #8ec07c
+URxvt.color109: #83a598
+URxvt.color130: #af3a03
+URxvt.color136: #b57614
+URxvt.color142: #b8bb26
+URxvt.color167: #fb4934
+URxvt.color175: #d3869b
+URxvt.color208: #fe8019
+URxvt.color214: #fabd2f
+URxvt.color223: #ebdbb2
+URxvt.color228: #f2e5bc
+URxvt.color229: #fbf1c7
+URxvt.color230: #f9f5d7
+URxvt.color234: #1d2021
+URxvt.color235: #282828
+URxvt.color236: #32302f
+URxvt.color237: #3c3836
+URxvt.color239: #504945
+URxvt.color241: #665c54
+URxvt.color243: #7c6f64
+URxvt.color244: #928374
+URxvt.color245: #928374
+URxvt.color246: #a89984
+URxvt.color248: #bdae93
+URxvt.color250: #d5c4a1
 
 ! Xcursor --------------------------------------------------------------------
 Xcursor.theme: Oxygen_Blue

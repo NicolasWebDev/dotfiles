@@ -6,6 +6,51 @@
 
 source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
+" VIM-PLUG {{{
+call plug#begin('~/.vim/plugged')
+Plug 'morhetz/gruvbox'
+Plug 'felixhummel/setcolors.vim'
+Plug 'tpope/vim-abolish'
+Plug 'moll/vim-node'
+Plug 'chrisbra/csv.vim'
+Plug 'dhruvasagar/vim-table-mode'
+Plug 'scrooloose/nerdcommenter'
+Plug 'python-rope/ropevim'
+Plug 'ervandew/supertab'
+Plug 'scrooloose/syntastic'
+Plug 'syngan/vim-vimlint' | Plug 'ynkdir/vim-vimlparser'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-line'
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-rails'
+Plug 'dkprice/vim-easygrep'
+Plug 'plasticboy/vim-markdown'
+Plug 'slim-template/vim-slim'
+Plug 'sukima/xmledit'
+Plug 'tmhedberg/matchit'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
+Plug 'tmhedberg/matchit'
+Plug 'Sathors/vim-blockle'
+Plug 'killphi/vim-ruby-refactoring'
+Plug 'freitass/todo.txt-vim'
+Plug 'bitc/vim-hdevtools'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'chrisbra/Recover.vim'
+Plug 'tmhedberg/SimpylFold'
+Plug 'sunaku/vim-ruby-minitest'
+Plug 'Chiel92/vim-autoformat'
+Plug 'othree/html5.vim'
+Plug 'StanAngeloff/php.vim'
+Plug 'takac/vim-hardtime'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'Yggdroot/indentLine'
+Plug 'mileszs/ack.vim'
+Plug 'NicolasWebDev/journal-vim'
+call plug#end()
+" }}}
+
 " BASIC SETTINGS {{{
     " to make the mouse work inside of tmux.
     set ttymouse=xterm2
@@ -95,7 +140,10 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     set autoindent
 
     " change default color scheme
-    colorscheme perso
+    set background=dark
+    let g:gruvbox_contrast_dark='hard'
+    let g:gruvbox_italic=1
+    colorscheme gruvbox
 
     " highlight cursor line (must come after colorscheme command to take effect)
     set cursorline
@@ -167,49 +215,6 @@ augroup END
 " }}}
 
 " ADDONS SETTINGS {{{
-
-" VIM-PLUG {{{
-call plug#begin('~/.vim/plugged')
-Plug 'tpope/vim-abolish'
-Plug 'moll/vim-node'
-Plug 'chrisbra/csv.vim'
-Plug 'dhruvasagar/vim-table-mode'
-Plug 'scrooloose/nerdcommenter'
-Plug 'python-rope/ropevim'
-Plug 'ervandew/supertab'
-Plug 'scrooloose/syntastic'
-Plug 'syngan/vim-vimlint' | Plug 'ynkdir/vim-vimlparser'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-line'
-Plug 'tpope/vim-bundler'
-Plug 'tpope/vim-rails'
-Plug 'dkprice/vim-easygrep'
-Plug 'plasticboy/vim-markdown'
-Plug 'slim-template/vim-slim'
-Plug 'sukima/xmledit'
-Plug 'tmhedberg/matchit'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
-Plug 'tmhedberg/matchit'
-Plug 'Sathors/vim-blockle'
-Plug 'killphi/vim-ruby-refactoring'
-Plug 'freitass/todo.txt-vim'
-Plug 'bitc/vim-hdevtools'
-Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
-Plug 'chrisbra/Recover.vim'
-Plug 'tmhedberg/SimpylFold'
-Plug 'sunaku/vim-ruby-minitest'
-Plug 'Chiel92/vim-autoformat'
-Plug 'othree/html5.vim'
-Plug 'StanAngeloff/php.vim'
-Plug 'takac/vim-hardtime'
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'Yggdroot/indentLine'
-Plug 'mileszs/ack.vim'
-Plug 'NicolasWebDev/journal-vim'
-call plug#end()
-" }}}
 
 " VIM-JAVASCRIPT {{{
 " Enable syntax highlightning of flow types.
