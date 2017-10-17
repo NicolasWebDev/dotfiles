@@ -8,6 +8,8 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
 " VIM-PLUG {{{
 call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-surround'
+Plug 'jiangmiao/auto-pairs'
 Plug 'morhetz/gruvbox'
 Plug 'felixhummel/setcolors.vim'
 Plug 'tpope/vim-abolish'
