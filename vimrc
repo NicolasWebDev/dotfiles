@@ -185,6 +185,9 @@ call plug#end()
     " show title in console title bar
     set title
 
+    " print the letters in english by lowest frequency, to know how to jump
+    noremap <F6> :echo "Z J Q X K V B P G W Y F M C U L D H R S N I O A T E"<cr>
+
     noremap <leader>qq :bd<cr>
     noremap <leader>qQ :Bdelete<cr>
     " Save with <leader>s.
