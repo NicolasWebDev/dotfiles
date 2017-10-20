@@ -336,6 +336,13 @@ let g:indentLine_color_term = 239
 let g:vim_markdown_folding_style_pythonic = 1
 set conceallevel=2
 " }}}
+" VIM-AUTOPAIRS {{{
+" Rebind the <M-*> shortcuts, which give problems with bepo.
+let g:AutoPairsShortcutToggle = ''
+let g:AutoPairsShortcutFastWrap = ''
+let g:AutoPairsShortcutJump = ''
+let g:AutoPairsShortcutBackInsert = ''
+" }}}
 " }}}
 
 " LEARN VIM THE HARD WAY {{{
