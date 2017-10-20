@@ -362,8 +362,6 @@ vnoremap <leader>' <esc>`<i'<esc>`>a'<esc>
 vnoremap <leader>" <esc>`<i"<esc>`>a"<esc>
 nnoremap <leader>w :execute "match Error " . '/\s\+$/'<cr>
 nnoremap <leader>W :execute "match none"<cr>
-nnoremap / /\v
-nnoremap ? ?\v
 nnoremap <leader>hs :set nohlsearch<cr>
 "nnoremap <leader>g :silent! execute "grep! -R " . shellescape(expand("<cWORD>")) . " ."<cr>:copen<cr>
 nnoremap <leader>qn :cnext<cr>
