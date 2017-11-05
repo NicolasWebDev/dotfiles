@@ -150,16 +150,18 @@ alias ll='ls --color=auto -lX'
 alias vimgtd="cd $HOME/todo.txt-cli ; vim waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt'"
 alias ls='ls --color=auto'
 alias b='bundle exec'
-alias gitc='git commit -v'
-alias gitcm='git commit -m'
-alias gita='git add'
-alias gitap='git add -p'
-alias gits='git status'
-alias gitd='git diff'
-alias gitdc='git diff --cached'
-alias gitco='git checkout'
-alias gitbr='git branch'
-alias gitlf="git lf"
+alias gc='git commit -v'
+alias gca='git commit -av'
+alias gcm='git commit -m'
+alias gcam='git commit -a -m'
+alias ga='git add'
+alias gap='git add -p'
+alias gs='git status'
+alias gd='git diff'
+alias gdc='git diff --cached'
+alias gco='git checkout'
+alias gbr='git branch'
+alias glf="git lf"
 function github {
     git clone --depth 1 https://github.com/$1
 }
