@@ -97,6 +97,13 @@ export HISTSIZE=5000
 export DO=104.236.197.222
 export CALIBRE_USE_SYSTEM_THEME="true"
 source "$HOME/.secrets.sh"
+# Taken from http://owen.cymru/fzf-ripgrep-navigate-with-bash-faster-than-ever-before
+set -o vi
+source "/usr/share/fzf/key-bindings.bash"
+source "/usr/share/fzf/completion.bash"
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*" 2>/dev/null'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+bind -x '"\C-p": vim $(fzf);'
 # Completion file for tmuxinator.
 source "$HOME/.tmuxinator.bash"
 
