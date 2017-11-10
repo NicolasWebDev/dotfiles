@@ -1,5 +1,13 @@
+global !p
+import time
+
+def time_pomodoro(snip, project):
+	snip.rv = '${0}_{1}'.format(time.strftime('%H:%M'), project)
+
+endglobal
+
 snippet $ht "protel time pomodoro"
-$`!p import time; snip.rv = time.strftime('%H:%M')`_protel$0
+`!p time_pomodoro(snip, 'protel')`$0
 endsnippet
 
 snippet $t "protel pomodoro"
@@ -7,15 +15,23 @@ $protel$0
 endsnippet
 
 snippet $hs "selecta time pomodoro"
-$`!p import time; snip.rv = time.strftime('%H:%M')`_selecta$0
+`!p time_pomodoro(snip, 'selecta')`$0
 endsnippet
 
 snippet $s "selecta pomodoro"
 $selecta$0
 endsnippet
 
+snippet $hl "luzverde time pomodoro"
+`!p time_pomodoro(snip, 'luzverde')`$0
+endsnippet
+
+snippet $l "luzverde pomodoro"
+$luzverde$0
+endsnippet
+
 snippet $hw "work time pomodoro" b
-$`!p import time; snip.rv = time.strftime('%H:%M')`_work$0
+`!p time_pomodoro(snip, 'work')`$0
 endsnippet
 
 snippet $w "work pomodoro"
@@ -23,5 +39,5 @@ $work$0
 endsnippet
 
 snippet $h "time pomodoro" b
-$`!p import time; snip.rv = time.strftime('%H:%M')`_$0
+`!p time_pomodoro(snip, '')`$0
 endsnippet
