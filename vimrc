@@ -6,6 +6,7 @@
 
 " VIM-PLUG {{{
 call plug#begin('~/.vim/plugged')
+Plug 'leafgarland/typescript-vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
