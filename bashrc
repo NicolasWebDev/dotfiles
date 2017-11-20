@@ -91,7 +91,7 @@ complete -cf sudo
 
 export MOZ_DISABLE_PANGO=1
 export PAGER="less -r"
-export EDITOR=vim
+export EDITOR=nvim
 export BROWSER=/usr/bin/chromium
 export HISTSIZE=5000
 export DO=104.236.197.222
@@ -103,7 +103,7 @@ source "/usr/share/fzf/key-bindings.bash"
 source "/usr/share/fzf/completion.bash"
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*" 2>/dev/null'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-bind -x '"\C-p": vim $(fzf);'
+bind -x '"\C-p": nvim $(fzf);'
 # Completion file for tmuxinator.
 source "$HOME/.tmuxinator.bash"
 
@@ -129,16 +129,17 @@ alias t='todo.sh'
 alias d='sudo docker'
 alias dc='sudo docker-compose'
 alias tree1='tree -L 1'
-alias v='vim'
+alias v='nvim'
+alias n='nvim'
 alias tree2='tree -L 2'
 alias psgrep='ps aux | grep -v grep | grep'
-alias vimwaiting="vim $HOME/todo.txt-cli/waiting.txt"
+alias vimwaiting="$EDITOR $HOME/todo.txt-cli/waiting.txt"
 alias scanimage="scanimage --device 'pixma:04A9176C_A5C6D3'"
-alias vimtodo="vim $HOME/todo.txt-cli/todo.txt"
+alias vimtodo="$EDITOR $HOME/todo.txt-cli/todo.txt"
 alias ssh='TERM=xterm-256color ssh'
-alias vimbashrc="vim $HOME/.bashrc ; source $HOME/.bashrc"
-alias vimsomeday="vim $HOME/todo.txt-cli/someday_maybe.txt"
-alias vimreminders="vim $HOME/.reminders"
+alias vimbashrc="$EDITOR $HOME/.bashrc ; source $HOME/.bashrc"
+alias vimsomeday="$EDITOR $HOME/todo.txt-cli/someday_maybe.txt"
+alias vimreminders="$EDITOR $HOME/.reminders"
 alias ping="ping www.archlinux.org"
 alias be='setxkbmap fr bepo ; echo "keyboard switched to bepo"'
 alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
@@ -147,7 +148,7 @@ alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 # https://github.com/serialoverflow/blockify/issues/92
 alias spotify='PULSE_PROP="module-stream-restore.id=spotify" /usr/bin/spotify'
 alias ll='ls --color=auto -lX'
-alias vimgtd="cd $HOME/todo.txt-cli ; vim waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt'"
+alias vimgtd="cd $HOME/todo.txt-cli ; $EDITOR waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt'"
 alias ls='ls --color=auto'
 alias b='bundle exec'
 alias gc='git commit -v'
@@ -216,7 +217,7 @@ alias screen_detach='xrandr --output eDP-1 --auto --output HDMI-1 --off'
 alias screen_mirror="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --same-as eDP-1"
 alias screen_split="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --right-of eDP-1"
 alias rsync-backup='rsync -av --progress --delete --stats'
-alias svim='sudo /usr/bin/vim'
+alias svim='sudo /usr/bin/nvim'
 alias dfh='df -h'
 alias mount='mount | column -t'
 alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m - \2|g'"
