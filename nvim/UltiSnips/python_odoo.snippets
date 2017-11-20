@@ -1,0 +1,221 @@
+global !p
+import re
+
+def model_to_test_class(model):
+	"""
+	Convert my.object to Test_My_Object.
+	"""
+	return 'Test_' + '_'.join(map(unicode.title, model.split('.')))
+
+def id_field_to_string(t, snip):
+	"""
+	Replace "my_long_field_id" with "My Long Field".
+	"""
+	field_id_name = t[1]
+	field_id_name = re.sub('_id$', '', field_id_name)
+	snip.rv = " ".join(comp.title() for comp in field_id_name.split('_'))
+
+endglobal
+
+snippet odoo_test_class "testing class" b
+class `!p snip.rv = model_to_test_class(t[1])`(TransactionCase):
+	_objects = {'$2': '$1'}
+
+	def setUp(self):
+		super(`!p snip.rv = model_to_test_class(t[1])`, self).setUp()
+		self.$2 = self.$2_obj.create_demo()
+
+	def test_test(self):
+		self.assertTrue(False)
+endsnippet
+
+snippet #p "public section" b
+#---PUBLIC
+endsnippet
+
+snippet #v "private section" b
+#---PRIVATE
+endsnippet
+
+snippet #d "definition section" b
+#---DEFINITION
+endsnippet
+
+snippet #o "overwritten section" b
+#---OVERWRITTEN
+endsnippet
+
+snippet met "a simple method" b
+def ${1:name}(self${2:, $3}):
+	$4
+endsnippet
+
+snippet func "a staticmethod" b
+@staticmethod
+def ${1:name}(${2:params}):
+	$3
+endsnippet
+
+snippet #a "actions section" b
+#---ACTIONS
+endsnippet
+
+snippet #e "events section" b
+#---EVENTS
+endsnippet
+
+snippet #c "constraints section" b
+#---CONSTRAINTS
+endsnippet
+
+snippet #s "selections section" b
+#---SELECTIONS
+endsnippet
+
+snippet #u "computes section" b
+#---COMPUTES
+endsnippet
+
+snippet ato "@api.one" b
+@api.one
+endsnippet
+
+snippet atd "@api.depends" b
+@api.one
+@api.depends('$1')
+def _compute_$2(self):
+	self.$2 = $3
+endsnippet
+
+snippet atc "@api.constrains" b
+@api.one
+@api.constrains('$1')
+def _check_$2(self):
+	$3
+endsnippet
+
+snippet atn "@api.onchange" b
+@api.onchange('$1')
+def onchange_$2(self):
+	$3
+endsnippet
+
+snippet atm "@api.multi" b
+@api.multi
+endsnippet
+
+snippet atl "@api.model" b
+@api.model
+endsnippet
+
+snippet atr "@api.returns" b
+@api.returns('$1')
+endsnippet
+
+snippet odoo_file "boilerplate of a file with a normal model" b
+# -*- coding: utf-8 -*-
+"""
+${1:documentation}
+"""
+
+from openerp.models import Model
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+endsnippet
+
+snippet odoo_wz "boilerplate of a file with a transient model" b
+# -*- coding: utf-8 -*-
+"""
+${1:documentation}
+"""
+
+from openerp.models import TransientModel
+endsnippet
+
+snippet m2o "many2one field" b
+$1 = fields.Many2one('$2', string='`!p id_field_to_string(t, snip)`'${4:, required=True})
+endsnippet
+
+snippet rel "related field" b
+$1 = $2(related='$3_id.${4:$1}'${5:, readonly=True})
+endsnippet
+
+snippet odoo_model "odoo model" b
+class ${1:model_name}(Model):
+	_name = '${1/_/./g}'
+	_inherit = 'protel'
+	${2:_description = '$3'}
+endsnippet
+
+snippet ro "readonly attribute"
+readonly=True
+endsnippet
+
+snippet en "env model"
+self.env['${1:model_name}']
+endsnippet
+
+snippet dom "odoo domain"
+domain=[('$1', '$2', $3)]
+endsnippet
+
+snippet sear "odoo search"
+search([('$1', '$2', $3)])
+endsnippet
+
+snippet con "odoo context"
+context={'$1': $2}
+endsnippet
+
+snippet sase "self.assertEqual" b
+self.assertEqual(${1:actual}, ${2:expected})
+endsnippet
+
+snippet sasf "self.assertFalse" b
+self.assertFalse($1)
+endsnippet
+
+snippet sast "self.assertTrue" b
+self.assertTrue($1)
+endsnippet
+
+snippet ase "assertEqual" b
+assertEqual(${1:actual}, ${2:expected})
+endsnippet
+
+snippet asf "assertFalse" b
+assertFalse($1)
+endsnippet
+
+snippet ast "assertTrue" b
+assertTrue($1)
+endsnippet
+
+snippet asr "assertRaisesRegexp" b
+with assertRaisesRegexp(${1:ValidationError}, '$2'):
+	$3
+endsnippet
+
+snippet odoo_report "Create a report py file" b
+# -*- coding: utf-8 -*-
+"""
+${1:Module doc}
+"""
+from openerp.models import AbstractModel
+from openerp.addons.oly_customize.protel_rml_parse import protel_rml_parse
+
+class $2_$3_logic(AbstractModel):
+    _name = '${2/_/./g}.${3/_/./g}.logic'
+	_inherit = 'report.logic.abstract'
+
+class $2_$3(protel_rml_parse):
+    _logic_class = '${2/_/./g}.${3/_/./g}.logic'
+    _methods = []
+    _functions = []
+
+class rp_transfer(AbstractModel):
+    _name = 'report.${2:module_name}.${3:report_name}'
+    _inherit = 'report.abstract_report'
+    _template = '$2.$3'
+    _wrapped_report_class = $2_$3
+endsnippet

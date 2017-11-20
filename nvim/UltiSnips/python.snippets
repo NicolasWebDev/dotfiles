@@ -1,0 +1,118 @@
+global !p
+def format_arg(arg, style):
+		return ":%s: TODO" % arg
+
+def get_style(snip):
+	return 0x1
+
+def write_docstring_args(args, snip):
+	if not args:
+		snip.rv += ' {0}'.format(triple_quotes(snip))
+		return
+
+	snip.rv += '\n' + snip.mkline('', indent='')
+
+	for arg in args:
+		snip += format_arg(arg, style)
+
+class Arg(object):
+	def __init__(self, arg):
+		self.arg = arg
+		self.name = arg.split('=')[0].strip()
+
+	def __str__(self):
+		return self.name
+
+	def __unicode__(self):
+		return self.name
+
+	def is_kwarg(self):
+		return '=' in self.arg
+
+def get_args(arglist):
+	args = [Arg(arg) for arg in arglist.split(',') if arg]
+	args = [arg for arg in args if arg.name != 'self']
+
+	return args
+
+def write_function_docstring(t, snip):
+	"""
+	Writes a function docstring with the current style.
+
+	:param t: The values of the placeholders
+	:param snip: UltiSnips.TextObjects.SnippetUtil object instance
+	"""
+	snip.rv = ""
+	snip >> 1
+
+	args = get_args(t[2])
+	if args:
+		write_docstring_args(args, snip)
+
+	style = get_style(snip)
+	snip += format_return(style)
+	snip.rv += '\n' + snip.mkline('', indent='')
+	snip += triple_quotes(snip)
+
+def dependencies(t1, *args):
+	t = ''.join(args)
+	res = set()
+	for word in t.split():
+		if word.startswith('self.') and word != 'self.' + t1:
+			res.add("'" + word[5:] + "'")
+	if res:
+		return '\n@api.depends(' + ', '.join(sorted(res)) + ')'
+	else:
+		return ''
+endglobal
+
+snippet comp "Create a compute" b
+@api.one`!p snip.rv = dependencies(t[1], t[2], t[3])`
+def _compute_${1:field}(self):$3
+	self.$1 = $2
+endsnippet
+
+snippet cons "Create a constraint" b
+@api.one`!p snip.rv = dependencies(t[1], t[2])`
+def _check_${1:field}(self):
+	$2
+	raise ValidationError('${3:error_message}')
+endsnippet
+
+snippet '> "print '>>>>>>>>>>>>>>>>>>>'" b
+print '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+endsnippet
+
+snippet defm "method with docstrings" b
+def ${1:method}(self${2:, ${3:arg1}}):
+	${0:pass}
+endsnippet
+
+snippet plist "print a list for debugging" b
+print 'Elements of list ${1:my_list}'
+for elt in sorted($1):
+	print elt
+endsnippet
+
+snippet pdict "print a dict for debugging" b
+print 'Elements of dict ${1:my_dict}'
+for key in sorted($1):
+	print '-> {}: {}'.format(key, $1[key])
+endsnippet
+
+snippet pv "print a variable for debugging" b
+print '${1:my_var}:', $1
+endsnippet
+
+snippet defc "class method" b
+@classmethod
+def ${1:function}(cls${2:, ${3:arg1}}):
+	${0:pass}
+endsnippet
+
+snippet defs "static method" b
+@staticmethod
+def ${1:function}(${2:arg1}):
+	${0:pass}
+endsnippet
+

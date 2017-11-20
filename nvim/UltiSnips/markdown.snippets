@@ -1,0 +1,17 @@
+snippet url "url"
+[${1:ref}](${2:url})
+endsnippet
+
+snippet fm "Front Matter" b
+---
+title: $1
+categories: $2
+---
+$0
+endsnippet
+
+snippet highlight "Highlight block" b
+{% highlight ${1:lang} %}
+$0
+{% endhighlight %}
+endsnippet

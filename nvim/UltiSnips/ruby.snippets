@@ -1,0 +1,13 @@
+snippet "\b(de)?f" "def <name>..." r
+def ${1:function_name}${2: ${3:*args}}
+  $0
+end
+endsnippet
+
+snippet puts "puts variable" b
+puts "${1:var} = #{$1}"
+endsnippet
+
+snippet p "p variable" b
+p "${1:var} = #{$1}"
+endsnippet
