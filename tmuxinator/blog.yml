@@ -31,7 +31,7 @@ startup_window: 1
 # post: tmux -CC attach -t blog
 
 windows:
-  - editor: vim
+  - editor: $EDITOR
   - extra1:
   - extra2:
   - server: bundle exec jekyll liveserve --drafts

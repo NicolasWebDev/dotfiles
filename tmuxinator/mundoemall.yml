@@ -31,7 +31,7 @@ root: ~/work/projects/mundoemall/webshop
 # post: tmux -CC attach -t mundoemall
 
 windows:
-  - editor: vim
+  - editor: $EDITOR
   - term:
   - spec:
     root: ~/work/projects/mundoemall/BACKOFFICE TIENDA

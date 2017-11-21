@@ -31,7 +31,7 @@ root: ~/work/projects/our_website
 # post: tmux -CC attach -t nicolaswebdev
 
 windows:
-  - editor: vim
+  - editor: $EDITOR
   - tests: bundle exec guard
   - console:
   - server: bundle exec rails s

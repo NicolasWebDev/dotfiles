@@ -31,7 +31,7 @@ root: ~/work/selecta/ziembra
 # post: tmux -CC attach -t ziembra
 
 windows:
-  - editor: vim
+  - editor: $EDITOR
   - extra: 
   - webpack server: yarn dev:wds
   - app server: yarn start

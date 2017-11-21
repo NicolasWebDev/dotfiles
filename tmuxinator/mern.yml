@@ -31,7 +31,7 @@ root: ~/work/books_material/Pro MERN Stack
 # post: tmux -CC attach -t mern
 
 windows:
-  - editor: vim
+  - editor: $EDITOR
   - extra1:
   - extra2:
   - server: npm start

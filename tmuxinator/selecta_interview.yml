@@ -31,7 +31,7 @@ root: ~/work/projects/startrek_warp_engine_optimizer
 # post: tmux -CC attach -t selecta_interview
 
 windows:
-  - editor: vim
+  - editor: $EDITOR
   - guard: bundle exec guard
   - extra1:
   - extra2:

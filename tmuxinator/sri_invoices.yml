@@ -31,7 +31,7 @@ root: ~/work/projects/sri_invoices
 # post: tmux -CC attach -t sri_invoices
 
 windows:
-  - editor: vim
+  - editor: $EDITOR
   - tests:
   - console:
   - extra:
