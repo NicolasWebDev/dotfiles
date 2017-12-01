@@ -1,5 +1,6 @@
 " VIM-PLUG {{{
     call plug#begin('~/.local/share/nvim/plugged')
+    Plug 'easymotion/vim-easymotion'
     Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
     Plug 'vim-airline/vim-airline'
     Plug 'ervandew/supertab'
@@ -158,6 +159,10 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
     " VIM-JSX {{{
         let g:jsx_ext_required = 1
+    " }}}
+
+    " VIM-EASYMOTION {{{
+        nmap k <Plug>(easymotion-s)
     " }}}
 
     " VIM-JAVASCRIPT {{{
