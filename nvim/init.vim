@@ -26,7 +26,7 @@
     Plug 'slim-template/vim-slim'
     Plug 'sukima/xmledit'
     Plug 'Valloric/YouCompleteMe', { 'do': './install.py --js-completer' }
-    Plug 'tmhedberg/matchit'
+    Plug 'andymass/vim-matchup'
     Plug 'Sathors/vim-blockle'
     Plug 'killphi/vim-ruby-refactoring'
     Plug 'freitass/todo.txt-vim'
