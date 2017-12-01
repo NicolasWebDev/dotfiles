@@ -428,6 +428,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Pause", function () awful.util.spawn("gnome-pomodoro --pause-resume") end),
     awful.key({ }, "XF86AudioNext", function () awful.util.spawn("playerctl next") end),
     awful.key({ }, "XF86AudioPrev", function () awful.util.spawn("playerctl previous") end),
+    awful.key({ modkey }, "p", function () awful.util.spawn_with_shell("pkill -SIGSTOP whatsie ; pkill -SIGSTOP slack") end),
+    awful.key({ modkey, "Shift" }, "p", function () awful.util.spawn_with_shell("pkill -SIGCONT whatsie ; pkill -SIGCONT slack") end),
     -- Multimedia keys for alsawidget
     awful.key({ }, "XF86AudioRaiseVolume", function()
         awful.util.spawn("amixer sset " .. alsawidget.channel .. " " .. alsawidget.step .. "+")
@@ -510,7 +512,7 @@ globalkeys = awful.util.table.join(
                   awful.util.getdir("cache") .. "/history_eval")
               end),
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end)
+    awful.key({ modkey,           }, "a", function() menubar.show() end)
 )
 
 clientkeys = awful.util.table.join(
