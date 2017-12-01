@@ -13,7 +13,7 @@ macro index,pager I \
 
 ### GENERAL SETTINGS
 #set index_format  = '%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s'
-set editor="vim"
+set editor="nvim"
 set index_format  = '%4C %Z %M %d %-15.15L (%?l?%4l&%4c?) %s'
 set date_format='%d/%m/%y'
 set tmpdir="~/.tmp"
