@@ -189,15 +189,17 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " }}}
 
     " AIRLINE {{{
-        let g:airline_symbols = {}
-        let g:airline#extensions#tabline#enabled = 1
-        let g:airline_powerline_fonts = 1
-        let g:airline_detect_whitespace = 0
-        let g:airline_section_warning = ''
-        set laststatus=2 " Always display the statusline in all windows
-        set showtabline=2 " Always display the tabline, even if there is only one tab
-        set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
-        let g:airline_symbols.linenr = ''
+        if !exists("g:airline_symbols")
+            let g:airline_symbols = {}
+            let g:airline#extensions#tabline#enabled = 1
+            let g:airline_powerline_fonts = 1
+            let g:airline_detect_whitespace = 0
+            let g:airline_section_warning = ''
+            set laststatus=2 " Always display the statusline in all windows
+            set showtabline=2 " Always display the tabline, even if there is only one tab
+            set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
+            let g:airline_symbols.linenr = ''
+        endif
     " }}}
 
     " NERDTREE SETTINGS {{{
