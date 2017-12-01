@@ -75,6 +75,11 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 " }}}
    
 " AUTOCOMMANDS {{{
+    " Disable YCM in the journal, because it makes editing really slow.
+    autocmd BufReadPre ~/work/documentation/journal.md let b:ycm_largefile = 1
+    " Disable ALE in the journal
+    autocmd BufReadPre ~/work/documentation/journal.md let b:ale_enabled = 0
+
     augroup anki
         autocmd BufRead ~/docs/lists/anki.md vnoremap <buffer> c1 <Esc>`>a}}<Esc>`<i{{c1::<Esc>
         autocmd BufRead ~/docs/lists/anki.md vnoremap <buffer> c2 <Esc>`>a}}<Esc>`<i{{c2::<Esc>
