@@ -134,11 +134,16 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " }}}
 
     " ALE {{{
+        let g:ale_writegood_options='--no-passive'
         let g:ale_echo_msg_error_str = 'E'
         let g:ale_echo_msg_warning_str = 'W'
         let g:ale_echo_msg_info_str = 'I'
         let g:ale_echo_msg_format = '[%severity%] %code: %%s [%linter%]'
-        let g:ale_linters = {'javascript': ['eslint']}
+        let g:ale_linters = {
+        \   'javascript': ['eslint'],
+        \   'text': ['proselint', 'vale', 'write-good'],
+        \   'markdown': ['mdl', 'proselint', 'remark-lint', 'vale', 'write-good'],
+        \}
     " }}}
 
     " GRUVBOX {{{
@@ -149,6 +154,10 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
     " VIM-SURROUND {{{
         xnoremap E <Plug>VSurround
+    " }}}
+
+    " VIM-JSX {{{
+        let g:jsx_ext_required = 1
     " }}}
 
     " VIM-JAVASCRIPT {{{
