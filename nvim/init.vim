@@ -135,6 +135,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " }}}
 
     " ALE {{{
+        let g:ale_sign_column_always = 1
         let g:ale_writegood_options='--no-passive'
         let g:ale_echo_msg_error_str = 'E'
         let g:ale_echo_msg_warning_str = 'W'
