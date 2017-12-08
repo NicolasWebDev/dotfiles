@@ -135,6 +135,7 @@ alias tree2='tree -L 2'
 alias psgrep='ps aux | grep -v grep | grep'
 alias vimwaiting="$EDITOR $HOME/todo.txt-cli/waiting.txt"
 alias scanimage="scanimage --device 'pixma:04A9176C_A5C6D3'"
+alias subdl="subdl --download=best-rating"
 alias vimtodo="$EDITOR $HOME/todo.txt-cli/todo.txt"
 alias ssh='TERM=xterm-256color ssh'
 alias vimbashrc="$EDITOR $HOME/.bashrc ; source $HOME/.bashrc"
