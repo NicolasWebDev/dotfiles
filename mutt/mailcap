@@ -1,4 +1,4 @@
-text/html; firefox '%s' &; test=test -n "$DISPLAY"; needsterminal;
+text/html; chromium '%s' &; test=test -n "$DISPLAY"; needsterminal;
 text/html; elinks -dump ; copiousoutput;
 image/jpeg; feh %s
 image/png; feh %s
