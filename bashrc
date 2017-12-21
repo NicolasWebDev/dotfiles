@@ -139,6 +139,7 @@ alias subdl="subdl --download=best-rating"
 alias vimtodo="$EDITOR $HOME/todo.txt-cli/todo.txt"
 alias ssh='TERM=xterm-256color ssh'
 alias vimbashrc="$EDITOR $HOME/.bashrc ; source $HOME/.bashrc"
+alias vimvimrc="$EDITOR $HOME/.config/nvim/init.vim"
 alias vimsomeday="$EDITOR $HOME/todo.txt-cli/someday_maybe.txt"
 alias vimreminders="$EDITOR $HOME/.reminders"
 alias ping="ping www.archlinux.org"
