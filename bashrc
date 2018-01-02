@@ -175,10 +175,13 @@ alias mkdir='mkdir -pv'
 alias poweroff='systemctl poweroff'
 alias youtube-dl-sub='youtube-dl --write-sub --sub-lang en --sub-format vtt'
 function remc() {
-    remind -ccum -w$(tput cols),0 ~/.reminders
+    remind -ccu+ -m -b1 -w$(tput cols),0 ~/.reminders
+}
+function remcm() {
+    remind -ccu -m -b1 -w$(tput cols),0 ~/.reminders
 }
 function remc2() {
-    remind -ccu2 -m -w$(tput cols),0 ~/.reminders
+    remind -ccu2 -m -b1 -w$(tput cols),0 ~/.reminders
 }
 function project_time()
 {
