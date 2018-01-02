@@ -90,6 +90,7 @@ fi
 complete -cf sudo
 
 export MOZ_DISABLE_PANGO=1
+export WINEARCH=win32
 export PAGER="less -r"
 export EDITOR=nvim
 export BROWSER=/usr/bin/chromium
