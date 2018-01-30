@@ -1,12 +1,18 @@
+global !p
+def current_month(snip):
+	import datetime
+	snip.rv = datetime.datetime.now().strftime("%B")[:3]
+endglobal
+
 snippet R "Reminder" b
-REM ${1:day} ${2:month} ${4:AT ${5:hour} }MSG $6
+REM ${1:day} ${2:`!p current_month(snip)`} ${4:AT ${5:hour} }MSG $6
 endsnippet
 
 snippet RM "Reminder Movie" b
-REM ${1:day} ${2:month} MSG "${3:title}" 2x1 +movies
+REM ${1:day} ${2:`!p current_month(snip)`} MSG "${3:title}" 2x1 +movies
 endsnippet
 
 snippet RMR "Movie Release Reminder" b
-REM ${1:day} ${2:month} MSG "${3:title}" released? +movies
+REM ${1:day} ${2:`!p current_month(snip)`} MSG "${3:title}" released? +movies
 endsnippet
 	
