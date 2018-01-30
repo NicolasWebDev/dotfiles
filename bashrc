@@ -21,6 +21,8 @@ then
     alias ya='/usr/bin/yaourt -S'
     alias pacu='sudo /usr/bin/pacman -Syu'
     alias yau='/usr/bin/yaourt -Syua'
+    # Download only.
+    alias yaw='/usr/bin/yaourt -Syuw'
     alias pacr='sudo /usr/bin/pacman -Rs'
     alias pacs='/usr/bin/pacman -Ss'
     alias yas='/usr/bin/yaourt -Ss'
