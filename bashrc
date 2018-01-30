@@ -176,14 +176,25 @@ alias hist='history | grep'
 alias mkdir='mkdir -pv'
 alias poweroff='systemctl poweroff'
 alias youtube-dl-sub='youtube-dl --write-sub --sub-lang en --sub-format vtt'
+declare -A PROJECT_COLORS=( ["luzverde"]="0 255 0" ["selecta"]="0 0 255" )
+function rem_sed_script() {
+    for project in "${!PROJECT_COLORS[@]}"
+    do
+        echo "s/^\(.*\) MSG \(.*\) +$project$/\1 SPECIAL COLOR ${PROJECT_COLORS[$project]} \2/"
+    done
+}
+function rem_cal() {
+    C_OPTIONS=$1
+    rem_sed_script | sed -f /dev/stdin ~/.reminders | remind -ccu${C_OPTIONS} -m -b1 -w$(tput cols),0 -
+}
 function remc() {
-    remind -ccu+ -m -b1 -w$(tput cols),0 ~/.reminders
+    rem_cal +
 }
 function remcm() {
-    remind -ccu -m -b1 -w$(tput cols),0 ~/.reminders
+    rem_cal
 }
-function remc2() {
-    remind -ccu2 -m -b1 -w$(tput cols),0 ~/.reminders
+function remcm2() {
+    rem_cal 2
 }
 function project_time()
 {
