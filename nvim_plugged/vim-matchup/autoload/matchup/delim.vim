@@ -196,9 +196,15 @@ function! matchup#delim#get_surrounding(type, ...) " {{{1
   " provided count == 0 refers to local any block
   let l:local = l:count == 0 ? 1 : 0
 
+  let l:opts = {}
+  let s:invert_skip = 0
+  if matchup#delim#skip() " TODO: check for insert mode
+    let l:opts.check_skip = 0
+  endif
+
   while l:pos_val_open < l:pos_val_last
     let l:open = matchup#delim#get_prev(a:type,
-          \ l:local ? 'open_mid' : 'open')
+          \ l:local ? 'open_mid' : 'open', l:opts)
     if empty(l:open) | break | endif
 
     let l:matches = matchup#delim#get_matching(l:open, 1)
@@ -248,7 +254,7 @@ function! matchup#delim#jump_target(delim) " {{{1
   for l:tries in range(strlen(a:delim.match)-1)
     call matchup#pos#set_cursor(a:delim.lnum, l:column)
 
-    let l:delim_test = matchup#delim#get_current('all', a:delim.side)
+    let l:delim_test = matchup#delim#get_current('all', 'both_all')
     if l:delim_test.class[0] ==# a:delim.class[0]
       break
     endif
@@ -332,21 +338,24 @@ function! s:get_delim(opts) " {{{1
   let a:opts.cursorpos = l:cursorpos
 
   " for current, we want to find matches that end after the cursor
+  " note: we expect this to give false-positives with \ze
   if a:opts.direction ==# 'current'
     let l:re .= '\%>'.(l:cursorpos).'c'
   "  let l:re = '\%<'.(l:cursorpos+1).'c' . l:re
   endif
 
-  " use the 'c' cpo flag to allow overlapping matches
-  let l:save_cpo = &cpo
-  noautocmd set cpo-=c
+  " allow overlapping delimiters (replaces cpo-=c)
+  " without this, the > in <tag> would not be found
+  let l:re .= '\&'
 
   " use b:match_ignorecase
   call s:ignorecase_start()
 
   " move cursor one left for searchpos if necessary
+  let l:need_restore_cursor = 0
   if l:insertmode
     call matchup#pos#set_cursor(line('.'), col('.')-1)
+    let l:need_restore_cursor = 1
   endif
 
   " in the first pass, we get matching line and column numbers
@@ -372,21 +381,20 @@ function! s:get_delim(opts) " {{{1
       call matchup#pos#set_cursor(a:opts.direction ==# 'next'
             \ ? matchup#pos#next(l:lnum, l:cnum)
             \ : matchup#pos#prev(l:lnum, l:cnum))
+      let l:need_restore_cursor = 1
       continue
     endif
 
     break
   endwhile
 
-  " restore cpo
-  " note: this messes with cursor position
-  noautocmd let &cpo = l:save_cpo
-
   " reset ignorecase
   call s:ignorecase_end()
 
   " restore cursor
-  call matchup#pos#set_cursor(l:save_pos)
+  if l:need_restore_cursor
+    call matchup#pos#set_cursor(l:save_pos)
+  endif
 
   call matchup#perf#toc('s:get_delim', 'first_pass')
 
@@ -706,9 +714,11 @@ function! s:get_matching_delims(down) dict " {{{1
     if l:lnum <= 0 | break | endif
 
     if a:down
-      if l:lnum >= l:lnum_corr && l:cnum >= l:cnum_corr | break | endif
+      if l:lnum > l:lnum_corr || l:lnum == l:lnum_corr
+          \ && l:cnum >= l:cnum_corr | break | endif
     else
-      if l:lnum <= l:lnum_corr && l:cnum <= l:cnum_corr | break | endif
+      if l:lnum < l:lnum_corr || l:lnum == l:lnum_corr
+          \ && l:cnum <= l:cnum_corr | break | endif
     endif
 
     let l:re_anchored = s:anchor_regex(l:re, l:cnum, l:has_zs)
@@ -757,7 +767,9 @@ function! s:init_delim_lists() " {{{1
     echohl None
     let l:match_words = ''
   endif
-  let l:match_words .= ','.l:mps
+  if !get(b:, 'matchup_delim_nomatchpairs', 0) && !empty(l:mps)
+    let l:match_words .= ','.l:mps
+  endif
   let l:sets = split(l:match_words, g:matchup#re#not_bslash.',')
 
   " do not duplicate whole groups of match words
@@ -1102,8 +1114,7 @@ endfunction
 
 function! matchup#delim#get_capture_groups(str, ...) " {{{1
   let l:allow_percent = a:0 ? a:1 : 0
-  let l:pat = g:matchup#re#not_bslash . '\zs\('
-        \ . (l:allow_percent ? '\\%(\|' : '') . '\\(\|\\)\)'
+  let l:pat = g:matchup#re#not_bslash . '\(\\%(\|\\(\|\\)\)'
 
   let l:start = 0
 
@@ -1115,18 +1126,22 @@ function! matchup#delim#get_capture_groups(str, ...) " {{{1
     if l:match[1] < 0 | break | endif
     let l:start = l:match[2]
 
-    if l:match[0] ==# '\(' || l:match[0] ==# '\%('
+    if l:match[0] ==# '\(' || (l:match[0] ==# '\%(' && l:allow_percent)
       let l:counter += 1
       call add(l:stack, l:counter)
+      let l:cgstack = filter(copy(l:stack), 'v:val > 0')
       let l:brefs[l:counter] = {
         \ 'str': '',
-        \ 'depth': len(l:stack),
-        \ 'parent': (len(l:stack) > 1 ? l:stack[-2] : 0),
+        \ 'depth': len(l:cgstack),
+        \ 'parent': (len(l:cgstack) > 1 ? l:cgstack[-2] : 0),
         \ 'pos': [l:match[1], 0],
         \}
+    elseif l:match[0] ==# '\%('
+      call add(l:stack, 0)
     else
       if empty(l:stack) | break | endif
       let l:i = remove(l:stack, -1)
+      if l:i < 1 | continue | endif
       let l:j = l:brefs[l:i].pos[0]
       let l:brefs[l:i].str = strpart(a:str, l:j, l:match[2]-l:j)
       let l:brefs[l:i].pos[1] = l:match[2]
