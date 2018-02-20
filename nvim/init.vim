@@ -155,7 +155,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " }}}
 
     " VIM-SURROUND {{{
-        xnoremap E <Plug>VSurround
+        xmap K <Plug>VSurround
     " }}}
 
     " VIM-JSX {{{
