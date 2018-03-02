@@ -124,6 +124,7 @@ esac
 #---------------------------- PATH ------------------------------
 
 #------------------------- ALIASES --------------------------------
+alias x='exit'
 alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
 alias odoo_reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgres ; dropdb --if-exists -p 5434 testing ; createdb -p 5434 -T demo testing"'
 alias odoo_server='./odoo.py -c .openerp_serverrc'
