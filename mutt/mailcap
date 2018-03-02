@@ -9,3 +9,4 @@ application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; localc %s
 application/vnd.openxmlformats-officedocument.wordprocessingml.document; loffice %s
 application/pdf; evince %s
 video/quicktime; vlc %s
+application/vnd.ms-excel; localc %s
