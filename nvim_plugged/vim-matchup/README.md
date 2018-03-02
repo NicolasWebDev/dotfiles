@@ -363,6 +363,14 @@ let g:matchup_transmute_enabled = 1
 ```
 default: 0
 
+To configure the number of lines to search in either direction while using
+motions and text objects.  Does not apply to match highlighting
+(see `g:matchup_matchparen_stopline` instead).
+```vim
+let g:matchup_delim_stopline = 1500
+```
+default: 1500
+
 ### Variables
 
 match-up understands the following variables from matchit.
@@ -411,7 +419,23 @@ Whether to replace the statusline for off-screen matches:
 ```vim
 let g:matchup_matchparen_status_offscreen = 0
 ```
+
+If a match is off of the screen, the line belonging to that match will be
+displayed syntax-highlighted in the status line along with the line number
+(if line numbers are enabled).  If the match is above the screen border,
+an additional Δ symbol will be shown to indicate that the matching line is
+really above the cursor line.
+
 default: 1
+
+The number of lines to search in either direction while highlighting
+matches.  Set this conservatively since high values may cause performance
+issues.
+```vim
+let g:matchup_matchparen_stopline = 400  " for match highlighting only
+```
+
+default: 400
 
 #### highlighting timeouts
 
@@ -524,6 +548,25 @@ _Options planned_.
   If are having any other performance issues, please open a new issue and
   report `g:matchup#perf#times`.
 
+- Why is there a weird entry on the status line?
+
+  This is a feature which helps you see matches that are outside of the
+  vim screen, similar to some IDEs.  If you wish to disable it, use
+
+  ```vim
+  let g:matchup_matchparen_status_offscreen = 0
+  ```
+
+- Matching does not work when lines are too far apart.
+
+  The number of search lines is limited for performance reasons.  You may
+  increase the limits with the following options:
+
+  ```vim
+  let g:matchup_delim_stopline      = 1500 " generally
+  let g:matchup_matchparen_stopline = 400  " for match highlighting only
+  ```
+
 - How can I contribute?
 
   Read the [contribution guidelines](CONTRIBUTING.md) and [issue
@@ -532,14 +575,37 @@ _Options planned_.
 
 ## Interoperability
 
-  - match-up's match highlighting is not compatible with [vimtex]'s
-  implementation.  match-up highlighting and will be disabled
-  automatically when vimtex is detected.
-  - matchit.vim should not be loaded.  If it is loaded, it must be loaded
-  after match-up (in this case, matchit.vim will be disabled).  Note that
-  some plugins, such as [vim-sensible](https://github.com/tpope/vim-sensible),
-  load matchit.vim so these must also be initialized after match-up.
-  - match-up loads matchparen if it is not already loaded.
+### vimtex, for LaTeX documents
+
+By default, match-up will be disabled automatically for tex files when
+[vimtex] is detected.  To enable match-up for tex files, use
+
+```vim
+let g:matchup_override_vimtex = 1
+```
+
+match-up's matching engine is more advanced than vimtex's and supports
+middle delimiters such as `\middle|` and `\else`.  The exact set of
+delimiters recognized may differ between the two plugins.  For example,
+the mappings `da%` and `dad` will not always match, particularly if you
+have customized vimtex's delimiters.
+
+### Matchit
+
+matchit.vim should not be loaded.  If it is loaded, it must be loaded
+after match-up (in this case, matchit.vim will be disabled).  Note that
+some plugins, such as
+[vim-sensible](https://github.com/tpope/vim-sensible),
+load matchit.vim so these must also be initialized after match-up.
+
+### Matchparen emulation~
+
+match-up loads [matchparen] if it is not already loaded.  Ordinarily, match-up
+disables matchparen's highlighting and emulates it to highlight the symbol
+contained in the 'matchpairs' option (by default `()`, `[]`, and `{}`).  If match-up
+is disabled per-buffer using `b:matchup_matchparen_enabled`, match-up will use
+matchparen instead of its own highlighting.  See `b:matchup_matchparen_fallback`
+for more information.
 
 ## Acknowledgments
 

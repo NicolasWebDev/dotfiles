@@ -85,7 +85,7 @@ function! s:matchparen.clear() abort dict " {{{1
   endif
 
   if exists('w:matchup_oldstatus')
-    let &statusline = w:matchup_oldstatus
+    let &l:statusline = w:matchup_oldstatus
     unlet w:matchup_oldstatus
   endif
 
@@ -184,6 +184,11 @@ function! s:matchparen.highlight(...) abort dict " {{{1
 
   call self.clear()
 
+  " don't get matches when inside a closed fold
+  if foldclosed(line('.')) > -1
+    return
+  endif
+
   " in insert mode, cursor is treated as being one behind
   let l:insertmode = l:entering_insert
         \ || (mode() ==# 'i' || mode() ==# 'R')
@@ -197,11 +202,13 @@ function! s:matchparen.highlight(...) abort dict " {{{1
   call matchup#perf#timeout_start(l:timeout)
 
   let l:current = matchup#delim#get_current('all', 'both_all',
-        \ { 'insertmode': l:insertmode })
+        \ { 'insertmode': l:insertmode,
+        \   'stopline': g:matchup_matchparen_stopline, })
   call matchup#perf#toc('matchparen.highlight', 'get_current')
   if empty(l:current) | return | endif
 
-  let l:corrlist = matchup#delim#get_matching(l:current, 1)
+  let l:corrlist = matchup#delim#get_matching(l:current,
+        \ { 'stopline': g:matchup_matchparen_stopline, })
   call matchup#perf#toc('matchparen.highlight', 'get_matching')
   if empty(l:corrlist) | return | endif
 
@@ -279,9 +286,9 @@ function! matchup#matchparen#offscreen(current) " {{{1
 
   if empty(l:offscreen) | return | endif
 
-  let w:matchup_oldstatus = &statusline
+  let w:matchup_oldstatus = &l:statusline
 
-  let &statusline = s:format_statusline(l:offscreen)
+  let &l:statusline = s:format_statusline(l:offscreen)
 endfunction
 
 " }}}1
@@ -302,15 +309,17 @@ function! s:format_statusline(offscreen) " {{{1
   let l:line = getline(a:offscreen.lnum)
 
   let l:sl = ''
-  if &number
+  if &number || &relativenumber
     let l:nw = max([strlen(line('$')), &numberwidth-1])
     let l:linenr = a:offscreen.lnum
+    let l:direction = l:linenr < line('.')
+
     if &relativenumber
-      let l:linenr = l:linenr-line('.')
+      let l:linenr = abs(l:linenr-line('.'))
     endif
 
     let l:sl = printf('%'.(l:nw).'s', l:linenr)
-    if l:linenr < line('.')
+    if l:direction
       let l:sl = '%#Search#' . l:sl . '∆%#Normal#'
     else
       let l:sl = '%#LineNr#' . l:sl . ' %#Normal#'

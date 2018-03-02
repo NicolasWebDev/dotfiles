@@ -11,7 +11,7 @@ function! s:has_plugin(plug)
   return !empty(filter(split(&rtp,','), 'v:val =~? ''\<'.a:plug.'\>'''))
 endfunction
 
-let s:not_bslash = '\v%(\\@<!%(\\\\)*)@6<=\m'
+let s:not_bslash = '\v%(\\@<!%(\\\\)*)@4<=\m'
 
 function! s:get_match_words()
   " left and right modifiers, any delimiters
@@ -35,7 +35,7 @@ function! s:get_match_words()
         \ . ':'.l:mtopt.'\1'.l:rdelim
 
   " unmodified delimiters
-  let l:nomod = '\%(\\left\|\\right\|\[\@<!\\[bB]igg\?[lr]\?\)\@6<!'
+  let l:nomod = '\%(\\left\|\\right\|\[\@1<!\\[bB]igg\?[lr]\?\)\@6<!'
   for l:pair in [['\\{', '\\}'], ['\[', ']'], ['(', ')']]
     let l:match_words .= ','.l:nomod.s:not_bslash.l:pair[0]
           \ . ':'.l:nomod.s:not_bslash.l:pair[1]
@@ -57,8 +57,12 @@ function! s:get_match_words()
         \ . ':\\toprule\>:\\midrule\>:\\bottomrule\>'
         \ . ':\\end{tabular}'
 
+  " enumerate, itemize
+  let l:match_words .= ',\\begin\s*{\(enumerate\*\=\|itemize\*\=\)}'
+        \ . ':\\item\>:\\end\s*{\1}'
+
   " generic environment
-  let l:match_words .= ',\\begin\s*{\([^}]*\)}:\\item\>:\\end\s*{\1}'
+  let l:match_words .= ',\\begin\s*{\([^}]*\)}:\\end\s*{\1}'
 
   return l:match_words
 endfunction
@@ -78,12 +82,17 @@ if get(g:, 'vimtex_enabled',
     silent! nunmap <buffer> %
     silent! xunmap <buffer> %
     silent! ounmap <buffer> %
+
+    " lervag/vimtex/issues/1051
+    let g:vimtex_matchparen_enabled = 0
+    silent! call vimtex#matchparen#disable()
+
     call s:setup_match_words()
   else
     let b:matchup_matchparen_enabled = 0
     let b:matchup_matchparen_fallback = 0
   endif
-elseif get(g:, 'matchup_testing_issue_14', 0)
+else
   call s:setup_match_words()
 endif
 
