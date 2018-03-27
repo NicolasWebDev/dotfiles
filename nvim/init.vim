@@ -1,5 +1,12 @@
+function! BuildComposer(info)
+  if a:info.status != 'unchanged' || a:info.force
+    !cargo build --release
+  endif
+endfunction
+
 " VIM-PLUG {{{
     call plug#begin('~/.local/share/nvim/plugged')
+    Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
     Plug 'easymotion/vim-easymotion'
     Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
     Plug 'vim-airline/vim-airline'
