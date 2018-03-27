@@ -1,7 +1,7 @@
 # ~/.tmuxinator/node.yml
 
 name: node
-root: ~/<%= @args[0] %>
+root: <%= @args[0] %>
 
 # Optional tmux socket
 # socket_name: foo
