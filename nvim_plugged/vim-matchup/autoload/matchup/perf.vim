@@ -24,17 +24,40 @@ function! matchup#perf#toc(context, state)
     if l:elapsed > g:matchup#perf#times[l:key].maximum
       let g:matchup#perf#times[l:key].maximum = l:elapsed
     endif
+    let g:matchup#perf#times[l:key].last = l:elapsed
     let g:matchup#perf#times[l:key].emavg = s:alpha*l:elapsed
           \ + (1-s:alpha)*g:matchup#perf#times[l:key].emavg
   else
     let g:matchup#perf#times[l:key] = {
           \ 'maximum' : l:elapsed,
           \ 'emavg'   : l:elapsed,
+          \ 'last'    : l:elapsed,
           \}
   endif
 endfunction
 
-let s:timeout = 0 
+function! matchup#perf#show_times()
+  let l:keys = keys(g:matchup#perf#times)
+  let l:contexts = uniq(sort(map(copy(l:keys), 'split(v:val, "#")[0]')))
+
+  echo printf("%42s%11s%17s", 'average', 'last', 'maximum')
+  for l:c in l:contexts
+    echo '['.l:c.']'
+    let l:states = filter(copy(l:keys), 'v:val =~# "^\\V'.l:c.'#"')
+    for l:s in l:states
+      echo printf("  %-25s%12.2gms%12.2gms%12.2gms",
+            \ join(split(l:s,'#')[1:],'#'),
+            \ 1000*g:matchup#perf#times[l:s].emavg,
+            \ 1000*g:matchup#perf#times[l:s].last,
+            \ 1000*g:matchup#perf#times[l:s].maximum)
+    endfor
+  endfor
+endfunction
+
+command! MatchupShowTimes call matchup#perf#show_times()
+command! MatchupClearTimes let g:matchup#perf#times = {}
+
+let s:timeout = 0
 let s:timeout_enabled = 0
 let s:timeout_pulse_time = reltime()
 
@@ -44,7 +67,7 @@ endfunction
 
 "}}}1
 function! matchup#perf#timeout_start(timeout) " {{{1
-  let s:timeout = a:timeout 
+  let s:timeout = a:timeout
   let s:timeout_enabled = (a:timeout == 0) ? 0 : 1
   let s:timeout_pulse_time = reltime()
 endfunction
@@ -60,14 +83,16 @@ endfunction
 
 " }}}1
 
-function! s:reltimefloat(time) " {{{1
-  if s:exists_reltimefloat
+" function! s:reltimefloat(time) {{{1
+if exists('*reltimefloat')
+  function! s:reltimefloat(time)
     return reltimefloat(a:time)
-  else
+  endfunction
+else
+  function! s:reltimefloat(time)
     return str2float(reltimestr(a:time))
-  endif
-endfunction
-let s:exists_reltimefloat = exists('*reltimefloat')
+  endfunction
+endif
 
 " }}}1
 

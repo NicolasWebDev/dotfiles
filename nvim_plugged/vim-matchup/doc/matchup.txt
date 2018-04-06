@@ -200,9 +200,9 @@ of examples: >
 
   if l:x == 1
     call one()
-  else
+  elseif l:x == 2
     call two()
-  elseif
+  else
     call three()
   endif
 <
@@ -242,16 +242,31 @@ important special cases.
 
 Highlighting matches~
 
-To disable match highlighting, set |g:matchup_matchparen_enabled| to 0.
-If this option is set before the plugin is loaded, it will not disable
-the built-in |matchparen| plugin.  See |matchup-opts-matchparen| for other
-related options.
+To disable match highlighting at |startup|, use >
+
+  let g:matchup_matchparen_enabled = 0
+>
+in your vimrc.  See |matchup-opts-matchparen| for more information and related
+options.
+
+You can enable highlighting on the fly using >
+
+  :DoMatchParen
+<
+Likewise, you can disable highlighting at any time using >
+
+  :NoMatchParen
+<
+After start-up, is better to use `:NoMatchParen` and `:DoMatchParen` to toggle
+highlighting globally than setting the global variable since these commands
+make sure not to leave stale matches around.
 
 Display matches off screen~
 
 If a open or close which would have been highlighted is on a line positioned
 outside the current window, the match is shown in the status line.  If both
 the open and close match are off-screen, the close match is preferred.
+See |g:matchup_matchparen_status_offscreen|.
 
                                                   *<plug>(matchup-hi-surround)*
 Highlight surrounding~
@@ -412,6 +427,27 @@ Options~
 
   Default: 1500
 
+*g:matchup_delim_noskips*
+
+  This option controls whether matching is done within strings and comments.
+  By default, it is set to 0 which means all valid matches are made within
+  strings and comments.  If set to 1, symbols like `()` will still be matched
+  but words like `for` and `end` will not.  If set to 2, nothing will be
+  matched within strings and comments. >
+
+  let g:matchup_delim_noskips = 1
+  let g:matchup_delim_noskips = 2
+<
+  Default: 0 (matching enabled within strings and comments)
+
+*g:matchup_delim_start_plaintext*
+
+  When enabled (the default), the plugin will be loaded for all buffers,
+  including ones without a file type set.  This allows matching to be done in
+  new buffers and plain text files but adds a small start-up cost to vim.
+
+  Default: 1
+
 Variables~
 
 *b:match_words*
@@ -426,22 +462,55 @@ Variables~
                                                   *matchup-opts-matchparen*
 Module matchparen~
 
+*g:matchup_matchparen_enabled*
+
+  This option will disable match highlighting at |startup|, e.g., use >
+
+    let g:matchup_matchparen_enabled = 0
+<
+  in your vimrc.
+
+  Note: vim's built-in plugin |pi_paren| plugin is also disabled.  The variable
+  `g:loaded_matchparen` has no effect on match-up.
+
+  Default: 1
+
+  You can also enable and disable highlighting for specific buffers using the
+  variable |b:matchup_matchparen_enabled|.
+
+  Customizing the highlighting colors~
+
+    match-up uses the |MatchParen| highlighting group, which can be configured.
+    For example, >
+
+      :hi MatchParen ctermbg=blue guibg=lightblue cterm=italic gui=italic
+<
+    You may want to put this inside a |ColorScheme| |autocmd| so it is
+    preserved after colorscheme changes: >
+
+      augroup matchup_matchparen_highlight
+        autocmd!
+        autocmd ColorScheme * hi MatchParen guifg=red
+      augroup END
+<
 *b:matchup_matchparen_enabled*
 
-  Set to 0 to disable highlighting on a per-buffer basis.
+  Set to 0 to disable highlighting on a per-buffer basis (there is no command
+  for this).  By default, when disabling highlighting for a particular buffer,
+  the standard plugin |pi_paren| will still be used for that buffer.
 
   Default: undefined (equivalent to 1)
 
 *b:matchup_matchparen_fallback*
 
   If highlighting is disabled on a particular buffer, match-up will fall back
-  to the vim standard plugin matchit, which will highlight 'matchpairs' such
+  to the vim standard plugin |pi_paren|, which will highlight 'matchpairs' such
   as `()`, `[]`, & `{}`.  To disable this, set this option to 0.
 
   Default: undefined (equivalent to 1)
 
-  A common usage is to automatically disable matchparen for particular file
-  types: >
+  A common usage of these options is to automatically disable matchparen for
+  particular file types: >
 
     augroup matchup_matchparen_disable_ft
       autocmd!
@@ -496,12 +565,33 @@ Module matchparen~
 
   Default: 0 (disabled)
 
-*g:matchparen_matchparen_deferred_show_time*
-*g:matchparen_matchparen_deferred_hide_time*
+Note: this feature is only available if your vim version has |timers| and
+the function |timer_pause|, version 7.4.2180 and after.  For neovim, this
+will only work in nvim-0.2.1 and after.
 
-  Adjust timeouts in milliseconds for deferred highlighting.
+*g:matchup_matchparen_deferred_show_delay*
+*g:matchup_matchparen_deferred_hide_delay*
+
+  Adjust delays in milliseconds for deferred highlighting.
+  Note: these delays cannot be changed dynamically and should be configured
+  before the plugin loads (e.g., in your vimrc).
 
   Defaults: 50, 700
+
+*g:matchup_matchparen_pumvisible*
+
+  If set to 1, matches will be made even when the |popupmenu-completion| is
+  visible.  If you use an auto-complete plugin which interacts badly with
+  matching, set this option to 0.
+
+  Default: 1
+
+*g:matchup_matchparen_novisual*
+
+  When enabled, highlighting will be turned off in visual mode, after moving
+  the cursor.
+
+  Default: 0
 
 Module motion~
 
@@ -525,20 +615,38 @@ Module motion~
 
   Default: 1
 
-*g:matchup_motion_count_fail*
+*g:matchup_delim_count_fail*
 
-  When enabled, giving an invalid count to the |[%| and |]%| motions will
-  cause the motion to fail.  Otherwise they will move as far as possible.
+  When disabled (default), giving an invalid count to the |[%| and |]%| motions
+  and the text objects |i%| and |a%| will cause the motion or operation to fail.
+  When enabled, they will move as far as possible.
+  Note: targeting high counts when this option is enabled can become slow
+  because many positions need to be tried before giving up.
 
-  Default: 1
+  Default: 0
 
 Module text_obj~
 
 *g:matchup_text_obj_linewise_operators*
 
-  Modifies the set of operators which may operate line-wise
-  (see |matchup-feat-linewise|)
+  Modifies the set of operators which may operate line-wise with |i%|
+  (see |matchup-feat-linewise|).
 
+  You may use 'v', 'V', and "\<c-v>" (i.e., an actual CTRL-V character) to the
+  specify the corresponding visual mode.
+
+  You can also specify custom plugin operators with 'g@' and optionally, an
+  expression separated by a comma.  For example, to make |commentary|'s |gc|
+  mapping work likewise when used in the operator `gci%`, >
+
+  function! IsCommentaryOpFunc()
+    return &operatorfunc ==? matchstr(maparg('<Plug>Commentary', 'n'),
+        \ '\cset op\%(erator\)\?func=\zs.\{-\}\ze<cr>')
+  endfunction
+
+  let g:matchup_text_obj_linewise_operators = ['d', 'y',
+      \ 'g@,IsCommentaryOpFunc()']
+<
   Default: `['d', 'y']`
 
 ------------------------------------------------------------------------------
@@ -589,6 +697,10 @@ Customization~
       " customization
     endfunction
     let g:matchup_hotfix_vim = 'VimHotfix'
+
+*b:matchup_hotfix*
+
+  This is an alternative buffer-local name for adding customization.
 
 *matchup#util#patch_match_words*                                  *matchup-patch*
 >
@@ -641,7 +753,7 @@ A match-up aims to be as fast as possible, but highlighting matching words can
     |g:matchup_matchparen_timeout|, |g:matchup_matchparen_insert_timeout|
 
   If are having any other performance issues, please open a new issue and
-  report g:matchup#perf#times.
+  report the output of `:MatchupShowTimes`.
 
 Q Why is there a weird entry on the status line?
 
@@ -658,6 +770,24 @@ A The number of search lines is limited for performance reasons.  You may
   let g:matchup_delim_stopline      = 1500 " generally
   let g:matchup_matchparen_stopline = 400  " for match highlighting only
 <
+Q The maps `1i%` and `1a%` are difficult to press.
+
+A You may use the following maps `I%` and `A%` for convenience: >
+
+  function! s:matchup_convenience_maps()
+    xnoremap <sid>(std-I) I
+    xnoremap <sid>(std-A) A
+    xmap <expr> I mode()=='<c-v>'?'<sid>(std-I)':(v:count?'':'1').'i'
+    xmap <expr> A mode()=='<c-v>'?'<sid>(std-A)':(v:count?'':'1').'a'
+    for l:v in ['', 'v', 'V', '<c-v>']
+      execute 'omap <expr>' l:v.'I%' "(v:count?'':'1').'".l:v."i%'"
+      execute 'omap <expr>' l:v.'A%' "(v:count?'':'1').'".l:v."a%'"
+    endfor
+  endfunction
+  call s:matchup_convenience_maps()
+<
+  Note: this is not compatible with the plugin targets.vim.
+
 Q How can I contribute?
 
 A Read the contribution guidelines (CONTRIBUTING.md) and issue template

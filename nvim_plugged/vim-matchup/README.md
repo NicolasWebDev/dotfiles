@@ -1,9 +1,7 @@
 # vim match-up
 
-:mag: [screenshot](https://raw.githubusercontent.com/wiki/andymass/vim-matchup/images/match-up-hl1.gif) :mag:
-
-match-up is a replacement for the venerable vim plugin [matchit.vim].
-match-up aims to replicate all of matchit's features, fix a number of its
+match-up is a drop-in replacement for the vim plugin [matchit.vim].
+match-up aims to enhance all of matchit's features, fix a number of its
 deficiencies and bugs, and add a few totally new features.  It also
 replaces the standard plugin [matchparen], allowing all of matchit's words
 to be highlighted along with the `matchpairs` (`(){}[]`).
@@ -15,6 +13,10 @@ to be highlighted along with the `matchpairs` (`(){}[]`).
 
 A major goal of this project is to keep a modern and modular code base.
 Contributions are welcome!
+
+## Screenshot
+
+<img src='https://raw.githubusercontent.com/wiki/andymass/vim-matchup/images/match-up-hl1.gif' width='450px'>
 
 ## Table of contents
 
@@ -50,17 +52,27 @@ more information.  This plugin:
 
 ## Installation
 
-If you use vim-plug, then add the following line to your vimrc file:
+If you use [vim-plug](https://github.com/junegunn/vim-plug), then add the following line to your vimrc file:
 
 ```vim
 Plug 'andymass/vim-matchup'
 ```
 
-Or use some other plugin manager:
+and then use `:PlugInstall`.  Or, you can use any other plugin manager such as
+[vundle](https://github.com/gmarik/vundle),
+[dein](https://github.com/Shougo/dein.vim),
+[neobundle](https://github.com/Shougo/neobundle.vim), or
+[pathogen](https://github.com/tpope/vim-pathogen).
 
-  - vundle
-  - neobundle
-  - pathogen
+match-up should automatically disable matchit and matchparen, but if you
+are still having trouble, try placing this near the top of your vimrc:
+
+```vim
+let g:loaded_matchit = 1
+```
+
+See [Interoperability](#interoperability) for more information about working
+together with other plugins.
 
 ## Features
 
@@ -104,9 +116,9 @@ couple examples:
 ```vim
 if l:x == 1
   call one()
-else
+elseif l:x == 2
   call two()
-elseif
+else
   call three()
 endif
 ```
@@ -202,10 +214,19 @@ in the `matchpairs` setting.
 
 #### (c.2) highlight _all_ matches
 
-To disable match highlighting, `let g:matchup_matchparen_enabled = 0`.
-If this option is set before the plugin is loaded, it will not disable
-the built-in matchparen plugin.  See [here](#module-matchparen) for
-other related options.
+To disable match highlighting at startup, use
+`let g:matchup_matchparen_enabled = 0`
+in your vimrc.
+See [here](#module-matchparen) for more information and related
+options.
+
+You can enable highlighting on the fly using `:DoMatchParen`.
+Likewise, you can disable highlighting at any time using
+`:NoMatchParen`.
+
+After start-up, is better to use `:NoMatchParen` and `:DoMatchParen`
+to toggle highlighting globally than setting the global variable
+since these commands make sure not to leave stale matches around.
 
 #### (c.3) display matches off screen
 
@@ -213,6 +234,7 @@ If a open or close which would have been highlighted is on a line
 positioned outside the current window, the match is shown in the
 status line.  If both the open and close match are off-screen, the
 close match is preferred.
+(See the option `g:matchup_matchparen_status_offscreen`).
 
 #### (d.1) parallel transmutation
 
@@ -371,6 +393,13 @@ let g:matchup_delim_stopline = 1500
 ```
 default: 1500
 
+To disable matching within strings and comments,
+```vim
+let g:matchup_delim_noskips = 1   " recognize symbols within comments
+let g:matchup_delim_noskips = 2   " don't recognize anything in comments
+```
+default: 0 (matching is enabled within strings and comments)
+
 ### Variables
 
 match-up understands the following variables from matchit.
@@ -384,7 +413,32 @@ every file type.  To support a new file type, create a file
 
 ### Module matchparen
 
-The matchparen module can be disabled on a per-buffer basis
+To disable match highlighting at startup, use
+`let g:matchup_matchparen_enabled = 0` in your vimrc.
+Note: vim's built-in plugin |pi_paren| plugin is also disabled.
+The variable `g:loaded_matchparen` has no effect on match-up.
+
+#### Customizing the highlighting colors
+
+match-up uses the `MatchParen` highlighting group, which can be configured.
+For example,
+```vim
+  :hi MatchParen ctermbg=blue guibg=lightblue cterm=italic gui=italic
+```
+
+You may want to put this inside a `ColorScheme` `autocmd` so it is
+preserved after colorscheme changes:
+```vim
+  augroup matchup_matchparen_highlight
+    autocmd!
+    autocmd ColorScheme * hi MatchParen guifg=red
+  augroup END
+```
+
+The matchparen module can also be disabled on a per-buffer basis (there is
+no command for this).  By default, when disabling highlighting for a
+particular buffer, the standard plugin matchparen will still be used
+for that buffer.
 
 ```vim
 let b:matchup_matchparen_enabled = 0
@@ -392,15 +446,15 @@ let b:matchup_matchparen_enabled = 0
 default: 1
 
 If this module is disabled on a particular buffer, match-up will still
-fall-back to the vim standard plugin matchit, which will highlight
+fall-back to the vim standard plugin matchparen, which will highlight
 `matchpairs` such as `()`, `[]`, & `{}`.  To disable this,
 ```vim
 let b:matchup_matchparen_fallback = 0
 ```
 default: 1
 
-A common usage is to automatically disable matchparen for
-particular file types;
+A common usage of these options is to automatically disable
+matchparen for particular file types;
 ```vim
 augroup matchup_matchparen_disable_ft
   autocmd!
@@ -456,12 +510,19 @@ let g:matchup_matchparen_deferred = 1
 ```
 default: 0 (disabled)
 
-Adjust timeouts in milliseconds for deferred highlighting:
+Note: this feature is only available if your vim version has `timers` and
+the function `timer_pause`, version 7.4.2180 and after.  For neovim, this
+will only work in nvim-0.2.1 and after.
+
+Adjust delays in milliseconds for deferred highlighting:
 ```vim
-let g:matchparen_matchparen_deferred_show_time = 50
-let g:matchparen_matchparen_deferred_hide_time = 700
+let g:matchup_matchparen_deferred_show_delay = 50
+let g:matchup_matchparen_deferred_hide_delay = 700
 ```
 default: 50, 700
+
+Note: these delays cannot be changed dynamically and should be configured
+before the plugin loads (e.g., in your vimrc).
 
 #### highlight surrounding
 
@@ -546,7 +607,7 @@ _Options planned_.
   attempted again until the cursor moves.
 
   If are having any other performance issues, please open a new issue and
-  report `g:matchup#perf#times`.
+  report the output of `:MatchupShowTimes`.
 
 - Why is there a weird entry on the status line?
 
@@ -566,6 +627,25 @@ _Options planned_.
   let g:matchup_delim_stopline      = 1500 " generally
   let g:matchup_matchparen_stopline = 400  " for match highlighting only
   ```
+- The maps `1i%` and `1a%` are difficult to press.
+
+  You may use the following maps `I%` and `A%` for convenience:
+
+  ```vim
+  function! s:matchup_convenience_maps()
+    xnoremap <sid>(std-I) I
+    xnoremap <sid>(std-A) A
+    xmap <expr> I mode()=='<c-v>'?'<sid>(std-I)':(v:count?'':'1').'i'
+    xmap <expr> A mode()=='<c-v>'?'<sid>(std-A)':(v:count?'':'1').'a'
+    for l:v in ['', 'v', 'V', '<c-v>']
+      execute 'omap <expr>' l:v.'I%' "(v:count?'':'1').'".l:v."i%'"
+      execute 'omap <expr>' l:v.'A%' "(v:count?'':'1').'".l:v."a%'"
+    endfor
+  endfunction
+  call s:matchup_convenience_maps()
+  ```
+
+  Note: this is not compatible with the plugin targets.vim.
 
 - How can I contribute?
 
@@ -598,7 +678,7 @@ some plugins, such as
 [vim-sensible](https://github.com/tpope/vim-sensible),
 load matchit.vim so these must also be initialized after match-up.
 
-### Matchparen emulation~
+### Matchparen emulation
 
 match-up loads [matchparen] if it is not already loaded.  Ordinarily, match-up
 disables matchparen's highlighting and emulates it to highlight the symbol
@@ -649,7 +729,6 @@ contributing.
 
 ### Todo list
 
-- thoroughly test with unicode, tabs
 - complete parallel transmutation in an efficient way.
 - add screenshots and animations
 - support for fenced code possible?

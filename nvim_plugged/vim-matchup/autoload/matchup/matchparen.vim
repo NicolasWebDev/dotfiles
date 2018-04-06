@@ -21,26 +21,60 @@ endfunction
 " }}}1
 
 function! matchup#matchparen#enable() " {{{1
-  if !has('timers')
+  let g:matchup_matchparen_enabled = 1
+
+  if g:matchup_matchparen_deferred
+        \ && (!has('timers') || !exists('*timer_pause')
+        \     || has('nvim') && !has('nvim-0.2.1'))
     let g:matchup_matchparen_deferred = 0
+    echohl WarningMsg
+    echom "match-up's deferred highlighting feature is "
+          \ . 'not supported in your vim version'
+    echohl None
   endif
 
   augroup matchup_matchparen
     autocmd!
     autocmd CursorMoved,CursorMovedI * call s:matchparen.highlight_deferred()
     autocmd WinEnter * call s:matchparen.highlight(1)
-    " autocmd TextChanged,TextChangedI * call s:matchparen.highlight()
+    autocmd TextChanged,TextChangedI * call s:matchparen.highlight_deferred()
+    if has('patch-8.0.1494')
+      autocmd TextChangedP * call s:matchparen.highlight_deferred()
+    endif
     autocmd WinLeave * call s:matchparen.clear()
-    " autocmd BufLeave * call s:matchparen.clear()
-    " autocmd InsertEnter,InsertLeave  * call s:matchparen.highlight()
     autocmd InsertEnter * call s:matchparen.highlight(1, 1)
   augroup END
 
+  if has('vim_starting')
+    " prevent this from autoloading during timer callback at startup
+    if g:matchup_matchparen_deferred
+      call matchup#pos#val(0,0)
+    endif
+
+    " prevent loading the delim module at vim startup
+    let w:last_changedtick = 2
+    let w:last_cursor = [0,1,1,0,1]
+  endif
+endfunction
+
+" }}}1
+
+function! s:pi_paren_sid() " {{{1
+  if s:pi_paren_sid >= 0
+    return s:pi_paren_sid
+  endif
+
   let s:pi_paren_sid = 0
   if get(g:, 'loaded_matchparen')
-    let l:pat = expand('$VIM').'.\+matchparen\.vim'
-    let l:lines = matchup#util#command('scriptnames')
-    call filter(l:lines, 'v:val =~# l:pat')
+    let l:pat = '\%#=1\V'.expand('$VIM').'\m.\+matchparen\.vim$'
+    if v:version >= 800
+      " execute() was added in 7.4.2008
+      " :filter was introduced in 7.4.2244 but I have not tested it there
+      let l:lines = split(execute("filter '".l:pat."' scriptnames"), '\n')
+    else
+      let l:lines = matchup#util#command('scriptnames')
+      call filter(l:lines, 'v:val =~# l:pat')
+    endif
     let s:pi_paren_sid = matchstr(get(l:lines, 0), '\d\+\ze: ')
     if !exists('*<SNR>'.s:pi_paren_sid.'_Highlight_Matching_Pair')
       let s:pi_paren_sid = 0
@@ -50,14 +84,17 @@ function! matchup#matchparen#enable() " {{{1
     let s:pi_paren_fcn = function('<SNR>'.s:pi_paren_sid
       \ .'_Highlight_Matching_Pair')
   endif
-
-  call s:matchparen.highlight()
+  return s:pi_paren_sid
 endfunction
 
+let s:pi_paren_sid = -1
+
 " }}}1
+
 function! matchup#matchparen#disable() " {{{1
+  let g:matchup_matchparen_enabled = 0
   call s:matchparen.clear()
-  autocmd! matchup_matchparen
+  silent! autocmd! matchup_matchparen
 endfunction
 
 " }}}1
@@ -66,9 +103,10 @@ function! matchup#matchparen#toggle(...) " {{{1
         \ ? a:1
         \ : !g:matchup_matchparen_enabled
   if g:matchup_matchparen_enabled
+    call matchup#matchparen#enable()
     call s:matchparen.highlight(1)
   else
-    call s:matchparen.clear()
+    call matchup#matchparen#disable()
   endif
 endfunction
 
@@ -115,16 +153,21 @@ function! s:timer_callback(win_id, timer_id) abort " {{{1
   endif
 endfunction
 
-function! s:reltimefloat(time)
-  if s:exists_reltimefloat
+" }}}1
+
+" function! s:reltimefloat(time) {{{1
+if exists('*reltimefloat')
+  function! s:reltimefloat(time)
     return reltimefloat(a:time)
-  else
+  endfunction
+else
+  function! s:reltimefloat(time)
     return str2float(reltimestr(a:time))
-  endif
-endfunction
-let s:exists_reltimefloat = exists('*reltimefloat')
+  endfunction
+endif
 
 " }}}1
+
 function! s:matchparen.highlight_deferred() abort dict " {{{1
   if !g:matchup_matchparen_deferred
     return s:matchparen.highlight()
@@ -159,14 +202,16 @@ endfunction
 function! s:matchparen.highlight(...) abort dict " {{{1
   if !g:matchup_matchparen_enabled | return | endif
 
+  if has('vim_starting') | return | endif
+
+  if !g:matchup_matchparen_pumvisible && pumvisible() | return | endif
+
   if !get(b:, 'matchup_matchparen_enabled', 1)
-        \ && get(b:, 'matchup_matchparen_fallback', 1) && s:pi_paren_sid
+        \ && get(b:, 'matchup_matchparen_fallback', 1) && s:pi_paren_sid()
     return call(s:pi_paren_fcn, [])
   endif
 
   if !get(b:, 'matchup_matchparen_enabled', 1) | return | endif
-
-  if pumvisible() | return | endif
 
   let l:force_update    = a:0 >= 1 ? a:1 : 0
   let l:entering_insert = a:0 >= 2 ? a:2 : 0
@@ -183,6 +228,11 @@ function! s:matchparen.highlight(...) abort dict " {{{1
   call matchup#perf#tic('matchparen.highlight')
 
   call self.clear()
+
+  if g:matchup_matchparen_novisual
+        \ && index(['v','V',"\<c-v>"], mode()) >= 0
+    return
+  endif
 
   " don't get matches when inside a closed fold
   if foldclosed(line('.')) > -1
@@ -239,7 +289,9 @@ function! s:matchparen.highlight(...) abort dict " {{{1
     return s:matchparen.highlight(0, l:entering_insert)
   endif
 
-  if len(l:corrlist) <= 1 && !g:matchup_matchparen_singleton
+  if len(l:corrlist) <= (l:current.side ==# 'mid' ? 2 : 1)
+        \ && !g:matchup_matchparen_singleton
+    " TODO singleton doesn't work right for mids
     return
   endif
 
@@ -292,16 +344,27 @@ function! matchup#matchparen#offscreen(current) " {{{1
 endfunction
 
 " }}}1
-function! matchup#matchparen#highlight_surrounding() " {{{1
-  call matchup#perf#timeout_start(0)
+function! matchup#matchparen#highlight_surrounding(...) " {{{1
+  call matchup#perf#timeout_start(500)
   let l:delims = matchup#delim#get_surrounding('delim_all', 1)
-  if empty(l:delims[0]) | return | endif
+  let l:open = l:delims[0]
+  if empty(l:open) | return | endif
 
-  let l:save_pos = matchup#pos#get_cursor()
-  call matchup#pos#set_cursor(l:delims[0])
-  call s:matchparen.highlight(1)
+  let l:corrlist = matchup#delim#get_matching(l:open, 1)
+  if empty(l:corrlist) | return | endif
 
-  call matchup#pos#set_cursor(l:save_pos)
+  " store flag meaning highlighting is active
+  let w:matchup_need_clear = 1
+
+  " add highlighting matches
+  if !exists('w:matchup_match_id_list')
+    let w:matchup_match_id_list = []
+  endif
+
+  for l:corr in l:corrlist
+    call add(w:matchup_match_id_list, matchaddpos('MatchParen',
+       \   [[l:corr.lnum, l:corr.cnum, strlen(l:corr.match)]]))
+  endfor
 endfunction
 
 "}}}1
@@ -363,3 +426,4 @@ endfunction
 let &cpo = s:save_cpo
 
 " vim: fdm=marker sw=2
+
