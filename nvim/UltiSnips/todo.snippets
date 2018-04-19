@@ -2,6 +2,10 @@ snippet t "Task" b
 #${3:cat} +${2:project} ${1:description} *${4:time}
 endsnippet
 
+snippet w "waiting" b
+`!p from datetime import date; snip.rv = date.today().strftime('%d/%m')` ${1:person}: ${2:desc} ${3:@${4:whatsapp} }+${5:proj}
+endsnippet
+
 snippet tl "luzverde" b
 #l +luzverde ${1:description} *${2:time}
 endsnippet
