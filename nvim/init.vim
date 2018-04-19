@@ -6,6 +6,7 @@ endfunction
 
 " VIM-PLUG {{{
     call plug#begin('~/.local/share/nvim/plugged')
+    Plug 'matze/vim-move'
     Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
     Plug 'easymotion/vim-easymotion'
     Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -117,9 +118,9 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " Save with <leader>s.
     noremap <Leader>s :update<CR>
     " Move current line down.
-    nnoremap <leader>- ddp
+    " nnoremap <C-T> ddp
     " Move current line up.
-    nnoremap <leader>_ ddkP
+    " nnoremap <C-S> ddkP
     " Make current word uppercase.
     inoremap <leader><c-u> <esc>viwUi
     " Make current word uppercase.
@@ -131,6 +132,14 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 " }}}
 
 " ADDONS SETTINGS {{{
+    " VIM-MOVE {{{
+        let g:move_map_keys = 0
+        nmap <C-t> <Plug>MoveLineDown
+        nmap <C-s> <Plug>MoveLineUp
+        vmap <C-t> <Plug>MoveBlockDown
+        vmap <C-s> <Plug>MoveBlockUp
+    " }}}
+
     " VIM-NERDTREE-SYNTAX-HIGHLIGHT {{{
         let g:NERDTreeFileExtensionHighlightFullName = 1
         let g:NERDTreeExactMatchHighlightFullName = 1
