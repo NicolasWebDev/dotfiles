@@ -4,88 +4,41 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-if [[ `uname -n` == "ArchFloe" ]]
-then
-    echo "I'm on the ThinkPad"
-    export PATH="$HOME/.rbenv/bin:$HOME/todo.txt-cli:$HOME/work/my_scripts:$HOME/.cabal/bin:$HOME/.local/bin:$PATH"
-    export RUBYLIB="$HOME/work/my_scripts:$RUBYLIB"
-    eval "$(rbenv init -)"
-    source /usr/share/nvm/init-nvm.sh
-    # hook for finding package providing unknown command
-    source /usr/share/doc/pkgfile/command-not-found.bash
-    #------------------------- PROMPT ---------------------------------
-    PS1="${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
-    #------------------------- ALIASES --------------------------------
-    ## Pacman aliases ##
-    alias pac='sudo /usr/bin/pacman -S'
-    alias ya='/usr/bin/yaourt -S'
-    alias pacu='sudo /usr/bin/pacman -Syu'
-    alias yau='/usr/bin/yaourt -Syua'
-    # Download only.
-    alias yaw='/usr/bin/yaourt -Syuw'
-    alias pacr='sudo /usr/bin/pacman -Rs'
-    alias pacs='/usr/bin/pacman -Ss'
-    alias yas='/usr/bin/yaourt -Ss'
-    alias pacuu='sudo /usr/bin/pacman -U *.pkg.*'
-    alias paci='/usr/bin/pacman -Si'
-    alias yai='/usr/bin/yaourt -Si'
-    alias paclo='/usr/bin/pacman -Qdt'   # list all orphaned packages
-    alias pacc='sudo /usr/bin/pacman -Scc'
-    alias paclf='/usr/bin/pacman -Ql'
-    alias pacq='/usr/bin/pacman -Q | grep'
-    # recursively remove ALL orphaned packages
-    alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
-    alias pacman_size='pacgraph -c' # print installed packages by size
+export PATH="$HOME/.rbenv/bin:$HOME/todo.txt-cli:$HOME/work/my_scripts:$HOME/.cabal/bin:$HOME/.local/bin:$PATH"
+export RUBYLIB="$HOME/work/my_scripts:$RUBYLIB"
+eval "$(rbenv init -)"
+source /usr/share/nvm/init-nvm.sh
+# hook for finding package providing unknown command
+source /usr/share/doc/pkgfile/command-not-found.bash
+#------------------------- PROMPT ---------------------------------
+PS1="${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
+#------------------------- ALIASES --------------------------------
+## Pacman aliases ##
+alias pac='sudo /usr/bin/pacman -S'
+alias ya='/usr/bin/yaourt -S'
+alias pacu='sudo /usr/bin/pacman -Syu'
+alias yau='/usr/bin/yaourt -Syua'
+# Download only.
+alias yaw='/usr/bin/yaourt -Syuw'
+alias pacr='sudo /usr/bin/pacman -Rs'
+alias pacs='/usr/bin/pacman -Ss'
+alias yas='/usr/bin/yaourt -Ss'
+alias pacuu='sudo /usr/bin/pacman -U *.pkg.*'
+alias paci='/usr/bin/pacman -Si'
+alias yai='/usr/bin/yaourt -Si'
+alias paclo='/usr/bin/pacman -Qdt'   # list all orphaned packages
+alias pacc='sudo /usr/bin/pacman -Scc'
+alias paclf='/usr/bin/pacman -Ql'
+alias pacq='/usr/bin/pacman -Q | grep'
+# recursively remove ALL orphaned packages
+alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
+alias pacman_size='pacgraph -c' # print installed packages by size
 
-    ## Yaourt aliases ##
-    alias yas='yaourt -Ss'
-    alias yag='yaourt -G'
-    # list obsolete packages from the AUR
-    alias yao='for file in `pacman -Qmq` ; do yas $file | grep "installed:" ; done'
-elif [[ `uname -n` == "nicolas-envydv7" ]]
-then
-    echo "Je suis sur l'ordi de ProtelCotelsa"
-    export CODECOV_TOKEN=f38ce4dc-b1c0-4f96-abf1-5efcc0f264d2
-    alias reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgres ; dropdb --if-exists -p 5433 testing ; createdb -p 5433 -T demo testing"'
-    alias suspend='sflock -f "-*-fixed-*-r-*-*-*-420-*-*-*-*-*-*" ; dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend'
-    alias hibernate='sflock -f "-*-fixed-*-r-*-*-*-420-*-*-*-*-*-*" ; dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate'
-    alias bzrc='bzr diffstat | tail -n1 | cut -d',' -f2- | sed "s/^[^[:digit:]]*\([[:digit:]]*\)[^[:digit:]]*\([[:digit:]]*\).*$/\1 - \2/g" | bc'
-    alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
-    alias odoo_merge='bzr merge && bzr ci -m "[MRG]" && cd .. && ./run_tests.py -m oly_customize && cd - && bzr push'
-    alias screens_mirror="xrandr --output LVDS1 --mode 1440x900 --output VGA1 --mode 1440x900 --same-as LVDS1"
-    alias screens_split="xrandr --output LVDS1 --mode 1600x900 --output VGA1 --mode 1440x900 --right-of LVDS1"
-    alias screens_detach="xrandr --output VGA1 --off --output LVDS1 --mode 1600x900"
-    alias backup_work_pc='sudo rsync -aSAXv --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/home/nicolas/.gvfs","/home/nicolas/.cache"} --delete / /media/backup_work/backup_work'
-    function find_tests_time()
-    {
-        cat $1 | grep 'Ran' | cut -d' ' -f2- | sed 's/Ran //' | sed 's/tests in //' | sed 's/s$//' | sed 's/test in //' | sed 's/^\(.*:\) \([[:digit:]]\+\) \([[:digit:]]\+\)\.\([[:digit:]]\+\)/echo "\1 \2 tests at" $(echo "scale=1; \2 \/ \3.\4" | bc) "tests\/second"/' | bash | sort -nr -k5
-    }
-    function disable_tp()
-    {
-        xinput set-prop $(xinput | grep TouchPad | cut -d'=' -f2 | cut -f1) "Device Enabled" 0
-    }
-    function enable_tp()
-    {
-        xinput set-prop $(xinput | grep TouchPad | cut -d'=' -f2 | cut -f1) "Device Enabled" 1
-    }
-    #------------------------- PROMPT ---------------------------------
-    PS1="${debian_chroot:+($debian_chroot)}\[\033[01;35m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
-    #---------------------------- PATH ------------------------------
-    PATH="$HOME/.rbenv/bin:$PATH:$HOME/.cabal/bin:/usr/local/bin:/opt/sonar-runner-2.4/bin:~/.bin:$HOME/IT/perso/exercism/bin"
-    #------------------------- ALIASES --------------------------------
-    alias apt='sudo /usr/sbin/apt-fast install'
-    alias aptu='sudo /usr/sbin/apt-fast update ; sudo /usr/sbin/apt-fast -V upgrade'
-    alias aptr='sudo /usr/sbin/apt-fast purge'
-    alias apti='/usr/bin/apt-cache show'
-    alias bzrl='/usr/bin/bzr log --show-ids'
-    alias bzri='/usr/bin/bzr log --show-ids -r-1 | grep revision-id | cut -d'-' -f3'
-    eval "$(rbenv init -)"
-
-    ### Added by the Heroku Toolbelt
-    export PATH="/usr/local/heroku/bin:$PATH"
-else
-    echo "Je suis sur un ordi inconnu"
-fi
+## Yaourt aliases ##
+alias yas='yaourt -Ss'
+alias yag='yaourt -G'
+# list obsolete packages from the AUR
+alias yao='for file in `pacman -Qmq` ; do yas $file | grep "installed:" ; done'
 
 #------------------------ OTHER ------------------------------------
 # That line is used to enable auto-completion after sudo command.
