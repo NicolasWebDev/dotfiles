@@ -299,13 +299,14 @@ function! s:matchparen.highlight(...) abort dict " {{{1
   let w:matchup_need_clear = 1
 
   " disable off-screen when scrolling with j/k
-  let l:scrolling = winheight(0) > 2*&scrolloff
+  let l:scrolling = g:matchup_matchparen_scrolloff
+        \ && winheight(0) > 2*&scrolloff
         \ && (line('.') == line('w$')-&scrolloff
         \     || line('.') == line('w0')+&scrolloff)
 
   " show off-screen matches
-  if g:matchup_matchparen_status_offscreen && !l:current.skip
-        \ && (!l:scrolling || g:matchup_matchparen_deferred)
+  if g:matchup_matchparen_status_offscreen
+        \ && !l:current.skip && !l:scrolling
     call matchup#matchparen#offscreen(l:current)
   endif
 
@@ -372,6 +373,7 @@ function! s:format_statusline(offscreen) " {{{1
   let l:line = getline(a:offscreen.lnum)
 
   let l:sl = ''
+  let l:padding = wincol()-virtcol('.')
   if &number || &relativenumber
     let l:nw = max([strlen(line('$')), &numberwidth-1])
     let l:linenr = a:offscreen.lnum
@@ -387,11 +389,27 @@ function! s:format_statusline(offscreen) " {{{1
     else
       let l:sl = '%#LineNr#' . l:sl . ' %#Normal#'
     endif
+    let l:padding -= l:nw + 1
   endif
 
-  if !&number && a:offscreen.lnum < line('.')
+  if empty(l:sl) && a:offscreen.lnum < line('.')
     let l:sl = '%#Search#∆%#Normal#'
+    let l:padding -= 1    " OK if this is negative
   endif
+
+  " possible fold column, up to &foldcolumn characters
+  let l:fdcstr = ''
+  if &foldcolumn
+    let l:fdc = max([1, &foldcolumn-1])
+    let l:fdl = foldlevel(a:offscreen.lnum)
+    let l:fdcstr = l:fdl <= l:fdc ? repeat('|', l:fdl)
+          \ : join(range(l:fdl-l:fdc+1, l:fdl), '')
+    let l:padding -= len(l:fdcstr)
+    let l:fdcstr = '%#FoldColumn#' . l:fdcstr . '%#Normal#'
+  endif
+
+  " add remaining padding (this handles rest of fdc and scl)
+  let l:sl = l:fdcstr . repeat(' ', l:padding) . l:sl
 
   let l:lasthi = ''
   for l:c in range(min([winwidth(0), strlen(l:line)]))

@@ -129,8 +129,10 @@ function! matchup#delim#get_surrounding(type, ...) " {{{1
   let l:count = a:0 >= 1 ? a:1 : 1
   let l:counter = l:count
 
+  " third argument specifies local any block, otherwise,
   " provided count == 0 refers to local any block
-  let l:local = l:count == 0 ? 1 : 0
+  let l:opts = a:0 >= 2 ? a:2 : {}
+  let l:local = get(l:opts, 'local', l:count == 0 ? 1 : 0)
 
   let l:delimopts = {}
   let s:invert_skip = 0   " TODO: this logic is still bad
@@ -185,6 +187,30 @@ function! matchup#delim#get_surrounding(type, ...) " {{{1
   " restore cursor and return failure
   call matchup#pos#set_cursor(l:save_pos)
   call matchup#perf#toc('delim#get_surrounding', 'fail')
+  return [{}, {}]
+endfunction
+
+" }}}1
+function! matchup#delim#get_surround_nearest(open, ...) " {{{1
+  " finds the first consecutive pair whose start
+  " positions surround pos (default to the cursor)
+  let l:cur_pos = a:0 ? a:1 : matchup#pos#get_cursor()
+  let l:pos_val_cursor = matchup#pos#val(l:cur_pos)
+  let l:pos_val_open = matchup#pos#val(a:open)
+
+  let l:pos_val_prev = l:pos_val_open
+  let l:delim = a:open.links.next
+  let l:pos_val_next = matchup#pos#val(l:delim)
+  while l:pos_val_next > l:pos_val_open
+    if l:pos_val_prev <= l:pos_val_cursor
+          \ && l:pos_val_next >= l:pos_val_cursor
+      return [l:delim.links.prev, l:delim]
+    endif
+    let l:pos_val_prev = l:pos_val_next
+    let l:delim = l:delim.links.next
+    let l:pos_val_next = matchup#pos#val(l:delim)
+  endwhile
+
   return [{}, {}]
 endfunction
 
@@ -344,6 +370,8 @@ function! s:get_delim(opts) " {{{1
     if a:opts.direction !=# 'current'
           \ && (l:check_skip || l:wordish_skip)
           \ && matchup#delim#skip(l:lnum, l:cnum)
+          \ && (a:opts.direction ==# 'prev' ? (l:lnum > 1 || l:cnum > 1)
+          \     : (l:lnum < line('$') || l:cnum < len(getline('$'))))
 
       " invalid match, move cursor and keep looking
       call matchup#pos#set_cursor(a:opts.direction ==# 'next'
@@ -543,20 +571,21 @@ function! s:parser_delim_new(lnum, cnum, opts) " {{{1
           \ ? len(l:thisrebr.mid_list)+1
           \ : l:mid_id
 
-    for [l:br, l:to] in items(l:thisrebr.grp_renu[l:id])
-      let l:groups[l:to] = l:matches[l:br]
-    endfor
+    if has_key(l:thisrebr.grp_renu, l:id)
+      for [l:br, l:to] in items(l:thisrebr.grp_renu[l:id])
+        let l:groups[l:to] = l:matches[l:br]
+      endfor
+    endif
 
     " fill in augment pattern
     " TODO all the augment patterns should match,
     " but checking might be too slow
-    let l:aug = l:thisrebr.aug_comp[l:id][0]
-    " let l:augment.str = substitute(l:aug.str,
-    "       \ g:matchup#re#backref,
-    "       \ '\=l:groups[submatch(1)]', 'g')
-    let l:augment.str = matchup#delim#fill_backrefs(
-          \ l:aug.str, l:groups, 0)
-    let l:augment.unresolved = deepcopy(l:aug.outputmap)
+    if has_key(l:thisrebr.aug_comp, l:id)
+      let l:aug = l:thisrebr.aug_comp[l:id][0]
+      let l:augment.str = matchup#delim#fill_backrefs(
+            \ l:aug.str, l:groups, 0)
+      let l:augment.unresolved = deepcopy(l:aug.outputmap)
+    endif
   endif
 
   let l:result = {

@@ -21,6 +21,7 @@ function! s:init_options()
   call s:init_option('matchup_matchparen_enabled',
     \ !(&t_Co < 8 && !has('gui_running')))
   call s:init_option('matchup_matchparen_status_offscreen', 1)
+  call s:init_option('matchup_matchparen_scrolloff', 0)
   call s:init_option('matchup_matchparen_singleton', 0)
   call s:init_option('matchup_matchparen_deferred', 0)
   call s:init_option('matchup_matchparen_deferred_show_delay', 50)
@@ -35,6 +36,7 @@ function! s:init_options()
     \ get(g:, 'matchparen_insert_timeout', 60))
 
   call s:init_option('matchup_delim_count_fail', 0)
+  call s:init_option('matchup_delim_count_max', 8)
   call s:init_option('matchup_delim_start_plaintext', 1)
   call s:init_option('matchup_delim_noskips', 0)
 
@@ -47,9 +49,8 @@ function! s:init_options()
 
   call s:init_option('matchup_transmute_enabled', 0)
 
-  call s:init_option('matchup_imap_enabled', 0)
+  call s:init_option('matchup_mouse_enabled', 1)
 
-  call s:init_option('matchup_complete_enabled', 0)
 endfunction
 
 function! s:init_option(option, default)

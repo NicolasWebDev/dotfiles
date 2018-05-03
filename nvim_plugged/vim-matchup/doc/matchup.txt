@@ -405,11 +405,13 @@ Options~
 
   Default: 1
 
-*g:matchup_matchparen_enabled*      highlighting
+*g:matchup_mappings_enabled*        all mappings
+|g:matchup_matchparen_enabled|      match highlighting
+*g:matchup_mouse_enabled*           double click to select matches
 *g:matchup_motion_enabled*          |matchup-%|, |%|, |[%|, |]%|
 *g:matchup_text_obj_enabled*        |a%|, |i%|
 
-  Set to 0 to disable a particular module.
+  Set to 0 to disable a particular module or feature.
 
   Defaults: 1
 
@@ -536,6 +538,14 @@ Module matchparen~
 
   Default: 1
 
+*g:matchup_matchparen_scrolloff*
+
+  When enabled, off-screen matches will not be shown in the statusline
+  while the cursor is at the screen edge (respects the value of 'scrolloff').
+  This is intended to prevent flickering while scrolling with j and k.
+
+  Default: 0
+
 *g:matchup_matchparen_stopline*
 
   The number of lines to search in either direction while highlighting
@@ -641,7 +651,7 @@ Module text_obj~
 
   function! IsCommentaryOpFunc()
     return &operatorfunc ==? matchstr(maparg('<Plug>Commentary', 'n'),
-        \ '\cset op\%(erator\)\?func=\zs.\{-\}\ze<cr>')
+        \ '\c<SNR>\w\+\ze()\|set op\%(erator\)\?func=\zs.\{-\}\ze<cr>')
   endfunction
 
   let g:matchup_text_obj_linewise_operators = ['d', 'y',

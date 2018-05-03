@@ -22,14 +22,15 @@ g:matchup_delim_start_plaintext	matchup.txt	/*g:matchup_delim_start_plaintext*
 g:matchup_delim_stopline	matchup.txt	/*g:matchup_delim_stopline*
 g:matchup_enabled	matchup.txt	/*g:matchup_enabled*
 g:matchup_hotfix_{&filetype}	matchup.txt	/*g:matchup_hotfix_{&filetype}*
+g:matchup_mappings_enabled	matchup.txt	/*g:matchup_mappings_enabled*
 g:matchup_matchparen_deferred	matchup.txt	/*g:matchup_matchparen_deferred*
 g:matchup_matchparen_deferred_hide_delay	matchup.txt	/*g:matchup_matchparen_deferred_hide_delay*
 g:matchup_matchparen_deferred_show_delay	matchup.txt	/*g:matchup_matchparen_deferred_show_delay*
 g:matchup_matchparen_enabled	matchup.txt	/*g:matchup_matchparen_enabled*
-g:matchup_matchparen_enabled	matchup.txt	/*g:matchup_matchparen_enabled*
 g:matchup_matchparen_insert_timeout	matchup.txt	/*g:matchup_matchparen_insert_timeout*
 g:matchup_matchparen_novisual	matchup.txt	/*g:matchup_matchparen_novisual*
 g:matchup_matchparen_pumvisible	matchup.txt	/*g:matchup_matchparen_pumvisible*
+g:matchup_matchparen_scrolloff	matchup.txt	/*g:matchup_matchparen_scrolloff*
 g:matchup_matchparen_singleton	matchup.txt	/*g:matchup_matchparen_singleton*
 g:matchup_matchparen_status_offscreen	matchup.txt	/*g:matchup_matchparen_status_offscreen*
 g:matchup_matchparen_stopline	matchup.txt	/*g:matchup_matchparen_stopline*
@@ -38,6 +39,7 @@ g:matchup_matchpref_html_nolists	matchup.txt	/*g:matchup_matchpref_html_nolists*
 g:matchup_motion_cursor_end	matchup.txt	/*g:matchup_motion_cursor_end*
 g:matchup_motion_enabled	matchup.txt	/*g:matchup_motion_enabled*
 g:matchup_motion_override_Npercent	matchup.txt	/*g:matchup_motion_override_Npercent*
+g:matchup_mouse_enabled	matchup.txt	/*g:matchup_mouse_enabled*
 g:matchup_text_obj_enabled	matchup.txt	/*g:matchup_text_obj_enabled*
 g:matchup_text_obj_linewise_operators	matchup.txt	/*g:matchup_text_obj_linewise_operators*
 g:matchup_transmute_enabled	matchup.txt	/*g:matchup_transmute_enabled*
