@@ -84,6 +84,7 @@ alias odoo_server='./odoo.py -c .openerp_serverrc'
 alias firefox='firefox-aurora'
 alias t='todo.sh'
 alias d='sudo docker'
+alias sp_scope="rg '\(B\)' $HOME/todo.txt-cli/todo.txt | sed 's/^.*\*\([0-9.]*\).*$/\1/' | paste -sd+ | bc"
 alias dc='sudo docker-compose'
 alias tree1='tree -L 1'
 alias v='nvim'
