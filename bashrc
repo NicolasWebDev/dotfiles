@@ -46,6 +46,7 @@ complete -cf sudo
 
 export MOZ_DISABLE_PANGO=1
 export WINEARCH=win32
+export WINEPREFIX=$HOME/.wine
 export PAGER="less -r"
 export EDITOR=nvim
 export BROWSER=/usr/bin/chromium
