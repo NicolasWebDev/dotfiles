@@ -85,7 +85,8 @@ alias odoo_server='./odoo.py -c .openerp_serverrc'
 alias firefox='firefox-aurora'
 alias t='todo.sh'
 alias d='sudo docker'
-alias sp_scope="rg '\(B\)' $HOME/todo.txt-cli/todo.txt | sed 's/^.*\*\([0-9.]*\).*$/\1/' | paste -sd+ | bc"
+alias scope_sprint="backlog_scope todo.txt '\((A|B)\) '"
+alias scope_ready="backlog_scope *.backlog.todo.txt '\+ready'"
 alias dc='sudo docker-compose'
 alias tree1='tree -L 1'
 alias v='nvim'
@@ -109,7 +110,7 @@ alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 # https://github.com/serialoverflow/blockify/issues/92
 alias spotify='PULSE_PROP="module-stream-restore.id=spotify" /usr/bin/spotify'
 alias ll='ls --color=auto -lX'
-alias vimgtd="cd $HOME/todo.txt-cli ; $EDITOR waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt'"
+alias vimgtd="cd $HOME/todo.txt-cli ; $EDITOR waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt' -c ':tabedit general.backlog.todo.txt' -c ':tabedit programming.backlog.todo.txt' -c ':tabedit marketing.backlog.todo.txt' -c ':tabedit protel.backlog.todo.txt'"
 alias ls='ls --color=auto'
 alias b='bundle exec'
 alias gc='git commit -v'
@@ -151,6 +152,22 @@ function remcm() {
 }
 function remcm2() {
     rem_cal 2
+}
+function backlog_scope() {
+    FILES=$1
+    REGEX=$2
+    for FILE in $HOME/todo.txt-cli/$FILES
+    do
+        printf "%-20s" $(basename $FILE .backlog.todo.txt)
+        ESTIMATES=$(rg $REGEX $FILE | sed 's/^.*\*\([0-9.]*\).*$/\1/')
+        if [[ $ESTIMATES ]]
+        then
+            echo -n "$ESTIMATES" | paste -sd+ | bc 
+        else
+            echo -n 0
+        fi
+    done
+    echo
 }
 function project_time()
 {
