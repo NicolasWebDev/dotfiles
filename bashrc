@@ -86,6 +86,7 @@ alias firefox='firefox-aurora'
 alias t='todo.sh'
 alias d='sudo docker'
 alias scope_sprint="backlog_scope todo.txt '\((A|B)\) '"
+alias scope_b="backlog_scope *.backlog.todo.txt '\(B\) '"
 alias scope_ready="backlog_scope *.backlog.todo.txt '\+ready'"
 alias dc='sudo docker-compose'
 alias tree1='tree -L 1'
