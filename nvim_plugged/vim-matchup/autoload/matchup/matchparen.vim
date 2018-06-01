@@ -229,8 +229,11 @@ function! s:matchparen.highlight(...) abort dict " {{{1
 
   call self.clear()
 
-  if g:matchup_matchparen_novisual
-        \ && index(['v','V',"\<c-v>"], mode()) >= 0
+  let l:modes = g:matchup_matchparen_nomode
+  if get(g:, 'matchup_matchparen_novisual', 0)  " deprecated option name
+    let l:modes .= "vV\<c-v>"
+  endif
+  if stridx(l:modes, l:entering_insert ? 'i' : mode()) >= 0
     return
   endif
 
@@ -289,8 +292,10 @@ function! s:matchparen.highlight(...) abort dict " {{{1
     return s:matchparen.highlight(0, l:entering_insert)
   endif
 
-  if len(l:corrlist) <= (l:current.side ==# 'mid' ? 2 : 1)
+  if !has_key(l:current, 'match_index')
+        \ || len(l:corrlist) <= (l:current.side ==# 'mid' ? 2 : 1)
         \ && !g:matchup_matchparen_singleton
+    " TODO this doesn't catch every case, needs refactor
     " TODO singleton doesn't work right for mids
     return
   endif
@@ -316,8 +321,10 @@ function! s:matchparen.highlight(...) abort dict " {{{1
   endif
 
   for l:corr in l:corrlist
-    call add(w:matchup_match_id_list, matchaddpos('MatchParen',
-       \   [[l:corr.lnum, l:corr.cnum, strlen(l:corr.match)]]))
+    let l:group = l:corr.match_index == l:current.match_index
+          \ ? 'MatchParenCur' : 'MatchParen'
+    call add(w:matchup_match_id_list, matchaddpos(l:group,
+          \ [[l:corr.lnum, l:corr.cnum, strlen(l:corr.match)]]))
   endfor
 
   call matchup#perf#toc('matchparen.highlight', 'end')

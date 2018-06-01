@@ -24,7 +24,11 @@ if exists('g:loaded_matchup')
 endif
 let g:loaded_matchup = 1
 
-if exists('g:loaded_matchit')
+if has('nvim')
+  if exists(':MatchDebug')
+    runtime! autoload/matchup/unmatchit.vim
+  endif
+elseif exists('g:loaded_matchit')
   echoerr 'match-up must be loaded before matchit'
   finish
 endif
@@ -42,6 +46,8 @@ catch /^Vim\%((\a\+)\)\=:E216/
 endtry
 command! NoMatchParen call matchup#matchparen#toggle(0)
 command! DoMatchParen call matchup#matchparen#toggle(1)
+
+hi def link MatchParenCur MatchParen
 
 if get(g:, 'matchup_override_vimtex', 0)
   let g:vimtex_matchparen_enabled = 0

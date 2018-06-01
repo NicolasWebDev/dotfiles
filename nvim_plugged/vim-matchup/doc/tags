@@ -28,7 +28,7 @@ g:matchup_matchparen_deferred_hide_delay	matchup.txt	/*g:matchup_matchparen_defe
 g:matchup_matchparen_deferred_show_delay	matchup.txt	/*g:matchup_matchparen_deferred_show_delay*
 g:matchup_matchparen_enabled	matchup.txt	/*g:matchup_matchparen_enabled*
 g:matchup_matchparen_insert_timeout	matchup.txt	/*g:matchup_matchparen_insert_timeout*
-g:matchup_matchparen_novisual	matchup.txt	/*g:matchup_matchparen_novisual*
+g:matchup_matchparen_nomode	matchup.txt	/*g:matchup_matchparen_nomode*
 g:matchup_matchparen_pumvisible	matchup.txt	/*g:matchup_matchparen_pumvisible*
 g:matchup_matchparen_scrolloff	matchup.txt	/*g:matchup_matchparen_scrolloff*
 g:matchup_matchparen_singleton	matchup.txt	/*g:matchup_matchparen_singleton*
