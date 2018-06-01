@@ -165,10 +165,9 @@ function backlog_scope() {
         then
             echo -n "$ESTIMATES" | paste -sd+ | bc 
         else
-            echo -n 0
+            echo 0
         fi
     done
-    echo
 }
 function project_time()
 {
