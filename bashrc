@@ -85,7 +85,6 @@ alias odoo_server='./odoo.py -c .openerp_serverrc'
 alias firefox='firefox-aurora'
 alias t='todo.sh'
 alias d='sudo docker'
-alias scope_sprint="backlog_scope todo.txt '\((A|B)\) '"
 alias scope_b="backlog_scope *.backlog.todo.txt '\(B\) '"
 alias scope_ready="backlog_scope *.backlog.todo.txt '\+ready'"
 alias dc='sudo docker-compose'
@@ -153,6 +152,16 @@ function remcm() {
 }
 function remcm2() {
     rem_cal 2
+}
+function scope_done() {
+    tac todo.txt-cli/done.txt | sed '/\+scrum SP/q' | sed 's/^.*\*\([0-9.]*\).*$/\1/' | paste -sd+ | bc
+}
+function scope_sprint() {
+    REMAINING=$(backlog_scope todo.txt '\((A|B)\) ' | grep -o '[[:digit:]][.[:digit:]]*')
+    DONE=$(scope_done)
+    printf "%-20s%.1f\n" todo.txt $REMAINING
+    printf "%-20s%.1f\n" done.txt $DONE
+    printf "%-20s%.1f\n" total $(bc <<< "$REMAINING+$DONE")
 }
 function backlog_scope() {
     FILES=$1
