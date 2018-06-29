@@ -85,6 +85,7 @@ alias odoo_server='./odoo.py -c .openerp_serverrc'
 alias firefox='firefox-aurora'
 alias t='todo.sh'
 alias d='sudo docker'
+alias scope_a="backlog_scope todo.txt '\(A\) '"
 alias scope_b="backlog_scope *.backlog.todo.txt '\(B\) '"
 alias scope_ready="backlog_scope *.backlog.todo.txt '\+ready'"
 alias dc='sudo docker-compose'
