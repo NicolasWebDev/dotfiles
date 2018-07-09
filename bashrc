@@ -135,6 +135,10 @@ alias mkdir='mkdir -pv'
 alias poweroff='systemctl poweroff'
 alias youtube-dl-sub='youtube-dl --write-sub --sub-lang en --sub-format vtt'
 declare -A PROJECT_COLORS=( ["luzverde"]="0 255 0" ["selecta"]="0 0 255" )
+function flac2ogg() {
+    DIR=$1
+    find "$DIR" -name "*flac" -exec oggenc -q 7 {} \;
+}
 function rem_sed_script() {
     for project in "${!PROJECT_COLORS[@]}"
     do
