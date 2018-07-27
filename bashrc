@@ -84,6 +84,7 @@ alias odoo_reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgre
 alias odoo_server='./odoo.py -c .openerp_serverrc'
 alias firefox='firefox-aurora'
 alias t='todo.sh'
+alias public_ip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias d='sudo docker'
 alias scope_a="backlog_scope todo.txt '\(A\) '"
 alias scope_b="backlog_scope *.backlog.todo.txt '\(B\) '"
