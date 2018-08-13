@@ -125,6 +125,9 @@ function! s:matchparen.clear() abort dict " {{{1
   if exists('w:matchup_oldstatus')
     let &l:statusline = w:matchup_oldstatus
     unlet w:matchup_oldstatus
+    if exists('#User#MatchupOffscreenLeave')
+      doautocmd <nomodeline> User MatchupOffscreenLeave
+    endif
   endif
 
   let w:matchup_need_clear = 0
@@ -143,7 +146,18 @@ function! s:timer_callback(win_id, timer_id) abort " {{{1
   if l:elapsed >= s:show_delay
     let w:matchup_timer_paused = 1
     call timer_pause(a:timer_id, 1)
-    call s:matchparen.highlight()
+    if exists('#TextYankPost') && !has('patch-8.1.0192')
+      " workaround crash with autocmd trigger during regex match (#3175)
+      let l:save_ei = &eventignore
+      try
+        set eventignore+=TextYankPost
+        call s:matchparen.highlight()
+      finally
+        let &eventignore = l:save_ei
+      endtry
+    else
+      call s:matchparen.highlight()
+    endif
   elseif w:matchup_need_clear && exists('w:matchup_hi_time')
     " if highlighting becomes too stale, clear it
     let l:elapsed = 1000*s:reltimefloat(reltime(w:matchup_hi_time))
@@ -256,12 +270,14 @@ function! s:matchparen.highlight(...) abort dict " {{{1
 
   let l:current = matchup#delim#get_current('all', 'both_all',
         \ { 'insertmode': l:insertmode,
-        \   'stopline': g:matchup_matchparen_stopline, })
+        \   'stopline': g:matchup_matchparen_stopline,
+        \   'highlighting': 1, })
   call matchup#perf#toc('matchparen.highlight', 'get_current')
   if empty(l:current) | return | endif
 
   let l:corrlist = matchup#delim#get_matching(l:current,
-        \ { 'stopline': g:matchup_matchparen_stopline, })
+        \ { 'stopline': g:matchup_matchparen_stopline,
+        \   'highlighting': 1, })
   call matchup#perf#toc('matchparen.highlight', 'get_matching')
   if empty(l:corrlist) | return | endif
 
@@ -316,16 +332,7 @@ function! s:matchparen.highlight(...) abort dict " {{{1
   endif
 
   " add highlighting matches
-  if !exists('w:matchup_match_id_list')
-    let w:matchup_match_id_list = []
-  endif
-
-  for l:corr in l:corrlist
-    let l:group = l:corr.match_index == l:current.match_index
-          \ ? 'MatchParenCur' : 'MatchParen'
-    call add(w:matchup_match_id_list, matchaddpos(l:group,
-          \ [[l:corr.lnum, l:corr.cnum, strlen(l:corr.match)]]))
-  endfor
+  call s:add_matches(l:corrlist, l:current)
 
   call matchup#perf#toc('matchparen.highlight', 'end')
 endfunction
@@ -349,6 +356,9 @@ function! matchup#matchparen#offscreen(current) " {{{1
   let w:matchup_oldstatus = &l:statusline
 
   let &l:statusline = s:format_statusline(l:offscreen)
+  if exists('#User#MatchupOffscreenEnter')
+    doautocmd <nomodeline> User MatchupOffscreenEnter
+  endif
 endfunction
 
 " }}}1
@@ -365,14 +375,7 @@ function! matchup#matchparen#highlight_surrounding(...) " {{{1
   let w:matchup_need_clear = 1
 
   " add highlighting matches
-  if !exists('w:matchup_match_id_list')
-    let w:matchup_match_id_list = []
-  endif
-
-  for l:corr in l:corrlist
-    call add(w:matchup_match_id_list, matchaddpos('MatchParen',
-       \   [[l:corr.lnum, l:corr.cnum, strlen(l:corr.match)]]))
-  endfor
+  call s:add_matches(l:corrlist)
 endfunction
 
 "}}}1
@@ -402,6 +405,9 @@ function! s:format_statusline(offscreen) " {{{1
   if empty(l:sl) && a:offscreen.lnum < line('.')
     let l:sl = '%#Search#∆%#Normal#'
     let l:padding -= 1    " OK if this is negative
+    if l:padding == -1 && indent(a:offscreen.lnum) == 0
+      let l:padding = 0
+    endif
   endif
 
   " possible fold column, up to &foldcolumn characters
@@ -413,6 +419,8 @@ function! s:format_statusline(offscreen) " {{{1
           \ : join(range(l:fdl-l:fdc+1, l:fdl), '')
     let l:padding -= len(l:fdcstr)
     let l:fdcstr = '%#FoldColumn#' . l:fdcstr . '%#Normal#'
+  elseif empty(l:sl)
+    let l:sl = '%#Normal#'
   endif
 
   " add remaining padding (this handles rest of fdc and scl)
@@ -422,8 +430,9 @@ function! s:format_statusline(offscreen) " {{{1
   for l:c in range(min([winwidth(0), strlen(l:line)]))
     if a:offscreen.cnum <= l:c+1 && l:c+1 <= a:offscreen.cnum
           \ - 1 + strlen(a:offscreen.match)
+      let l:wordish = a:offscreen.match !~? '^[[:punct:]]\{1,3\}$'
       " TODO: we can't overlap groups, this might not be totally correct
-      let l:curhi = 'MatchParen'
+      let l:curhi = l:wordish ? 'MatchWord' : 'MatchParen'
     else
       let l:curhi = synIDattr(
             \ synID(a:offscreen.lnum, l:c+1, 1), 'name')
@@ -444,6 +453,35 @@ endfunction
 
 function! s:gchar_virtpos(lnum, cnum)
   return matchstr(getline(a:lnum), '\%'.a:cnum.'v.')
+endfunction
+
+" }}}1
+function! s:add_matches(corrlist, ...) " {{{1
+  if !exists('w:matchup_match_id_list')
+    let w:matchup_match_id_list = []
+  endif
+
+  " if MatchwordCur is undefined and MatchWord links to MatchParen
+  " (as default), behave like MatchWordCur is the same as MatchParenCur
+  " otherwise, MatchWordCur is the same as MatchWord
+  if a:0
+    let l:mwc = hlexists('MatchWordCur') ? 'MatchWordCur'
+          \ : (synIDtrans(hlID('MatchWord')) == hlID('MatchParen')
+          \     ? 'MatchParenCur' : 'MatchWord')
+  endif
+
+  for l:corr in a:corrlist
+    let l:wordish = l:corr.match !~? '^[[:punct:]]\{1,3\}$'
+
+    if a:0 && l:corr.match_index == a:1.match_index
+      let l:group = l:wordish ? l:mwc : 'MatchParenCur'
+    else
+      let l:group = l:wordish ? 'MatchWord' : 'MatchParen'
+    endif
+
+    call add(w:matchup_match_id_list, matchaddpos(l:group,
+          \ [[l:corr.lnum, l:corr.cnum, strlen(l:corr.match)]], 0))
+  endfor
 endfunction
 
 " }}}1

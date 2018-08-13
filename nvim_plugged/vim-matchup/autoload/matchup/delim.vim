@@ -79,7 +79,9 @@ function! matchup#delim#get_matching(delim, ...) " {{{1
 
     let [l:match, l:lnum, l:cnum] = l:matches[l:i]
 
-    let l:matching = deepcopy(a:delim)
+    let l:matching = copy(a:delim)
+    let l:matching.class = copy(a:delim.class)
+
     let l:matching.lnum = l:lnum
     let l:matching.cnum = l:cnum
     let l:matching.match = l:match
@@ -202,8 +204,9 @@ function! matchup#delim#get_surround_nearest(open, ...) " {{{1
   let l:delim = a:open.links.next
   let l:pos_val_next = matchup#pos#val(l:delim)
   while l:pos_val_next > l:pos_val_open
+    let l:end_offset = matchup#delim#end_offset(l:delim)
     if l:pos_val_prev <= l:pos_val_cursor
-          \ && l:pos_val_next >= l:pos_val_cursor
+          \ && l:pos_val_next + l:end_offset >= l:pos_val_cursor
       return [l:delim.links.prev, l:delim]
     endif
     let l:pos_val_prev = l:pos_val_next
@@ -333,8 +336,7 @@ function! s:get_delim(opts) " {{{1
     let l:re .= '\&'
   endif
 
-  " use b:match_ignorecase
-  call s:ignorecase_start()
+  " use b:match_ignorecase (defunct)
 
   " move cursor one left for searchpos if necessary
   let l:need_restore_cursor = 0
@@ -391,8 +393,7 @@ function! s:get_delim(opts) " {{{1
     let l:need_restore_cursor = 1
   endif
 
-  " reset ignorecase
-  call s:ignorecase_end()
+  " reset ignorecase (defunct)
 
   " restore cursor
   if l:need_restore_cursor
@@ -445,36 +446,6 @@ endfunction
 
 " }}}1
 
-function! s:ignorecase_start() " {{{1
-  " enforce b:match_ignorecase, if necessary
-  if exists('s:save_ic') || exists('s:save_scs')
-    return
-  endif
-  if exists('b:match_ignorecase') && b:match_ignorecase !=# &ignorecase
-    let s:save_ic = &ignorecase
-    noautocmd let &ignorecase = b:match_ignorecase
-  endif
-  if &smartcase
-    let s:save_scs = &smartcase
-    noautocmd let &smartcase = 0
-  endif
-endfunction
-
-"}}}1
-function! s:ignorecase_end() " {{{1
-  " restore ignorecase
-  if exists('s:save_ic')
-    noautocmd let &ignorecase = s:save_ic
-    unlet s:save_ic
-  endif
-  if exists('s:save_scs')
-    noautocmd let &smartcase = s:save_scs
-    unlet s:save_scs
-  endif
-endfunction
-
-"}}}1
-
 function! s:parser_delim_new(lnum, cnum, opts) " {{{1
   let l:cursorpos = a:opts.cursorpos
   let l:found = 0
@@ -483,7 +454,7 @@ function! s:parser_delim_new(lnum, cnum, opts) " {{{1
   let l:rebrs = b:matchup_delim_lists[a:opts.type].regex_backref
 
   " use b:match_ignorecase
-  call s:ignorecase_start()
+  let l:ic = get(b:, 'match_ignorecase', 0) ? '\c' : '\C'
 
   " loop through all (index, side) pairs,
   let l:ns = len(l:sides)
@@ -500,16 +471,26 @@ function! s:parser_delim_new(lnum, cnum, opts) " {{{1
     endif
 
     " if pattern may contain \zs, extra processing is required
-    let l:has_zs = l:rebrs[l:i / l:ns].extra_info.has_zs
+    let l:extra_info = l:rebrs[l:i / l:ns].extra_info
+    let l:has_zs = get(l:extra_info, 'has_zs', 0)
 
     let l:mid_id = 0
     for l:re in l:res
       let l:mid_id += 1
 
+      " check whether hlend needs to be handled
+      let l:id = l:side ==# 'mid' ? l:mid_id : l:side ==# 'open' ? 0 : -1
+      let l:extra_entry = l:rebrs[l:i / l:ns].extra_list[l:id]
+      let l:has_hlend = has_key(l:extra_entry, 'hlend')
+
+      if l:has_hlend && get(a:opts, 'highlighting', 0)
+        let l:re = s:process_hlend(l:re, l:cursorpos)
+      endif
+
       " prepend the column number and append the cursor column
       " to anchor the match; we don't use {start} for matchlist
       " because there may be zero-width look behinds
-      let l:re_anchored = s:anchor_regex(l:re, a:cnum, l:has_zs)
+      let l:re_anchored = l:ic . s:anchor_regex(l:re, a:cnum, l:has_zs)
 
       " for current we want the first match which the cursor is inside
       if a:opts.direction ==# 'current'
@@ -521,7 +502,7 @@ function! s:parser_delim_new(lnum, cnum, opts) " {{{1
 
       " reject matches which the cursor is outside of
       " this matters only for \ze
-      if a:opts.direction ==# 'current'
+      if !l:has_hlend && a:opts.direction ==# 'current'
           \ && a:cnum + strlen(l:matches[0]) <= l:cursorpos
         continue
       endif
@@ -540,8 +521,7 @@ function! s:parser_delim_new(lnum, cnum, opts) " {{{1
     break
   endfor
 
-  " reset ignorecase
-  call s:ignorecase_end()
+  " reset ignorecase (defunct)
 
   if !l:found
       return {}
@@ -600,6 +580,7 @@ function! s:parser_delim_new(lnum, cnum, opts) " {{{1
         \ 'regexone'     : l:thisre,
         \ 'regextwo'     : l:thisrebr,
         \ 'rematch'      : l:re,
+        \ 'highlighting' : get(a:opts, 'highlighting', 0),
         \}
 
   return l:result
@@ -644,7 +625,11 @@ function! s:get_matching_delims(down, stopline) dict " {{{1
   let l:close = matchup#delim#fill_backrefs(l:close, self.groups, 0)
 
   let s:invert_skip = self.skip
-  let l:skip = 'matchup#delim#skip0()'
+  if empty(b:matchup_delim_skip)
+    let l:skip = 'matchup#delim#skip_default()'
+  else
+    let l:skip = 'matchup#delim#skip0()'
+  endif
 
   if matchup#perf#timeout_check() | return [['', 0, 0]] | endif
 
@@ -654,7 +639,9 @@ function! s:get_matching_delims(down, stopline) dict " {{{1
   endif
 
   " use b:match_ignorecase
-  call s:ignorecase_start()
+  let l:ic = get(b:, 'match_ignorecase', 0) ? '\c' : '\C'
+  let l:open = l:ic . l:open
+  let l:close = l:ic . l:close
 
   let [l:lnum_corr, l:cnum_corr] = searchpairpos(l:open, '', l:close,
         \ 'n'.l:flags, l:skip, l:stopline, matchup#perf#timeout())
@@ -663,20 +650,24 @@ function! s:get_matching_delims(down, stopline) dict " {{{1
 
   " if nothing found, bail immediately
   if l:lnum_corr == 0
-    " reset ignorecase
-    call s:ignorecase_end()
+    " reset ignorecase (defunct)
 
     return [['', 0, 0]]
   endif
 
+  " when highlighting, respect hlend
+  let l:extra_entry = self.regextwo.extra_list[a:down ? -1 : 0]
+  if self.highlighting && has_key(l:extra_entry, 'hlend')
+    let l:re = s:process_hlend(l:re, -1)
+  endif
+
   " get the match and groups
   let l:has_zs = self.regextwo.extra_info.has_zs
-  let l:re_anchored = s:anchor_regex(l:re, l:cnum_corr, l:has_zs)
+  let l:re_anchored = l:ic . s:anchor_regex(l:re, l:cnum_corr, l:has_zs)
   let l:matches = matchlist(getline(l:lnum_corr), l:re_anchored)
   let l:match_corr = l:matches[0]
 
-  " reset ignorecase
-  call s:ignorecase_end()
+  " reset ignorecase (defunct)
 
   " store these in these groups
   if a:down
@@ -705,8 +696,14 @@ function! s:get_matching_delims(down, stopline) dict " {{{1
 
   let l:re = l:mids
 
+  " when highlighting, respect hlend
+  if get(self.regextwo.extra_info, 'mid_hlend') && self.highlighting
+    let l:re = s:process_hlend(l:re, -1)
+  endif
+
   " use b:match_ignorecase
-  call s:ignorecase_start()
+  let l:mid = l:ic . l:mids
+  let l:re = l:ic . l:re
 
   let l:list = []
   while 1
@@ -731,8 +728,7 @@ function! s:get_matching_delims(down, stopline) dict " {{{1
     call add(l:list, [l:match, l:lnum, l:cnum])
   endwhile
 
-  " reset ignorecase
-  call s:ignorecase_end()
+  " reset ignorecase (defunct)
 
   call add(l:list, [l:match_corr, l:lnum_corr, l:cnum_corr])
 
@@ -760,12 +756,12 @@ function! matchup#delim#skip(...) " {{{1
   execute 'return' (s:invert_skip ? '!(' : '(') b:matchup_delim_skip ')'
 endfunction
 
-function! matchup#delim#skip0()
-  if empty(b:matchup_delim_skip)
-    return matchup#util#in_comment_or_string(line('.'), col('.'))
-          \ ? !s:invert_skip : s:invert_skip
-  endif
+function! matchup#delim#skip_default()
+  return matchup#util#in_comment_or_string(line('.'), col('.'))
+        \ ? !s:invert_skip : s:invert_skip
+endfunction
 
+function! matchup#delim#skip0()
   let s:eff_curpos = [line('.'), col('.')]
   execute 'return' (s:invert_skip ? '!(' : '(') b:matchup_delim_skip ')'
 endfunction
@@ -818,6 +814,15 @@ function! s:anchor_regex(re, cnum, method) " {{{1
     " fails to match with \zs
     return '\%'.(a:cnum).'c\%('.a:re.'\)'
   endif
+endfunction
+
+" }}}1
+function! s:process_hlend(re, cursorpos) " {{{1
+  " first replace all \ze with \%>{cursorpos}c
+  let l:re = substitute(a:re, g:matchup#re#ze,
+        \ a:cursorpos < 0 ? '' : '\\%>'.a:cursorpos.'c', 'g')
+  " next convert hlend mark to \ze
+  return substitute(l:re, '\V\\%(hlend\\)\\{0}', '\\ze', 'g')
 endfunction
 
 " }}}1

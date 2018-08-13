@@ -125,6 +125,9 @@ function! matchup#motion#find_matching_pair(visual, down) " {{{1
   endif
 
   call matchup#pos#set_cursor(l:lnum, l:column)
+  if stridx(&foldopen, 'percent') >= 0
+    normal! zv
+  endif
 endfunction
 
 " }}}1
@@ -254,6 +257,25 @@ function! matchup#motion#jump_inside(visual) " {{{1
 
   normal! m`
   call matchup#pos#set_cursor(l:new_pos)
+endfunction
+
+" }}}1
+function! matchup#motion#insert_mode() " {{{1
+  call matchup#perf#timeout_start(0) " disable the timeout
+
+  let l:delim = matchup#delim#get_current(
+        \ 'all', 'both_all', {'insertmode': 1})
+  if empty(l:delim) | return | endif
+
+  let l:matches = matchup#delim#get_matching(l:delim, 1)
+  if len(l:matches) <= (l:delim.side ==# 'mid' ? 2 : 1) | return | endif
+  if !has_key(l:delim, 'links') | return | endif
+  let l:delim = get(l:delim.links, 'next', {})
+  if empty(l:delim) | return | endif
+
+  let l:new_pos = [l:delim.lnum, l:delim.cnum]
+  let l:new_pos[1] += matchup#delim#end_offset(l:delim)
+  call matchup#pos#set_cursor(matchup#pos#next_eol(l:new_pos))
 endfunction
 
 " }}}1
