@@ -86,9 +86,9 @@ alias firefox='firefox-aurora'
 alias t='todo.sh'
 alias public_ip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias d='sudo docker'
-alias scope_a="backlog_scope todo.txt '\(A\) '"
-alias scope_b="backlog_scope *.backlog.todo.txt '\(B\) '"
-alias scope_ready="backlog_scope *.backlog.todo.txt '\+ready'"
+alias scope_a="backlog_scope $HOME/todo.txt-cli/todo.txt '\(A\) '"
+alias scope_b="backlog_scope $HOME/todo.txt-cli/*.backlog.todo.txt '\(B\) '"
+alias scope_ready="backlog_scope $HOME/todo.txt-cli/*.backlog.todo.txt '\+ready'"
 alias dc='sudo docker-compose'
 alias tree1='tree -L 1'
 alias v='nvim'
@@ -148,7 +148,7 @@ function rem_sed_script() {
 }
 function rem_cal() {
     C_OPTIONS=$1
-    rem_sed_script | sed -f /dev/stdin ~/.reminders | remind -ccu${C_OPTIONS} -m -b1 -w$(tput cols),0 -
+    rem_sed_script | sed -f /dev/stdin $HOME/.reminders | remind -ccu${C_OPTIONS} -m -b1 -w$(tput cols),0 -
 }
 function remc() {
     rem_cal +
@@ -160,10 +160,10 @@ function remcm2() {
     rem_cal 2
 }
 function scope_done() {
-    tac todo.txt-cli/done.txt | sed '/\+scrum SP/q' | sed 's/^.*\*\([0-9.]*\).*$/\1/' | paste -sd+ | bc
+    tac $HOME/todo.txt-cli/done.txt | sed '/\+scrum SP/q' | sed 's/^.*\*\([0-9.]*\).*$/\1/' | paste -sd+ | bc
 }
 function scope_sprint() {
-    REMAINING=$(backlog_scope todo.txt '\((A|B)\) ' | grep -o '[[:digit:]][.[:digit:]]*')
+    REMAINING=$(backlog_scope $HOME/todo.txt-cli/todo.txt '\((A|B)\) ' | grep -o '[[:digit:]][.[:digit:]]*')
     DONE=$(scope_done)
     printf "%-20s%.1f\n" todo.txt $REMAINING
     printf "%-20s%.1f\n" done.txt $DONE
@@ -172,7 +172,7 @@ function scope_sprint() {
 function backlog_scope() {
     FILES=$1
     REGEX=$2
-    for FILE in $HOME/todo.txt-cli/$FILES
+    for FILE in $FILES
     do
         printf "%-20s" $(basename $FILE .backlog.todo.txt)
         ESTIMATES=$(rg $REGEX $FILE | sed 's/^.*\*\([0-9.]*\).*$/\1/')
@@ -186,7 +186,7 @@ function backlog_scope() {
 }
 function project_time()
 {
-    pomodori2time $(grep -c "$1" ~/work/documentation/journal.md)
+    pomodori2time $(grep -c "$1" $HOME/work/documentation/journal.md)
 }
 function pomodori2time()
 {
