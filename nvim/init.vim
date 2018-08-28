@@ -162,6 +162,10 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
         \   'text': ['proselint', 'vale', 'write-good'],
         \   'markdown': ['mdl', 'proselint', 'remark-lint', 'vale', 'write-good'],
         \}
+        let g:ale_fixers = {
+        \   'javascript': ['prettier'],
+        \}
+        let g:ale_fix_on_save = 1
     " }}}
 
     " GRUVBOX {{{
