@@ -178,10 +178,6 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
         xmap K <Plug>VSurround
     " }}}
 
-    " VIM-JSX {{{
-        let g:jsx_ext_required = 1
-    " }}}
-
     " VIM-EASYMOTION {{{
         nmap k <Plug>(easymotion-s)
     " }}}
