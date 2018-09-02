@@ -112,7 +112,7 @@ alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 # https://github.com/serialoverflow/blockify/issues/92
 alias spotify='PULSE_PROP="module-stream-restore.id=spotify" /usr/bin/spotify'
 alias ll='ls --color=auto -lX'
-alias vimgtd="cd $HOME/todo.txt-cli ; $EDITOR waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt' -c ':tabedit general.backlog.todo.txt' -c ':tabedit ziembra.backlog.todo.txt' -c ':tabedit marketing.backlog.todo.txt' -c ':tabedit programming.backlog.todo.txt'"
+alias vimgtd="cd $HOME/todo.txt-cli ; $EDITOR waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt' -c ':tabedit general.backlog.todo.txt' -c ':tabedit ziembra.backlog.todo.txt' -c ':tabedit marketing.backlog.todo.txt' -c ':tabedit growth.backlog.todo.txt'"
 alias ls='ls --color=auto'
 alias b='bundle exec'
 alias gc='git commit -v'
