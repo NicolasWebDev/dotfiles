@@ -6,6 +6,7 @@ endfunction
 
 " VIM-PLUG {{{
     call plug#begin('~/.local/share/nvim/plugged')
+    Plug 'RRethy/vim-illuminate'
     Plug 'matze/vim-move'
     Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
     Plug 'easymotion/vim-easymotion'
