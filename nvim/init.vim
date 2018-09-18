@@ -6,15 +6,16 @@ endfunction
 
 " VIM-PLUG {{{
     call plug#begin('~/.local/share/nvim/plugged')
+    Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
     Plug 'RRethy/vim-illuminate'
     Plug 'matze/vim-move'
-    Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+    Plug 'euclio/vim-markdown-composer', { 'for': 'markdown', 'do': function('BuildComposer') }
     Plug 'easymotion/vim-easymotion'
     Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
     Plug 'vim-airline/vim-airline'
     Plug 'ervandew/supertab'
     Plug 'sheerun/vim-polyglot'
-    Plug 'leafgarland/typescript-vim'
+    Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-surround'
     Plug 'jiangmiao/auto-pairs'
@@ -26,30 +27,30 @@ endfunction
     Plug 'w0rp/ale'
     Plug 'scrooloose/nerdtree'
     Plug 'Xuyuanp/nerdtree-git-plugin'
-    Plug 'python-rope/ropevim'
+    Plug 'python-rope/ropevim', { 'for': 'python' }
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
     Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-line'
     Plug 'tpope/vim-bundler'
     Plug 'tpope/vim-rails'
-    Plug 'plasticboy/vim-markdown'
-    Plug 'slim-template/vim-slim'
+    Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+    Plug 'slim-template/vim-slim', { 'for': 'slim' }
     Plug 'sukima/xmledit'
     Plug 'Valloric/YouCompleteMe', { 'do': './install.py --js-completer' }
     Plug 'andymass/vim-matchup'
-    Plug 'Sathors/vim-blockle'
-    Plug 'killphi/vim-ruby-refactoring'
+    Plug 'Sathors/vim-blockle', { 'for': 'ruby' }
+    Plug 'killphi/vim-ruby-refactoring', { 'for': 'ruby' }
     Plug 'freitass/todo.txt-vim'
     Plug 'bitc/vim-hdevtools'
     Plug 'tpope/vim-fugitive'
     Plug 'airblade/vim-gitgutter'
     Plug 'chrisbra/Recover.vim'
     Plug 'tmhedberg/SimpylFold'
-    Plug 'sunaku/vim-ruby-minitest'
+    Plug 'sunaku/vim-ruby-minitest', { 'for': 'ruby' }
     Plug 'othree/html5.vim'
-    Plug 'StanAngeloff/php.vim'
+    Plug 'StanAngeloff/php.vim', { 'for': 'php' }
     Plug 'takac/vim-hardtime'
     Plug 'pangloss/vim-javascript'
-    Plug 'mxw/vim-jsx'
+    Plug 'mxw/vim-jsx', { 'for': 'javascript' }
     Plug 'Yggdroot/indentLine'
     Plug 'mileszs/ack.vim'
     Plug 'ryanoasis/vim-devicons'
@@ -60,7 +61,7 @@ endfunction
 source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
 " BASIC SETTINGS {{{
-   let g:maplocalleader='-'
+   let maplocalleader='-'
    set background=dark
    set expandtab " Replace tab with spaces.
    set hidden " Hide buffers when they are abandoned instead of unloading them.
@@ -140,6 +141,11 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
         vmap <C-t> <Plug>MoveBlockDown
         vmap <C-s> <Plug>MoveBlockUp
     " }}}
+    
+    " VIM-WHICH-KEY {{{
+        nnoremap <silent> <leader> :WhichKey '\'<CR>
+        nnoremap <silent> <localleader> :WhichKey '-'<CR>
+    " }}}
 
     " VIM-NERDTREE-SYNTAX-HIGHLIGHT {{{
         let g:NERDTreeFileExtensionHighlightFullName = 1
@@ -190,8 +196,8 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
     " VIM-HARDTIME {{{
         let g:hardtime_default_on = 1
-        let g:list_of_normal_keys = ["c", "t", "s", "r", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-        let g:list_of_visual_keys = ["c", "t", "s", "r", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+        let g:list_of_normal_keys = ["c", "t", "s", "r", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+        let g:list_of_visual_keys = ["c", "t", "s", "r", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
         let g:hardtime_ignore_quickfix = 1
         let g:hardtime_allow_different_key = 1
     " }}}
