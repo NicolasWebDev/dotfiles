@@ -62,6 +62,8 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
 
 " BASIC SETTINGS {{{
    let maplocalleader='-'
+   " https://www.reddit.com/r/vim/comments/1vdrxg/space_is_a_big_key_what_do_you_map_it_to/#t1_cerq68d
+   map <space> <leader>
    set background=dark
    set expandtab " Replace tab with spaces.
    set hidden " Hide buffers when they are abandoned instead of unloading them.
