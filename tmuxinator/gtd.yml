@@ -46,4 +46,3 @@ windows:
   - gtd: vimgtd
   - journal: $EDITOR ~/work/documentation/journal.md
   - cal:
-  - reminders: $EDITOR ~/.reminders

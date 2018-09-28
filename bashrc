@@ -103,7 +103,6 @@ alias ssh='TERM=xterm-256color ssh'
 alias vimbashrc="$EDITOR $HOME/.bashrc ; source $HOME/.bashrc"
 alias vimvimrc="$EDITOR $HOME/.config/nvim/init.vim"
 alias vimsomeday="$EDITOR $HOME/todo.txt-cli/someday_maybe.txt"
-alias vimreminders="$EDITOR $HOME/.reminders"
 alias ping="ping www.archlinux.org"
 alias be='setxkbmap fr bepo ; echo "keyboard switched to bepo"'
 alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
@@ -157,29 +156,9 @@ function _caladd() {
     DURATION=$4
     gcalcli --calendar "$CALENDAR" --title "$TITLE" --when "$WHEN" $([ -n "$DURATION" ] && echo --duration "$DURATION") add
 }
-declare -A PROJECT_COLORS=( ["luzverde"]="0 255 0" ["selecta"]="0 0 255" )
 function flac2ogg() {
     DIR=$1
     find "$DIR" -name "*flac" -exec oggenc -q 7 {} \;
-}
-function rem_sed_script() {
-    for project in "${!PROJECT_COLORS[@]}"
-    do
-        echo "s/^\(.*\) MSG \(.*\) +$project$/\1 SPECIAL COLOR ${PROJECT_COLORS[$project]} \2/"
-    done
-}
-function rem_cal() {
-    C_OPTIONS=$1
-    rem_sed_script | sed -f /dev/stdin $HOME/.reminders | remind -ccu${C_OPTIONS} -m -b1 -w$(tput cols),0 -
-}
-function remc() {
-    rem_cal +
-}
-function remcm() {
-    rem_cal
-}
-function remcm2() {
-    rem_cal 2
 }
 function scope_done() {
     tac $HOME/todo.txt-cli/done.txt | sed '/\+scrum SP/q' | sed 's/^.*\*\([0-9.]*\).*$/\1/' | paste -sd+ | bc
@@ -237,7 +216,6 @@ function mutt ()
     /usr/bin/mutt "$@"
     cd -
 }
-alias remd='remind -z -k"notify-send -u critical -t 60000 %s &" ~/.reminders'
 alias reboot='systemctl reboot'
 alias screen_hdmi='xrandr | grep -q "HDMI-1 connected" && xrandr --output eDP-1 --off --output HDMI-1 --auto || echo "HDMI-1 is not connected"'
 alias screen_projector='xrandr --output eDP-1 --mode 1920x1080 --output DP-2 --mode 1280x800 --right-of eDP-1'
