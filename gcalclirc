@@ -7,3 +7,6 @@
 --noprompt
 --reminder=30
 --duration=60
+--detail_attendees
+--detail_length
+--detail_email

@@ -139,15 +139,18 @@ alias cal='gcalcli'
 alias calw='gcalcli calw'
 alias calm='gcalcli calm'
 function cala() {
-    _cala info@nicolaswebdev.com "$@"
+    gcalcli agenda "$@" | rg -v "Email: info@nicolaswebdev.com|Length: 1 day|Length: 1:00:00"
+}
+function calan() {
+    _caladd info@nicolaswebdev.com "$@"
 }
 function calaz() {
-    _cala Ziembra "$@"
+    _caladd Ziembra "$@"
 }
 function calai() {
-    _cala IQBit "$@"
+    _caladd IQBit "$@"
 }
-function _cala() {
+function _caladd() {
     CALENDAR=$1
     TITLE=$2
     WHEN=$3
