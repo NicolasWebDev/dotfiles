@@ -1,0 +1,9 @@
+--monday
+--military
+--width=29
+--defaultCalendar=info@nicolaswebdev.com#white
+--defaultCalendar=Ziembra#green 
+--defaultCalendar=IQBit#blue
+--noprompt
+--reminder=30
+--duration=60

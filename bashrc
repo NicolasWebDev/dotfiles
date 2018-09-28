@@ -135,6 +135,25 @@ alias hist='history | grep'
 alias mkdir='mkdir -pv'
 alias poweroff='systemctl poweroff'
 alias youtube-dl-sub='youtube-dl --write-sub --sub-lang en --sub-format vtt'
+alias cal='gcalcli'
+alias calw='gcalcli calw'
+alias calm='gcalcli calm'
+function cala() {
+    _cala info@nicolaswebdev.com "$@"
+}
+function calaz() {
+    _cala Ziembra "$@"
+}
+function calai() {
+    _cala IQBit "$@"
+}
+function _cala() {
+    CALENDAR=$1
+    TITLE=$2
+    WHEN=$3
+    DURATION=$4
+    gcalcli --calendar "$CALENDAR" --title "$TITLE" --when "$WHEN" $([ -n "$DURATION" ] && echo --duration "$DURATION") add
+}
 declare -A PROJECT_COLORS=( ["luzverde"]="0 255 0" ["selecta"]="0 0 255" )
 function flac2ogg() {
     DIR=$1
