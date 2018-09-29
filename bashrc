@@ -160,8 +160,18 @@ function flac2ogg() {
     DIR=$1
     find "$DIR" -name "*flac" -exec oggenc -q 7 {} \;
 }
+function stories_done() {
+    tac $HOME/todo.txt-cli/done.txt | sed '/\+scrum SP/q'
+}
+function stories_sprint() {
+    REMAINING=$(rg -c '\((A|B)\) ' $HOME/todo.txt-cli/todo.txt)
+    DONE=$(stories_done | wc -l)
+    printf "%-20s%d\n" todo.txt $REMAINING
+    printf "%-20s%d\n" done.txt $DONE
+    printf "%-20s%d\n" total $(bc <<< "$REMAINING+$DONE")
+}
 function scope_done() {
-    tac $HOME/todo.txt-cli/done.txt | sed '/\+scrum SP/q' | sed 's/^.*\*\([0-9.]*\).*$/\1/' | paste -sd+ | bc
+    stories_done | sed 's/^.*\*\([0-9.]*\).*$/\1/' | paste -sd+ | bc
 }
 function scope_sprint() {
     REMAINING=$(backlog_scope $HOME/todo.txt-cli/todo.txt '\((A|B)\) ' | grep -o '[[:digit:]][.[:digit:]]*')
