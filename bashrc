@@ -114,6 +114,7 @@ alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 alias spotify='PULSE_PROP="module-stream-restore.id=spotify" /usr/bin/spotify'
 alias ll='ls --color=auto -lX'
 alias vimgtd="cd $HOME/todo.txt-cli ; $EDITOR waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt' -c ':tabedit general.backlog.todo.txt' -c ':tabedit ziembra.backlog.todo.txt' -c ':tabedit marketing.backlog.todo.txt' -c ':tabedit growth.backlog.todo.txt'"
+alias gtdprojects="rg ' |^\+\S+ ' -o todo.txt-cli/someday.todo.txt | tr -d ' ' | sort | uniq -c | sort -n | tac"
 alias ls='ls --color=auto'
 alias b='bundle exec'
 alias gc='git commit -v'
