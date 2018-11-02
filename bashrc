@@ -156,7 +156,8 @@ function _caladd() {
     TITLE=$2
     WHEN=$3
     DURATION=$4
-    gcalcli --calendar "$CALENDAR" --title "$TITLE" --when "$WHEN" $([ -n "$DURATION" ] && echo --duration "$DURATION") add
+    OTHERS=("${@:5}")
+    gcalcli --calendar "$CALENDAR" --title "$TITLE" --when "$WHEN" $([ -n "$DURATION" ] && echo --duration "$DURATION" "${OTHERS[*]}") add
 }
 function flac2ogg() {
     DIR=$1
