@@ -184,6 +184,10 @@ function scope_sprint() {
     printf "%-20s%.1f\n" done.txt $DONE
     printf "%-20s%.1f\n" total $(bc <<< "$REMAINING+$DONE")
 }
+# Echoes standard input, and print the sum of the numbers it contains.
+function sum_digits() {
+    tee /dev/tty | rg -o '\d+' | paste -sd+ | bc
+}
 function backlog_scope() {
     FILES=$1
     REGEX=$2
