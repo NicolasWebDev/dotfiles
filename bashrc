@@ -186,7 +186,7 @@ function scope_sprint() {
 }
 # Echoes standard input, and print the sum of the numbers it contains.
 function sum_digits() {
-    tee /dev/tty | rg -o '\d+' | paste -sd+ | bc
+    tee /dev/tty | rg -o '\d+(\.\d+)?' | paste -sd+ | bc
 }
 function backlog_scope() {
     FILES=$1
