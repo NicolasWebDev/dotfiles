@@ -138,11 +138,12 @@ alias hist='history | grep'
 alias mkdir='mkdir -pv'
 alias poweroff='systemctl poweroff'
 alias youtube-dl-sub='youtube-dl --write-sub --sub-lang en --sub-format vtt'
+_CAL_OPTIONS='--monday --military --width=29'
 alias cal='gcalcli'
-alias calw='gcalcli calw'
-alias calm='gcalcli calm'
+alias calw="gcalcli calw $_CAL_OPTIONS"
+alias calm="gcalcli calm $_CAL_OPTIONS"
 function cala() {
-    gcalcli agenda "$@" | rg -v "Email: info@nicolaswebdev.com|Length: 1 day|Length: 1:00:00"
+    gcalcli agenda --military --width=29 --details attendees --details length --details email "$@" | rg -v "Email: info@nicolaswebdev.com|Length: 1 day|Length: 1:00:00"
 }
 function calan() {
     _caladd info@nicolaswebdev.com "$@"
@@ -157,9 +158,9 @@ function _caladd() {
     CALENDAR=$1
     TITLE=$2
     WHEN=$3
-    DURATION=$4
+    DURATION=${4:-60}
     OTHERS=("${@:5}")
-    gcalcli --calendar "$CALENDAR" --title "$TITLE" --when "$WHEN" $([ -n "$DURATION" ] && echo --duration "$DURATION" "${OTHERS[*]}") add
+    gcalcli --calendar "$CALENDAR" add --title "$TITLE" --when "$WHEN" --reminder 30 --duration "$DURATION" ${OTHERS[*]}
 }
 function flac2ogg() {
     DIR=$1
