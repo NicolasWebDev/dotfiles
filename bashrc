@@ -156,8 +156,8 @@ function calai() {
 }
 function _caladd() {
     CALENDAR=$1
-    TITLE=$2
-    WHEN=$3
+    WHEN=$2
+    TITLE=$3
     DURATION=${4:-60}
     OTHERS=("${@:5}")
     gcalcli --calendar "$CALENDAR" add --title "$TITLE" --when "$WHEN" --reminder 30 --duration "$DURATION" ${OTHERS[*]}
