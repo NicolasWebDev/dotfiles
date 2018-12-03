@@ -58,7 +58,7 @@ source "$HOME/.secrets.sh"
 set -o vi
 source "/usr/share/fzf/key-bindings.bash"
 source "/usr/share/fzf/completion.bash"
-export FZF_DEFAULT_COMMAND='rg --files --hidden 2>/dev/null'
+export FZF_DEFAULT_COMMAND='rg --files 2>/dev/null'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 bind -x '"\C-p": nvim $(fzf);'
 # Completion file for tmuxinator.
