@@ -199,7 +199,7 @@ function backlog_scope() {
         ESTIMATES=$(rg $REGEX $FILE | sed 's/^.*\*\([0-9.]*\).*$/\1/')
         if [[ $ESTIMATES ]]
         then
-            echo -n "$ESTIMATES" | paste -sd+ | bc 
+            printf "%3.1f\n" $(echo "$ESTIMATES" | paste -sd+ | bc)
         else
             echo 0
         fi
