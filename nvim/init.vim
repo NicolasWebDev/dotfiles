@@ -88,6 +88,15 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
    set cursorline " Highlight cursor line (must come after colorscheme command to take effect).
    set cursorcolumn
 " }}}
+
+" COMMANDS {{{
+    " Add repeated tasks based on a case insensitive pattern.
+    command! -nargs=1 GtdAdd read !rg -i <args> ~/work/gtd/repeated_tasks.md
+    " Add my weekly tasks.
+    command! GtdWeekly read ~/work/gtd/weekly_tasks.md
+    " Add my monthly tasks.
+    command! GtdMonthly read ~/work/gtd/monthly_tasks.md
+" }}}
    
 " AUTOCOMMANDS {{{
     " Disable YCM in the journal, because it makes editing really slow.
