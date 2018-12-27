@@ -78,6 +78,8 @@ esac
 #---------------------------- PATH ------------------------------
 
 #------------------------- ALIASES --------------------------------
+alias transtes='trans :es'
+alias transfes='trans es:'
 alias x='exit'
 alias o='mimeo'
 alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
