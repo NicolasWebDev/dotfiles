@@ -10,17 +10,16 @@ endfunction
 
 function! which_key#start(vis, bang, prefix) " {{{
   let s:vis = a:vis ? 'gv' : ''
+  let s:count = v:count != 0 ? v:count : ''
+
+  let key = a:prefix
+  let s:which_key_trigger = key ==# ' ' ? 'SPC' : key
+
   if a:bang
     let s:runtime = a:prefix
     call which_key#window#open(s:runtime)
     return
   endif
-
-  let s:count = v:count != 0 ? v:count : ''
-  let s:toplevel = a:prefix ==# 'top' ? 1 : 0
-
-  let key = a:prefix
-  let s:cur_trigger = a:prefix
 
   if !has_key(s:cache, key) || g:which_key_run_map_on_popup
     " First run
@@ -28,26 +27,46 @@ function! which_key#start(vis, bang, prefix) " {{{
     call which_key#map#parse(key, s:cache[key], s:vis ==# 'gv' ? 1 : 0)
   endif
 
-  let s:runtime = has_key(s:desc, key) || has_key(s:desc , 'top') ? s:create_target_dict(key) : s:cache[key]
-  let s:which_key_trigger = key ==# ' ' ? 'SPC' : key
+  " s:runtime is a dictionary combining the native key mapping dictionary
+  " parsed by vim-which-key itself with user defined prefix dictionary if avaliable.
+  let s:runtime = s:create_runtime(key)
+
+  if getchar(1)
+    while 1
+      let c = getchar()
+      let char = c == 9 ? '<Tab>' : nr2char(c)
+      let s:which_key_trigger .= ' '.char
+      let next_level = get(s:runtime, char)
+      if type(next_level) == s:TYPE.dict
+        let s:runtime = next_level
+      elseif type(next_level) == s:TYPE.list
+        call s:execute(next_level[0])
+        return
+      else
+        echohl ErrorMsg
+        echom s:which_key_trigger.' is undefined'
+        echohl None
+        return
+      endif
+      if s:wait_with_timeout(g:which_key_timeout)
+        break
+      endif
+    endwhile
+  endif
 
   call which_key#window#open(s:runtime)
 endfunction
 
-function! s:create_target_dict(key) " {{{
-  if has_key(s:desc, 'top')
-    let toplevel = deepcopy({s:desc['top']})
-    let tardict = s:toplevel ? toplevel : get(toplevel, a:key, {})
-    let mapdict = s:cache[a:key]
-    call s:merge(tardict, mapdict)
-  elseif has_key(s:desc, a:key)
-    let tardict = deepcopy({s:desc[a:key]})
-    let mapdict = s:cache[a:key]
-    call s:merge(tardict, mapdict)
+function! s:create_runtime(key)
+  let key = a:key
+  if has_key(s:desc, key)
+    let runtime = deepcopy({s:desc[key]})
+    let native = s:cache[key]
+    call s:merge(runtime, native)
   else
-    let tardict = s:cache[a:key]
+    let runtime = s:cache[key]
   endif
-  return tardict
+  return runtime
 endfunction
 
 function! s:merge(target, native) " {{{
@@ -64,13 +83,13 @@ function! s:merge(target, native) " {{{
         endif
         call s:merge(target[k], native[k])
       elseif type(native[k]) == s:TYPE.list
-        if g:which_key_flatten == 0 || type(target[k]) == s:TYPE.dict
-          let target[k.'m'] = target[k]
-        endif
+        " if g:which_key_flatten == 0 || type(target[k]) == s:TYPE.dict
+          " let target[k.'m'] = target[k]
+        " endif
         let target[k] = native[k]
-        if has_key(native, k.'m') && type(native[k.'m']) == s:TYPE.dict
-          call s:merge(target[k.'m'], native[k.'m'])
-        endif
+        " if has_key(native, k.'m') && type(native[k.'m']) == s:TYPE.dict
+          " call s:merge(target[k.'m'], native[k.'m'])
+        " endif
       endif
 
     " Support add a description to an existing map without dual definition
@@ -110,12 +129,36 @@ function! s:prompt() abort
   echohl None
 endfunction
 
+" Returns true if timed out
+function! s:wait_with_timeout(timeout)
+  let timeout = a:timeout
+  while timeout >= 0
+    if getchar(1)
+      return 0
+    endif
+    if timeout > 0
+      sleep 20m
+    endif
+    let timeout -= 20
+  endwhile
+  return 1
+endfunction
+
+function! s:has_children(input) abort
+  let group = map(keys(s:runtime), 'v:val =~# "^'.a:input.'"')
+  let group = filter(group, 'v:val == 1')
+  return len(group) > 1
+endfunction
+
 function! s:getchar() abort
+  let input = ''
   try
     let c = getchar()
   " Handle <C-C>
   catch /^Vim:Interrupt$/
-    let c = 27
+    call which_key#window#close()
+    redraw!
+    return ''
   endtry
 
   " <Esc>, <C-[>: 27
@@ -125,16 +168,21 @@ function! s:getchar() abort
     return ''
   endif
 
-  " <Tab>, <C-I>
-  if c == 9
-    return '<Tab>'
+  " <Tab>, <C-I> = 9
+  let input .= c == 9 ? '<Tab>' : nr2char(c)
+
+  if s:has_children(input)
+    while 1
+      if !s:wait_with_timeout(g:which_key_timeout)
+        let c = getchar()
+        let input .= c == 9 ? '<Tab>' : nr2char(c)
+      else
+        break
+      endif
+    endwhile
   endif
 
-  if c =~? '^\d\+$' || type(c) == type(0)
-    return nr2char(c)
-  else
-    return ''
-  endif
+  return input
 endfunction
 
 function! which_key#wait_for_input() " {{{
@@ -151,14 +199,17 @@ function! which_key#wait_for_input() " {{{
 endfunction
 
 function! s:handle_input(input) " {{{
-  call which_key#window#close()
-
   let type = type(a:input)
 
   if type ==? s:TYPE.dict
     let s:runtime = a:input
-    call which_key#window#open(s:runtime)
-  elseif type ==? s:TYPE.list
+    call which_key#window#fill(s:runtime)
+    return
+  endif
+
+  call which_key#window#close()
+
+  if type ==? s:TYPE.list
     call s:execute(a:input[0])
   else
     redraw!
@@ -186,7 +237,7 @@ function! s:execute(cmd) abort
     endif
     if Cmd =~? '^<Plug>.\+' || Cmd =~? '^<C-W>.\+' || Cmd =~? '^<.\+>$'
       let Cmd = s:join('call', 'feedkeys("\'.Cmd.'")')
-    elseif Cmd =~? '.(*)$' && match(Cmd, 'call') == -1
+    elseif Cmd =~? '.(*)$' && match(Cmd, '\<call\>') == -1
       let Cmd = s:join('call', Cmd)
     endif
     execute Cmd
@@ -196,7 +247,7 @@ function! s:execute(cmd) abort
 endfunction
 
 function! which_key#statusline() abort
-  let key = '%#WhichKeyTrigger# %{s:which_key_trigger} %*'
+  let key = '%#WhichKeyTrigger# %{get(s:, "which_key_trigger", "")} %*'
   let name = '%#WhichKeyName# %{which_key#window#name()} %*'
   return key.name
 endfunction

@@ -26,12 +26,17 @@
 
 vim-which-key is vim port of [emacs-which-key](https://github.com/justbur/emacs-which-key) that displays available keybindings in popup.
 
-[emacs-which-key](https://github.com/justbur/emacs-which-key) started as a rewrite of [guide-key](https://github.com/kai2nenobu/guide-key), very likely, [vim-which-key](https://github.com/liuchengxu/vim-which-key) heavily rewrote [vim-leader-guide](https://github.com/hecal3/vim-leader-guide) with a goal of going further in vim world. The features of vim-which-key has evolved a lot since then.
+[emacs-which-key](https://github.com/justbur/emacs-which-key) started as a rewrite of [guide-key](https://github.com/kai2nenobu/guide-key), very likely, [vim-which-key](https://github.com/liuchengxu/vim-which-key) heavily rewrote [vim-leader-guide](https://github.com/hecal3/vim-leader-guide). The features of vim-which-key has evolved a lot since then.
 
-<p align="center"><img width="800px" src="https://raw.githubusercontent.com/liuchengxu/img/master/vim-which-key/vim-which-key.png"></p>
+<p align="center">
+    <img width="800px" src="https://raw.githubusercontent.com/liuchengxu/img/master/vim-which-key/vim-which-key.png">
+    <br />
+    Vim config in the screenshot is <a href="https://github.com/liuchengxu/space-vim">space-vim</a>.
+</p>
 
 ## Pros.
 
+- Better UI.
 - Show all mappings following a prefix, e.g., `<leader>`, `<localleader>`, etc.
 - Instant response for your every single input.
 - Dynamic update on every call.
@@ -48,6 +53,9 @@ Plug 'liuchengxu/vim-which-key'
 
 " On-demand lazy load
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+" To register the descriptions when using the on-demand load feature, use the autocmd hook to call which#register(),
+" e.g., register for the Space key(see more configuration details in the following sections):
+" autocmd! User vim-which-key call which#register('<Space>', 'g:which_key_map')
 ```
 
 For other plugin managers please refer to their document for more details.
@@ -104,6 +112,8 @@ Please note that no matter which mappings and menus you configure, your original
 Assuming your `leader` and `localleader` key are `<Space>` and `,`, respectively, even no description dictionary has been registered, all `<Space>` and `,` related mappings will be displayed regardless.
 
 ```vim
+let g:mapleader = "\<Space>"
+let g:maplocalleader = ','
 nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
 nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
 ```

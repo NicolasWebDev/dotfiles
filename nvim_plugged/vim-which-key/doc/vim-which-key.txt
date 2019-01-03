@@ -196,6 +196,15 @@ Possible value: {0, 1}. By default it's 0.
 >
   let g:which_key_sort_horizontal = 0
 <
+                                              *g:which_key_align_by_seperator*
+If set to a value other than 1, the entries of each column will be align by
+the initial char instead of the seperator.
+
+Possible value: {0, 1}. By default it's 1.
+>
+  let g:which_key_align_by_seperator = 1
+<
+
 
                                                 *g:which_key_run_map_on_popup*
 Mappings change during a vim-session, e.g., changing the filetype or buffer.
@@ -228,9 +237,17 @@ WhichKeyFormatFunc is a Funcref called on every display item, which could be
 used to hide all trailing <CR> as well as all leading <Plug> substring in the
 guide buffer.
 
-Possible value: Funcref. By default it's function('which_key#util#format').
+Possible value: Funcref. By default it's `function('which_key#util#format')`.
 >
   let g:WhichKeyFormatFunc = function('which_key#util#format')
+<
+
+                                                        *g:which_key_timeout*
+Similar to `timeoutlen`, but for vim-which-key particularly.
+
+Possible value: {Number}. By default it's same with option `timeoutlen`.
+>
+  let g:which_key_timeout = 300
 <
 
 ==============================================================================
@@ -268,10 +285,10 @@ which_key#register({prefix}, {dict})                    *which_key#register()*
   Example:
 >
     " register dictionary for the <Space>-prefix
-    call leaderGuide#register_prefix_descriptions(' ', "g:space_prefix_dict")
+    call which_key#register(' ', "g:space_prefix_dict")
 
     " register dictionary for the ,-prefix
-    call leaderGuide#register_prefix_descriptions(',', "g:comma_prefix_dict")
+    call which_key#register(',', "g:comma_prefix_dict")
 <
 
 which_key#start({vis}, {bang}, {prefix})                   *which_key#start()*

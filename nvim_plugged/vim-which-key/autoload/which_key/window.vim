@@ -3,24 +3,8 @@ let s:winnr = -1
 
 function! which_key#window#open(runtime) abort
   let s:pos = [winsaveview(), winnr(), winrestcmd()]
-
-  let s:name = get(a:runtime, 'name', '')
-
   call s:open()
-
-  let runtime = a:runtime
-  let layout = which_key#util#calc_layout(runtime)
-  let string = which_key#util#create_string(layout, runtime)
-
-  let resize = g:which_key_vertical ? 'vertical resize' : 'resize'
-  noautocmd execute resize layout.win_dim
-
-  setlocal modifiable
-  silent 1put!=string
-  silent normal! gg"_dd
-  setlocal nomodifiable
-
-  call which_key#wait_for_input()
+  call which_key#window#fill(a:runtime)
 endfunction
 
 function! s:open() abort
@@ -60,6 +44,23 @@ function! s:open() abort
   setlocal t_ve=
 endfunction
 
+function! which_key#window#fill(runtime) abort
+  let runtime = a:runtime
+
+  let s:name = get(runtime, 'name', '')
+
+  let layout = which_key#util#calc_layout(runtime)
+  let rows = which_key#util#create_rows(layout, runtime)
+
+  let resize = g:which_key_vertical ? 'vertical resize' : 'resize'
+  noautocmd execute resize layout.win_dim
+  setlocal modifiable
+  call setline(1, rows)
+  setlocal nomodifiable
+
+  call which_key#wait_for_input()
+endfunction
+
 function! which_key#window#close() abort
   noautocmd execute s:winnr.'wincmd w'
   if winnr() == s:winnr
@@ -72,5 +73,5 @@ function! which_key#window#close() abort
 endfunction
 
 function! which_key#window#name() abort
-  return s:name
+  return get(s:, 'name', '')
 endfunction

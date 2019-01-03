@@ -21,6 +21,7 @@ function! s:init_options()
   call s:init_option('matchup_matchparen_enabled',
     \ !(&t_Co < 8 && !has('gui_running')))
   call s:init_option('matchup_matchparen_status_offscreen', 1)
+  call s:init_option('matchup_matchparen_status_offscreen_manual', 0)
   call s:init_option('matchup_matchparen_scrolloff', 0)
   call s:init_option('matchup_matchparen_singleton', 0)
   call s:init_option('matchup_matchparen_deferred', 0)
@@ -29,6 +30,8 @@ function! s:init_options()
   call s:init_option('matchup_matchparen_stopline', 400)
   call s:init_option('matchup_matchparen_pumvisible', 1)
   call s:init_option('matchup_matchparen_nomode', '')
+  call s:init_option('matchup_matchparen_hi_surround_always', 0)
+  call s:init_option('matchup_matchparen_hi_background', 0)
 
   call s:init_option('matchup_matchparen_timeout',
     \ get(g:, 'matchparen_timeout', 300))
@@ -50,6 +53,8 @@ function! s:init_options()
   call s:init_option('matchup_transmute_enabled', 0)
 
   call s:init_option('matchup_mouse_enabled', 1)
+
+  call s:init_option('matchup_surround_enabled', 0)
 
   call s:init_option('matchup_matchpref', {})
 endfunction
@@ -74,14 +79,61 @@ function! s:init_modules()
   call s:motion_init_module()
   call s:text_obj_init_module()
   call s:misc_init_module()
+  call s:surround_init_module()
 endfunction
+
+function! s:init_oldstyle_ops() " {{{1
+  if get(g:, 'matchup_motion_enabled', 0)
+        \ || get(g:, 'matchup_text_obj_enabled', 0)
+    for l:opforce in ['', 'v', 'V', '<c-v>']
+      call s:map('onore', '<expr> <plug>(matchup-o_'.l:opforce.')',
+            \ '<sid>force('''.l:opforce.''')')
+    endfor
+  endif
+
+  if get(g:, 'matchup_motion_enabled', 0)
+    for l:opforce in ['', 'v', 'V', '<c-v>']
+      call s:map('o', l:opforce.'%',
+            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-%)')
+      call s:map('o', l:opforce.'g%',
+            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-g%)')
+      call s:map('o', l:opforce.']%',
+            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-]%)')
+      call s:map('o', l:opforce.'[%',
+            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-[%)')
+      call s:map('o', l:opforce.'z%',
+            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-z%)')
+    endfor
+  endif
+
+  if get(g:, 'matchup_text_obj_enabled', 0)
+    for l:opforce in ['', 'v', 'V', '<c-v>']
+      call s:map('o', l:opforce.'i%',
+            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-i%)')
+      call s:map('o', l:opforce.'a%',
+            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-a%)')
+    endfor
+  endif
+endfunction
+
+let s:old_style_ops = !has('patch-8.1.0648')
 
 let g:v_motion_force = ''
 function! s:force(wise)
   let g:v_motion_force = a:wise
-  " let g:v_operator = v:operator
   return ''
 endfunction
+
+function! matchup#motion_force() abort
+  if !s:old_style_ops
+    let l:mode = mode(1)
+    let g:v_motion_force = len(l:mode) >= 3
+          \ && l:mode[0:1] ==# 'no' ? l:mode[2] : ''
+  endif
+  return g:v_motion_force
+endfunction
+
+" }}}1
 
 function! s:init_default_mappings()
   if !get(g:,'matchup_mappings_enabled', 1) | return | endif
@@ -93,10 +145,9 @@ function! s:init_default_mappings()
     endif
   endfunction
 
-  for l:opforce in ['', 'v', 'V', '<c-v>']
-    call s:map('onore', '<expr> <plug>(matchup-o_'.l:opforce.')',
-          \ '<sid>force('''.l:opforce.''')')
-  endfor
+  if s:old_style_ops
+    call s:init_oldstyle_ops()
+  endif
 
   " these won't conflict since matchit should not be loaded at this point
   if get(g:, 'matchup_motion_enabled', 0)
@@ -115,18 +166,9 @@ function! s:init_default_mappings()
     call s:map('n', 'z%', '<plug>(matchup-z%)')
     call s:map('x', 'z%', '<plug>(matchup-z%)')
 
-    for l:opforce in ['', 'v', 'V', '<c-v>']
-      call s:map('o', l:opforce.'%',
-            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-%)')
-      call s:map('o', l:opforce.'g%',
-            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-g%)')
-      call s:map('o', l:opforce.']%',
-            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-]%)')
-      call s:map('o', l:opforce.'[%',
-            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-[%)')
-      call s:map('o', l:opforce.'z%',
-            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-z%)')
-    endfor
+    if !s:old_style_ops
+      call s:map('o', '%', '<plug>(matchup-%)')
+    endif
 
     call s:map('i', '<c-g>%', '<plug>(matchup-c_g%)')
   endif
@@ -134,16 +176,20 @@ function! s:init_default_mappings()
   if get(g:, 'matchup_text_obj_enabled', 0)
     call s:map('x', 'i%', '<plug>(matchup-i%)')
     call s:map('x', 'a%', '<plug>(matchup-a%)')
-    for l:opforce in ['', 'v', 'V', '<c-v>']
-      call s:map('o', l:opforce.'i%',
-            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-i%)')
-      call s:map('o', l:opforce.'a%',
-            \ '<plug>(matchup-o_'.l:opforce.')<plug>(matchup-a%)')
-    endfor
+
+    if !s:old_style_ops
+      call s:map('o', 'i%', '<plug>(matchup-i%)')
+      call s:map('o', 'a%', '<plug>(matchup-a%)')
+    endif
   endif
 
   if get(g:, 'matchup_mouse_enabled', 1)
     call s:map('n', '<2-LeftMouse>', '<plug>(matchup-double-click)')
+  endif
+
+  if get(g:, 'matchup_surround_enabled', 0)
+    call s:map('n', 'ds%', '<plug>(matchup-ds%)')
+    call s:map('n', 'cs%', '<plug>(matchup-cs%)')
   endif
 endfunction
 
@@ -250,6 +296,25 @@ function! s:misc_init_module() " {{{1
   command! MatchupReload          call matchup#misc#reload()
   nnoremap <plug>(matchup-reload) :<c-u>MatchupReload<cr>
   call matchup#perf#toc('loading_module', 'misc')
+endfunction
+
+" }}}1
+function! s:surround_init_module() " {{{1
+  if !g:matchup_surround_enabled | return | endif
+
+  call matchup#perf#tic('loading_module')
+
+  for [l:map, l:name, l:opt] in [
+        \ ['%', 'delimited', 'delim_all'],
+        \]
+    let l:p1 = 'noremap <silent> <plug>(matchup-'
+    let l:p2 = l:map . ') :<c-u>call matchup#surround#' . l:name
+    let l:p3 = empty(l:opt) ? ')<cr>' : ', ''' . l:opt . ''')<cr>'
+    execute 'n' . l:p1 . 'ds' . l:p2 . '(0, "d"' . l:p3
+    execute 'n' . l:p1 . 'cs' . l:p2 . '(0, "c"' . l:p3
+  endfor
+
+  call matchup#perf#toc('loading_module', 'surround')
 endfunction
 
 " }}}1

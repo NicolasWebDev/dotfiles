@@ -35,14 +35,17 @@ function! matchup#matchparen#enable() " {{{1
 
   augroup matchup_matchparen
     autocmd!
-    autocmd CursorMoved,CursorMovedI * call s:matchparen.highlight_deferred()
+    autocmd CursorMoved,CursorMovedI *
+          \ call s:matchparen.highlight_deferred()
     autocmd WinEnter * call s:matchparen.highlight(1)
-    autocmd TextChanged,TextChangedI * call s:matchparen.highlight_deferred()
+    autocmd TextChanged,TextChangedI *
+          \ call s:matchparen.highlight_deferred()
     if has('patch-8.0.1494')
       autocmd TextChangedP * call s:matchparen.highlight_deferred()
     endif
-    autocmd WinLeave * call s:matchparen.clear()
-    autocmd InsertEnter * call s:matchparen.highlight(1, 1)
+    autocmd WinLeave,BufLeave * call s:matchparen.clear()
+    autocmd InsertEnter,Insertchange * call s:matchparen.highlight(1, 1)
+    autocmd InsertLeave * call s:matchparen.highlight(1)
   augroup END
 
   if has('vim_starting')
@@ -102,6 +105,11 @@ function! matchup#matchparen#toggle(...) " {{{1
   let g:matchup_matchparen_enabled = a:0 > 0
         \ ? a:1
         \ : !g:matchup_matchparen_enabled
+  call matchup#matchparen#reload()
+endfunction
+
+" }}}1
+function! matchup#matchparen#reload() " {{{1
   if g:matchup_matchparen_enabled
     call matchup#matchparen#enable()
     call s:matchparen.highlight(1)
@@ -128,6 +136,9 @@ function! s:matchparen.clear() abort dict " {{{1
     if exists('#User#MatchupOffscreenLeave')
       doautocmd <nomodeline> User MatchupOffscreenLeave
     endif
+  endif
+  if exists('w:matchup_statusline')
+    unlet w:matchup_statusline
   endif
 
   let w:matchup_need_clear = 0
@@ -183,7 +194,8 @@ endif
 " }}}1
 
 function! s:matchparen.highlight_deferred() abort dict " {{{1
-  if !g:matchup_matchparen_deferred
+  if !get(b:, 'matchup_matchparen_deferred',
+        \ g:matchup_matchparen_deferred)
     return s:matchparen.highlight()
   endif
 
@@ -228,7 +240,8 @@ function! s:matchparen.highlight(...) abort dict " {{{1
   if !get(b:, 'matchup_matchparen_enabled', 1) | return | endif
 
   let l:force_update    = a:0 >= 1 ? a:1 : 0
-  let l:entering_insert = a:0 >= 2 ? a:2 : 0
+  let l:changing_insert = a:0 >= 2 ? a:2 : 0
+  let l:real_mode = l:changing_insert ? v:insertmode : mode()
 
   if !l:force_update
         \ && exists('w:last_changedtick') && exists('w:last_cursor')
@@ -247,7 +260,7 @@ function! s:matchparen.highlight(...) abort dict " {{{1
   if get(g:, 'matchup_matchparen_novisual', 0)  " deprecated option name
     let l:modes .= "vV\<c-v>"
   endif
-  if stridx(l:modes, l:entering_insert ? 'i' : mode()) >= 0
+  if stridx(l:modes, l:real_mode) >= 0
     return
   endif
 
@@ -257,8 +270,7 @@ function! s:matchparen.highlight(...) abort dict " {{{1
   endif
 
   " in insert mode, cursor is treated as being one behind
-  let l:insertmode = l:entering_insert
-        \ || (mode() ==# 'i' || mode() ==# 'R')
+  let l:insertmode = l:real_mode ==# 'i'
 
   " start the timeout period
   let l:timeout = l:insertmode
@@ -273,7 +285,15 @@ function! s:matchparen.highlight(...) abort dict " {{{1
         \   'stopline': g:matchup_matchparen_stopline,
         \   'highlighting': 1, })
   call matchup#perf#toc('matchparen.highlight', 'get_current')
-  if empty(l:current) | return | endif
+  if empty(l:current)
+    if get(b:, 'matchup_matchparen_deferred',
+          \ g:matchup_matchparen_deferred)
+          \ && get(b:, 'matchup_matchparen_hi_surround_always',
+          \        g:matchup_matchparen_hi_surround_always)
+       call s:highlight_surrounding(l:insertmode)
+    endif
+    return
+  endif
 
   let l:corrlist = matchup#delim#get_matching(l:current,
         \ { 'stopline': g:matchup_matchparen_stopline,
@@ -281,31 +301,33 @@ function! s:matchparen.highlight(...) abort dict " {{{1
   call matchup#perf#toc('matchparen.highlight', 'get_matching')
   if empty(l:corrlist) | return | endif
 
-  if !exists('w:matchup_matchparen_context')
-    let w:matchup_matchparen_context = {
-          \ 'normal': {
-          \   'current':   {},
-          \   'corrlist':  [],
-          \  },
-          \ 'prior': {},
-          \ 'counter': 0,
-          \}
-  endif
+  if g:matchup_transmute_enabled
+    if !exists('w:matchup_matchparen_context')
+      let w:matchup_matchparen_context = {
+            \ 'normal': {
+            \   'current':   {},
+            \   'corrlist':  [],
+            \  },
+            \ 'prior': {},
+            \ 'counter': 0,
+            \}
+    endif
 
-  let w:matchup_matchparen_context.counter += 1
+    let w:matchup_matchparen_context.counter += 1
 
-  if !l:insertmode
-    let w:matchup_matchparen_context.prior
-          \ = deepcopy(w:matchup_matchparen_context.normal)
+    if !l:insertmode
+      let w:matchup_matchparen_context.prior
+            \ = copy(w:matchup_matchparen_context.normal)
 
-    let w:matchup_matchparen_context.normal.current = l:current
-    let w:matchup_matchparen_context.normal.corrlist = l:corrlist
-  endif
+      let w:matchup_matchparen_context.normal.current = l:current
+      let w:matchup_matchparen_context.normal.corrlist = l:corrlist
+    endif
 
-  " if transmuted, highlight again (will reset timeout)
-  if matchup#transmute#tick(l:insertmode, l:entering_insert)
-    " no force_update here because it would screw up prior
-    return s:matchparen.highlight(0, l:entering_insert)
+    " if transmuted, highlight again (will reset timeout)
+    if matchup#transmute#tick(l:insertmode, 'unused')
+      " no force_update here because it would screw up prior
+      return s:matchparen.highlight(0, l:changing_insert)
+    endif
   endif
 
   if !has_key(l:current, 'match_index')
@@ -328,17 +350,22 @@ function! s:matchparen.highlight(...) abort dict " {{{1
   " show off-screen matches
   if g:matchup_matchparen_status_offscreen
         \ && !l:current.skip && !l:scrolling
-    call matchup#matchparen#offscreen(l:current)
+    call s:do_offscreen(l:current)
   endif
 
   " add highlighting matches
   call s:add_matches(l:corrlist, l:current)
 
+  " highlight the background between parentheses
+  if g:matchup_matchparen_hi_background >= 1
+    call s:highlight_background(l:corrlist)
+  endif
+
   call matchup#perf#toc('matchparen.highlight', 'end')
 endfunction
 
 " }}}1
-function! matchup#matchparen#offscreen(current) " {{{1
+function! s:do_offscreen(current) " {{{1
   let l:offscreen = {}
 
   if !has_key(a:current, 'links') | return | endif
@@ -353,22 +380,45 @@ function! matchup#matchparen#offscreen(current) " {{{1
 
   if empty(l:offscreen) | return | endif
 
-  let w:matchup_oldstatus = &l:statusline
+  let w:matchup_statusline = s:format_statusline(l:offscreen)
+  if !exists('w:matchup_oldstatus')
+    let w:matchup_oldstatus = &l:statusline
+  endif
+  if !g:matchup_matchparen_status_offscreen_manual
+    let &l:statusline =  w:matchup_statusline
+  endif
 
-  let &l:statusline = s:format_statusline(l:offscreen)
   if exists('#User#MatchupOffscreenEnter')
     doautocmd <nomodeline> User MatchupOffscreenEnter
   endif
 endfunction
 
 " }}}1
-function! matchup#matchparen#highlight_surrounding(...) " {{{1
+function! matchup#matchparen#highlight_surrounding() " {{{1
   call matchup#perf#timeout_start(500)
-  let l:delims = matchup#delim#get_surrounding('delim_all', 1)
+  call s:highlight_surrounding()
+endfunction
+
+" }}}1
+
+function! MatchupStatusOffscreen() " {{{1
+  return get(w:, 'matchup_statusline', '')
+endfunction
+
+" }}}1
+function! MatchupStatusOffscreenNohl() " {{{1
+  return substitute(MatchupStatusOffscreen(), '%<\|%#\w*#', '', 'g')
+endfunction
+
+" }}}1
+
+function! s:highlight_surrounding(...) " {{{1
+  let l:opts = { 'local': 0, 'matches': [] }
+  let l:delims = matchup#delim#get_surrounding('delim_all', 1, l:opts)
   let l:open = l:delims[0]
   if empty(l:open) | return | endif
 
-  let l:corrlist = matchup#delim#get_matching(l:open, 1)
+  let l:corrlist = l:opts.matches
   if empty(l:corrlist) | return | endif
 
   " store flag meaning highlighting is active
@@ -376,17 +426,44 @@ function! matchup#matchparen#highlight_surrounding(...) " {{{1
 
   " add highlighting matches
   call s:add_matches(l:corrlist)
+
+  " highlight the background between parentheses
+  if g:matchup_matchparen_hi_background >= 2
+    call s:highlight_background(l:corrlist)
+  endif
+endfunction
+
+" }}}1
+function! s:highlight_background(corrlist) " {{{1
+  let [l:lo1, l:lo2] = [a:corrlist[0], a:corrlist[-1]]
+
+  let l:inclusive = 1
+  if l:inclusive
+    call s:add_background_matches_1(
+          \ l:lo1.lnum,
+          \ l:lo1.cnum,
+          \ l:lo2.lnum,
+          \ l:lo2.cnum + matchup#delim#end_offset(l:lo2))
+  else
+    call s:add_background_matches_1(
+          \ l:lo1.lnum,
+          \ l:lo1.cnum + matchup#delim#end_offset(l:lo1) + 1,
+          \ l:lo2.lnum,
+          \ l:lo2.cnum - 1)
+  endif
 endfunction
 
 "}}}1
 function! s:format_statusline(offscreen) " {{{1
-  let l:line = getline(a:offscreen.lnum)
+  let l:adjust = matchup#quirks#status_adjust(a:offscreen)
+  let l:lnum = a:offscreen.lnum + l:adjust
+  let l:linenr = l:lnum     " distinct for relativenumber
+  let l:line = getline(l:linenr)
 
   let l:sl = ''
   let l:padding = wincol()-virtcol('.')
   if &number || &relativenumber
     let l:nw = max([strlen(line('$')), &numberwidth-1])
-    let l:linenr = a:offscreen.lnum
     let l:direction = l:linenr < line('.')
 
     if &relativenumber
@@ -402,10 +479,10 @@ function! s:format_statusline(offscreen) " {{{1
     let l:padding -= l:nw + 1
   endif
 
-  if empty(l:sl) && a:offscreen.lnum < line('.')
+  if empty(l:sl) && l:lnum < line('.')
     let l:sl = '%#Search#∆%#Normal#'
     let l:padding -= 1    " OK if this is negative
-    if l:padding == -1 && indent(a:offscreen.lnum) == 0
+    if l:padding == -1 && indent(l:lnum) == 0
       let l:padding = 0
     endif
   endif
@@ -414,7 +491,7 @@ function! s:format_statusline(offscreen) " {{{1
   let l:fdcstr = ''
   if &foldcolumn
     let l:fdc = max([1, &foldcolumn-1])
-    let l:fdl = foldlevel(a:offscreen.lnum)
+    let l:fdl = foldlevel(l:lnum)
     let l:fdcstr = l:fdl <= l:fdc ? repeat('|', l:fdl)
           \ : join(range(l:fdl-l:fdc+1, l:fdl), '')
     let l:padding -= len(l:fdcstr)
@@ -426,16 +503,20 @@ function! s:format_statusline(offscreen) " {{{1
   " add remaining padding (this handles rest of fdc and scl)
   let l:sl = l:fdcstr . repeat(' ', l:padding) . l:sl
 
+  " let l:room = winwidth() - (wincol()-virtcol('.')+4)
   let l:lasthi = ''
   for l:c in range(min([winwidth(0), strlen(l:line)]))
-    if a:offscreen.cnum <= l:c+1 && l:c+1 <= a:offscreen.cnum
+    if !l:adjust && a:offscreen.cnum <= l:c+1 && l:c+1 <= a:offscreen.cnum
           \ - 1 + strlen(a:offscreen.match)
       let l:wordish = a:offscreen.match !~? '^[[:punct:]]\{1,3\}$'
       " TODO: we can't overlap groups, this might not be totally correct
       let l:curhi = l:wordish ? 'MatchWord' : 'MatchParen'
     else
       let l:curhi = synIDattr(
-            \ synID(a:offscreen.lnum, l:c+1, 1), 'name')
+            \ synID(l:lnum, l:c+1, 1), 'name')
+      if empty(l:curhi)
+        let l:curhi = 'Normal'
+      endif
     endif
     let l:sl .= (l:curhi !=# l:lasthi ? '%#'.l:curhi.'#' : '')
     if l:line[l:c] ==# "\t"
@@ -446,13 +527,39 @@ function! s:format_statusline(offscreen) " {{{1
     endif
     let l:lasthi = l:curhi
   endfor
-  let l:sl .= '%#Normal#'
+  let l:sl .= '%<%#Normal#'
+  if l:adjust
+    let l:sl .= '%#LineNr# … %#Normal#'
+          \ . '%#MatchParen#' . a:offscreen.match . '%#Normal#'
+  endif
+
+  if has('timers') && exists('*timer_pause')
+    if !exists('s:scroll_timer')
+      let s:scroll_timer = timer_start(50,
+            \ 'matchup#matchparen#scroll_callback',
+            \ { 'repeat': -1 })
+      call timer_pause(s:scroll_timer, 1)
+    endif
+    if !g:matchup_matchparen_status_offscreen_manual
+      let l:sl .= '%{matchup#matchparen#scroll_update('
+            \ .l:lnum.')}'
+    endif
+  endif
 
   return l:sl
 endfunction
 
-function! s:gchar_virtpos(lnum, cnum)
-  return matchstr(getline(a:lnum), '\%'.a:cnum.'v.')
+function! matchup#matchparen#scroll_callback(tid)
+  call timer_pause(a:tid, 1)
+  call s:matchparen.highlight(1)
+endfunction
+
+function! matchup#matchparen#scroll_update(lnum)
+  if line('w0') <= a:lnum && a:lnum <= line('w$')
+        \ && exists('s:scroll_timer')
+    call timer_pause(s:scroll_timer, 0)
+  endif
+  return ''
 endfunction
 
 " }}}1
@@ -479,9 +586,63 @@ function! s:add_matches(corrlist, ...) " {{{1
       let l:group = l:wordish ? 'MatchWord' : 'MatchParen'
     endif
 
-    call add(w:matchup_match_id_list, matchaddpos(l:group,
-          \ [[l:corr.lnum, l:corr.cnum, strlen(l:corr.match)]], 0))
+    if exists('*matchaddpos')
+      call add(w:matchup_match_id_list, matchaddpos(l:group,
+            \ [[l:corr.lnum, l:corr.cnum, strlen(l:corr.match)]], 0))
+    else
+      call add(w:matchup_match_id_list, matchadd(l:group,
+            \ '\%'.(l:corr.lnum).'l\%'.(l:corr.cnum).'c'
+            \ . '.\+\%<'.(l:corr.cnum+strlen(l:corr.match)+1).'c', 0))
+    endif
   endfor
+endfunction
+
+" }}}1
+function! s:add_background_matches_1(line1, col1, line2, col2) " {{{1
+  if a:line1 == a:line2 && a:col1 > a:col2
+    return
+  endif
+
+  let l:priority = -1
+
+  if a:line1 == a:line2
+    let l:match = '\%'.(a:line1).'l\&'
+          \ . '\%'.(a:col1).'c.*\%'.(a:col2).'c.'
+  else
+    let l:match = '\%>'.(a:line1).'l\(.\+\|^$\)\%<'.(a:line2).'l'
+          \ . '\|\%'.(a:line1).'l\%>'.(a:col1-1).'c.\+'
+          \ . '\|\%'.(a:line2).'l.\+\%<'.(a:col2+1).'c.'
+  endif
+
+  call add(w:matchup_match_id_list,
+        \  matchadd('MatchBackground', l:match, l:priority))
+endfunction
+
+" }}}1
+function! s:add_background_matches_2(line1, col1, line2, col2) " {{{1
+  if a:line1 == a:line2 && a:col1 > a:col2
+    return
+  endif
+
+  let l:priority = -1
+
+  let l:curline = a:line1
+  while l:curline <= a:line2
+    let l:endline = min([l:curline+7, a:line2])
+    let l:list = range(l:curline, l:endline)
+    if l:curline == a:line1
+      let l:list[0] = [a:line1, a:col1,
+            \ l:curline == a:line2 ? (a:col2-a:col1+1)
+            \ : strlen(getline(a:line1))]
+    endif
+    if l:endline == a:line2 && l:curline != a:line2
+      let l:list[-1] = [a:line2, 1, a:col2]
+    endif
+
+    call add(w:matchup_match_id_list,
+          \ matchaddpos('MatchBackground', l:list, l:priority))
+    let l:curline = l:endline+1
+  endwhile
 endfunction
 
 " }}}1

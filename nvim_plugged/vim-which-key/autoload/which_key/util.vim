@@ -9,11 +9,12 @@ let g:which_key#util#TYPE = {
 
 let s:displaynames = {
       \ ' ': 'SPC',
-      \ '<C-H>': '<BS>',
-      \ '<C-I>': '<Tab>',
+      \ '<C-H>': 'BS',
+      \ '<C-I>': 'TAB',
+      \ '<TAB>': 'TAB',
       \ }
 
-function! which_key#util#calc_layout(mappings) abort
+function! which_key#util#calc_layout(mappings) abort " {{{
   let layout = {}
   let smap = filter(copy(a:mappings), 'v:key !=# "name" && !(type(v:val) == type([]) && v:val[1] == "which_key_ignore")')
   let layout.n_items = len(smap)
@@ -41,7 +42,7 @@ function! which_key#util#calc_layout(mappings) abort
   return layout
 endfunction " }}}
 
-function! which_key#util#create_string(layout, mappings) abort
+function! which_key#util#create_rows(layout, mappings) abort
   let l = a:layout
   let mappings = a:mappings
   let l.capacity = l.n_rows * l.n_cols
@@ -53,6 +54,7 @@ function! which_key#util#create_string(layout, mappings) abort
   let row = 0
   let col = 0
   let smap = sort(filter(keys(mappings), 'v:val !=# "name"'),'1')
+
   for k in smap
     let key = get(s:displaynames, toupper(k), k)
     let desc = type(mappings[k]) == type({}) ? mappings[k].name : mappings[k][1]
@@ -65,8 +67,7 @@ function! which_key#util#create_string(layout, mappings) abort
     if empty(crow)
       call add(rows, crow)
     endif
-    call add(crow, item)
-    call add(crow, repeat(' ', l.col_width - strdisplaywidth(item)))
+    call add(crow, item.repeat(' ', l.col_width - strdisplaywidth(item)))
 
     if !g:which_key_sort_horizontal
       if row >= n_rows - 1
@@ -91,23 +92,34 @@ function! which_key#util#create_string(layout, mappings) abort
     silent execute "cnoremap <nowait> <buffer> ".substitute(k, "|", "<Bar>", ""). " " . s:escape_keys(k) ."<CR>"
   endfor
 
-  let r = []
-  let mlen = 0
-  for ro in rows
-    let line = join(ro, '')
-    call add(r, line)
-    if strdisplaywidth(line) > mlen
-      let mlen = strdisplaywidth(line)
-    endif
-  endfor
+  if get(g:, 'which_key_align_by_seperator', 1)
+    for i in range(0, col-1)
+      let cur_col = []
+      for j in range(0, n_rows)
+        if i < len(rows[j])
+          call add(cur_col, rows[j][i])
+        endif
+      endfor
+      let cur_col_keys = map(cur_col, 'strdisplaywidth(split(v:val)[0])')
+      let [max_key_len, min_key_len] = [max(cur_col_keys), min(cur_col_keys)]
+      if max_key_len != min_key_len
+        for j in range(0, n_rows)
+          if i < len(rows[j])
+            let key = split(rows[j][i])[0]
+            let len = strdisplaywidth(key)
+            let rows[j][i] = repeat(' ', max_key_len-len).rows[j][i][0:(l.col_width + 1 - (max_key_len -len))]
+          endif
+        endfor
+      endif
+    endfor
+  endif
 
-  call insert(r, '')
-  let output = join(r, "\n ")
+  call map(rows, 'join(v:val, "")')
 
-  return output
+  return rows
 endfunction " }}}
 
-function! s:escape_keys(inp) abort
+function! s:escape_keys(inp) abort " {{{
   " :h <>
   let l:ret = a:inp
   let l:ret = substitute(l:ret, "<", "<lt>", "")
@@ -132,20 +144,20 @@ endfunction
 
 function! which_key#util#get_register() "{{{
  if has('nvim') && !exists('s:reg')
-      let s:reg = ''
+    let s:reg = ''
   else
-      let s:reg = v:register != s:register() ? '"'.v:register : ''
+    let s:reg = v:register != s:register() ? '"'.v:register : ''
   endif
   return s:reg
 endfunction "}}}
 
-function! which_key#util#escape_mappings(mapping) abort" {{{
+function! which_key#util#escape_mappings(mapping) abort " {{{
   let feedkeyargs = a:mapping.noremap ? "nt" : "mt"
-  let rstring = substitute(a:mapping.rhs, '\', '\\\\', 'g')
-  let rstring = substitute(rstring, '<\([^<>]*\)>', '\\<\1>', 'g')
-  let rstring = substitute(rstring, '"', '\\"', 'g')
-  let rstring = 'call feedkeys("'.rstring.'", "'.feedkeyargs.'")'
-  return rstring
+  let rhs = substitute(a:mapping.rhs, '\', '\\\\', 'g')
+  let rhs = substitute(rhs, '<\([^<>]*\)>', '\\<\1>', 'g')
+  let rhs = substitute(rhs, '"', '\\"', 'g')
+  let rhs = 'call feedkeys("'.rhs.'", "'.feedkeyargs.'")'
+  return rhs
 endfunction " }}}
 
 function! which_key#util#get_sep() abort
@@ -153,33 +165,35 @@ function! which_key#util#get_sep() abort
 endfunction
 
 function! which_key#util#string_to_keys(input)
+  let input = a:input
   " Avoid special case: <>
-  if match(a:input, '<.\+>') != -1
+  if match(input, '<.\+>') != -1
+    echom "match input: ".input
     let retlist = []
     let si = 0
     let go = 1
-    while si < len(a:input)
+    while si < len(input)
       if go
-        call add(retlist, a:input[si])
+        call add(retlist, input[si])
       else
-        let retlist[-1] .= a:input[si]
+        let retlist[-1] .= input[si]
       endif
-      if a:input[si] ==? '<'
+      if input[si] ==? '<'
         let go = 0
-      elseif a:input[si] ==? '>'
+      elseif input[si] ==? '>'
         let go = 1
       end
       let si += 1
-    endw
+    endwhile
     return retlist
   else
-    return split(a:input, '\zs')
+    return split(input, '\zs')
   endif
 endfunction " }}}
 
 function! which_key#util#mismatch() abort
   echohl ErrorMsg
-  echom "Fail to execute, no such mapping"
+  echom '[which-key] Fail to execute, no such mapping'
   echohl None
 endfunction
 

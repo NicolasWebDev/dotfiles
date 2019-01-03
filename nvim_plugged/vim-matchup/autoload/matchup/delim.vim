@@ -45,8 +45,8 @@ function! matchup#delim#get_matching(delim, ...) " {{{1
   " this gives us a context object which we use for the other side
   " TODO: what if no open is found here?
   let l:matches = []
+  let l:save_pos = matchup#pos#get_cursor()
   for l:down in {'open': [1], 'close': [0], 'mid': [0,1]}[a:delim.side]
-    let l:save_pos = matchup#pos#get_cursor()
     call matchup#pos#set_cursor(a:delim)
 
     " second iteration: [] refers to the current match
@@ -57,9 +57,11 @@ function! matchup#delim#get_matching(delim, ...) " {{{1
     let l:res = a:delim.get_matching(l:down, l:stopline)
     if l:res[0][1] > 0
       call extend(l:matches, l:res)
+    elseif l:down
+      let l:matches = []
     endif
-    call matchup#pos#set_cursor(l:save_pos)
   endfor
+  call matchup#pos#set_cursor(l:save_pos)
 
   if a:delim.side ==# 'open'
     call insert(l:matches, [])
@@ -156,6 +158,9 @@ function! matchup#delim#get_surrounding(type, ...) " {{{1
     endif
 
     let l:matches = matchup#delim#get_matching(l:open, 1)
+    if has_key(l:opts, 'matches')
+      let l:opts.matches = l:matches
+    endif
 
     if len(l:matches)
       let l:close = l:local ? l:open.links.next : l:open.links.close
@@ -292,6 +297,8 @@ function! s:get_delim(opts) " {{{1
 
   let l:save_pos = matchup#pos#get_cursor()
 
+  call matchup#loader#refresh_match_words()
+
   " this contains all the patterns for the specified type and side
   let l:re = b:matchup_delim_re[a:opts.type][a:opts.side]
 
@@ -299,6 +306,10 @@ function! s:get_delim(opts) " {{{1
 
   let l:insertmode = get(a:opts, 'insertmode', 0)
   if l:cursorpos > 1 && l:insertmode
+    let l:cursorpos -= 1
+  endif
+  if l:cursorpos > strlen(getline('.'))
+        \ && stridx("vV\<c-v>", mode()) > -1
     let l:cursorpos -= 1
   endif
 
@@ -407,6 +418,10 @@ function! s:get_delim(opts) " {{{1
     call matchup#perf#toc('s:get_delim', 'nothing_found')
     return {}
   endif
+
+  " XXX: workaround an apparent obscure vim bug where the
+  " reported syntax id is incorrect on the first synID() call
+  call matchup#delim#skip(l:lnum, l:cnum)
 
   let l:skip_state = l:check_skip ? 0
         \ : matchup#delim#skip(l:lnum, l:cnum)
