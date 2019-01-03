@@ -15,17 +15,18 @@ PS1="${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[0
 #------------------------- ALIASES --------------------------------
 ## Pacman aliases ##
 alias pac='sudo /usr/bin/pacman -S'
-alias ya='/usr/bin/yaourt -S'
+alias ya='/usr/bin/yay -S'
 alias pacu='sudo /usr/bin/pacman -Syu'
-alias yau='/usr/bin/yaourt -Syua'
+alias yau='/usr/bin/yay'
 # Download only.
-alias yaw='/usr/bin/yaourt -Syuw'
+alias yaw='/usr/bin/yay -Syuw'
 alias pacr='sudo /usr/bin/pacman -Rs'
 alias pacs='/usr/bin/pacman -Ss'
-alias yas='/usr/bin/yaourt -Ss'
+alias yas='/usr/bin/yay'
 alias pacuu='sudo /usr/bin/pacman -U *.pkg.*'
 alias paci='/usr/bin/pacman -Si'
-alias yai='/usr/bin/yaourt -Si'
+alias yai='/usr/bin/yay -Si'
+alias yag='/usr/bin/yay -G'
 alias paclo='/usr/bin/pacman -Qdt'   # list all orphaned packages
 alias pacc='sudo /usr/bin/pacman -Scc'
 alias paclf='/usr/bin/pacman -Ql'
@@ -34,9 +35,6 @@ alias pacq='/usr/bin/pacman -Q | grep'
 alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
 alias pacman_size='pacgraph -c' # print installed packages by size
 
-## Yaourt aliases ##
-alias yas='yaourt -Ss'
-alias yag='yaourt -G'
 # list obsolete packages from the AUR
 alias yao='for file in `pacman -Qmq` ; do yas $file | grep "installed:" ; done'
 
