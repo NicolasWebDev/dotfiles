@@ -168,6 +168,10 @@ function flac2ogg() {
     DIR=$1
     find "$DIR" -name "*flac" -exec oggenc -q 7 {} \;
 }
+function ogg2mp3() {
+    DIR=$1
+    parallel ffmpeg -i "{}" "{.}.mp3" ::: *.{ogg,opus}
+}
 function stories_done() {
     tac $HOME/todo.txt-cli/done.txt | sed '/\+scrum SP/q'
 }
