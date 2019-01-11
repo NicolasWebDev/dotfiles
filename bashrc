@@ -170,6 +170,10 @@ function ogg2mp3() {
     DIR=$1
     parallel ffmpeg -i "{}" "{.}.mp3" ::: *.{ogg,opus}
 }
+function m4a2mp3() {
+    DIR=$1
+    parallel ffmpeg -i "{}" "{.}.mp3" ::: *.m4a
+}
 function stories_done() {
     tac $HOME/todo.txt-cli/done.txt | sed '/\+scrum SP/q'
 }
