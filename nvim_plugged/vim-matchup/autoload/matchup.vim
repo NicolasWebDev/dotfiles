@@ -51,6 +51,7 @@ function! s:init_options()
   call s:init_option('matchup_text_obj_linewise_operators', ['d', 'y'])
 
   call s:init_option('matchup_transmute_enabled', 0)
+  call s:init_option('matchup_transmute_breakundo', 0)
 
   call s:init_option('matchup_mouse_enabled', 1)
 
@@ -168,6 +169,10 @@ function! s:init_default_mappings()
 
     if !s:old_style_ops
       call s:map('o', '%', '<plug>(matchup-%)')
+      call s:map('o', 'g%', '<plug>(matchup-g%)')
+      call s:map('o', ']%', '<plug>(matchup-]%)')
+      call s:map('o', '[%', '<plug>(matchup-[%)')
+      call s:map('o', 'z%', '<plug>(matchup-z%)')
     endif
 
     call s:map('i', '<c-g>%', '<plug>(matchup-c_g%)')

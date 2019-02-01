@@ -101,9 +101,7 @@ function! matchup#delim#get_matching(delim, ...) " {{{1
   " set up links between matches
   for l:i in range(len(l:matching_list))
     let l:c = l:matching_list[l:i]
-    if !has_key(l:c, 'links')
-      let l:c.links = {}
-    endif
+    let l:c.links = {}
     let l:c.links.next = l:matching_list[(l:i+1) % len(l:matching_list)]
     let l:c.links.prev = l:matching_list[l:i-1]
     let l:c.links.open = l:matching_list[0]
@@ -158,6 +156,12 @@ function! matchup#delim#get_surrounding(type, ...) " {{{1
     endif
 
     let l:matches = matchup#delim#get_matching(l:open, 1)
+
+    " TODO: getting one match result here is surely wrong
+    if len(l:matches) == 1
+      let l:matches = []
+    endif
+
     if has_key(l:opts, 'matches')
       let l:opts.matches = l:matches
     endif
@@ -165,7 +169,7 @@ function! matchup#delim#get_surrounding(type, ...) " {{{1
     if len(l:matches)
       let l:close = l:local ? l:open.links.next : l:open.links.close
       let l:pos_val_try = matchup#pos#val(l:close)
-          \ + matchup#delim#end_offset(l:close)
+            \ + matchup#delim#end_offset(l:close)
     endif
 
     if len(l:matches) && l:pos_val_try >= l:pos_val_cursor
