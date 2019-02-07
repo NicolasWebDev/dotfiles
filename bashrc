@@ -23,6 +23,8 @@ alias yaw='/usr/bin/yay -Syuw'
 alias pacr='sudo /usr/bin/pacman -Rs'
 alias pacs='/usr/bin/pacman -Ss'
 alias yas='/usr/bin/yay'
+# Archlinux news.
+alias yan='/usr/bin/yay -Pww'
 alias pacuu='sudo /usr/bin/pacman -U *.pkg.*'
 alias paci='/usr/bin/pacman -Si'
 alias yai='/usr/bin/yay -Si'
