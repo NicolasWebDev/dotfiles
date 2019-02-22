@@ -179,6 +179,9 @@ function m4a2mp3() {
 function stories_done() {
     tac $HOME/todo.txt-cli/done.txt | sed '/\+scrum SP/q'
 }
+function stories_b() {
+    rg -c '\(B\) ' $HOME/todo.txt-cli/todo.txt $HOME/todo.txt-cli/*.backlog.todo.txt | sum_digits
+}
 function stories_sprint() {
     REMAINING=$(rg -c '\((A|B)\) ' $HOME/todo.txt-cli/todo.txt)
     DONE=$(stories_done | wc -l)
