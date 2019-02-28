@@ -142,6 +142,7 @@ alias poweroff='systemctl poweroff'
 alias youtube-dl-sub='youtube-dl --write-sub --sub-lang en --sub-format vtt'
 _CAL_OPTIONS='--monday --military --width=29'
 alias cal='gcalcli'
+alias cals='gcalcli search'
 alias calw="gcalcli calw $_CAL_OPTIONS"
 alias calm="gcalcli calm $_CAL_OPTIONS"
 function cala() {
