@@ -167,23 +167,25 @@ function! matchup#motion#find_unmatched(visual, down) " {{{1
       if l:exclusive
         let l:new_pos[1] -= 1
       else
-        if l:is_oper
-          let l:new_pos[1] += matchup#delim#end_offset(l:delim)
-        else
-          let l:new_pos[1] = matchup#delim#jump_target(l:delim)
-        endif
+        let l:new_pos[1] += matchup#delim#end_offset(l:delim)
       endif
     endif
 
     " if the cursor didn't move, increment count
     if matchup#pos#equal(l:save_pos, l:new_pos)
       let l:count += 1
+    elseif l:tries
+      break
     endif
 
     if l:count <= 1
       break
     endif
   endfor
+
+  if a:down && !l:is_oper
+    let l:new_pos[1] = matchup#delim#jump_target(l:delim)
+  endif
 
   " this is an exclusive motion, [%
   if !a:down && l:exclusive
@@ -218,6 +220,8 @@ function! matchup#motion#jump_inside(visual) " {{{1
 
   let l:save_pos = matchup#pos#get_cursor()
 
+  call matchup#perf#timeout_start(750)
+
   if a:visual
     normal! gv
   endif
@@ -247,12 +251,19 @@ function! matchup#motion#jump_inside(visual) " {{{1
   let l:new_pos = matchup#pos#next(l:new_pos)
 
   " this is an exclusive motion except when dealing with whitespace
-  if !empty(get(s:, 'v_operator', ''))
+  let l:is_oper = !empty(get(s:, 'v_operator', ''))
+  if l:is_oper
         \ && g:v_motion_force !=# 'v' && g:v_motion_force !=# "\<c-v>"
     while matchup#util#in_whitespace(l:new_pos[1], l:new_pos[2])
       let l:new_pos = matchup#pos#next(l:new_pos)
     endwhile
     let l:new_pos = matchup#pos#prev(l:new_pos)
+  endif
+
+  " jump ahead if inside indent
+  if !l:is_oper && matchup#util#in_indent(l:new_pos[1], l:new_pos[2])
+    let l:new_pos[2] = 1 + strlen(matchstr(
+          \ getline(l:new_pos[1]), '^\s\+'))
   endif
 
   " handle selection option 'exclusive' (motion only goes forwards)

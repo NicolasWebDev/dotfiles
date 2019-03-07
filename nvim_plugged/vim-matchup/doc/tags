@@ -26,6 +26,7 @@ g:matchup_enabled	matchup.txt	/*g:matchup_enabled*
 g:matchup_hotfix[&filetype]	matchup.txt	/*g:matchup_hotfix[&filetype]*
 g:matchup_mappings_enabled	matchup.txt	/*g:matchup_mappings_enabled*
 g:matchup_matchparen_deferred	matchup.txt	/*g:matchup_matchparen_deferred*
+g:matchup_matchparen_deferred_fade_time	matchup.txt	/*g:matchup_matchparen_deferred_fade_time*
 g:matchup_matchparen_deferred_hide_delay	matchup.txt	/*g:matchup_matchparen_deferred_hide_delay*
 g:matchup_matchparen_deferred_show_delay	matchup.txt	/*g:matchup_matchparen_deferred_show_delay*
 g:matchup_matchparen_enabled	matchup.txt	/*g:matchup_matchparen_enabled*
@@ -60,6 +61,7 @@ matchup-contents	matchup.txt	/*matchup-contents*
 matchup-custom-mappings	matchup.txt	/*matchup-custom-mappings*
 matchup-default-mappings	matchup.txt	/*matchup-default-mappings*
 matchup-development	matchup.txt	/*matchup-development*
+matchup-fading	matchup.txt	/*matchup-fading*
 matchup-faq	matchup.txt	/*matchup-faq*
 matchup-feat-exclusive	matchup.txt	/*matchup-feat-exclusive*
 matchup-feat-linewise	matchup.txt	/*matchup-feat-linewise*
