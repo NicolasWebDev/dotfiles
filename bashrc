@@ -169,12 +169,13 @@ function flac2ogg() {
     DIR=$1
     find "$DIR" -name "*flac" -exec oggenc -q 7 {} \;
 }
+function flac2mp3() {
+    parallel ffmpeg -i {} -qscale:a 0 {.}.mp3 ::: ./*.flac
+}
 function ogg2mp3() {
-    DIR=$1
     parallel ffmpeg -i "{}" "{.}.mp3" ::: *.{ogg,opus}
 }
 function m4a2mp3() {
-    DIR=$1
     parallel ffmpeg -i "{}" "{.}.mp3" ::: *.m4a
 }
 function stories_done() {
