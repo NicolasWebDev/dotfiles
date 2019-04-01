@@ -117,7 +117,7 @@ alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
 alias spotify='PULSE_PROP="module-stream-restore.id=spotify" /usr/bin/spotify'
 alias ll='ls --color=auto -lX'
 alias vimgtd="cd $HOME/todo.txt-cli ; $EDITOR waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt' -c ':tabedit general.backlog.todo.txt' -c ':tabedit ziembra.backlog.todo.txt' -c ':tabedit marketing.backlog.todo.txt' -c ':tabedit growth.backlog.todo.txt'"
-alias gtdprojects="rg ' |^\+\S+ ' -o todo.txt-cli/someday.todo.txt | tr -d ' ' | sort | uniq -c | sort -n | tac"
+alias gtdprojects="rg -o '\+\S+' ~/todo.txt-cli/someday.todo.txt | sort | uniq -c | sort -n | tac"
 alias ls='ls --color=auto'
 alias b='bundle exec'
 alias gc='git commit -v'
@@ -145,6 +145,9 @@ alias cal='gcalcli'
 alias cals='gcalcli search'
 alias calw="gcalcli calw $_CAL_OPTIONS"
 alias calm="gcalcli calm $_CAL_OPTIONS"
+function titlecase() {
+    sed 's/.*/\L&/; s/[a-z]*/\u&/g'
+}
 function cala() {
     gcalcli agenda --military --width=29 --details attendees --details length --details email "$@" | rg -v "Email: info@nicolaswebdev.com|Length: 1 day|Length: 1:00:00"
 }
@@ -257,6 +260,9 @@ alias screen_projector='xrandr --output eDP-1 --mode 1920x1080 --output DP-2 --m
 alias screen_detach_projector='xrandr --output eDP-1 --auto --output DP-2 --off'
 alias screen_detach='xrandr --output eDP-1 --auto --output HDMI-1 --off'
 alias screen_mirror="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --same-as eDP-1"
+alias xp="xsel"
+alias xs="xsel -s"
+alias xb="xsel -b"
 alias screen_split="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --right-of eDP-1"
 alias rsync-backup='rsync -av --progress --delete --stats'
 alias svim='sudo /usr/bin/nvim'
