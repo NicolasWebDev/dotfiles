@@ -80,6 +80,8 @@ esac
 #------------------------- ALIASES --------------------------------
 alias transtes='trans :es'
 alias transfes='trans es:'
+# To encode quickly from utf-8 to ascii, trying to keep the right letters (é/ê/è/ë -> e).
+alias utf82ascii='iconv -f utf-8 -t ascii//translit'
 alias x='exit'
 alias o='mimeo'
 alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
@@ -145,6 +147,7 @@ alias cal='gcalcli'
 alias cals='gcalcli search'
 alias calw="gcalcli calw $_CAL_OPTIONS"
 alias calm="gcalcli calm $_CAL_OPTIONS"
+alias snakecase="tr '[:upper:]' '[:lower:]' | tr ' ' '_'"
 function titlecase() {
     sed 's/.*/\L&/; s/[a-z]*/\u&/g'
 }
