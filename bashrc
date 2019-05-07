@@ -19,7 +19,7 @@ alias ya='/usr/bin/yay -S'
 alias pacu='sudo /usr/bin/pacman -Syu'
 alias yau='/usr/bin/yay'
 # Download only.
-alias yaw='/usr/bin/yay -Syuw'
+alias yaw='/usr/bin/yay -Syuw --repo --answerupgrade None --noconfirm'
 alias pacr='sudo /usr/bin/pacman -Rs'
 alias pacs='/usr/bin/pacman -Ss'
 alias yas='/usr/bin/yay'
