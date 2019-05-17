@@ -98,6 +98,7 @@ alias cat="bat"
 alias scope_ready="backlog_scope \"$HOME/todo.txt-cli/*.backlog.todo.txt\" '\+ready'"
 alias dc='sudo docker-compose'
 alias tree1='tree -L 1'
+alias svd='EDITOR="nvim -d" sudoedit'
 alias v='nvim'
 alias n='nvim'
 alias tree2='tree -L 2'
