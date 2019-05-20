@@ -33,7 +33,6 @@ run_once("slack")
 run_once("nm-applet")
 run_once("zeal")
 run_once("redshift")
-run_once("gnome-pomodoro")
 -- }}}
 
 -- {{{ Error handling
