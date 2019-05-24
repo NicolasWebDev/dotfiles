@@ -31,7 +31,6 @@ run_once("urxvtd -q -o")
 run_once("whatsie")
 run_once("slack")
 run_once("nm-applet")
-run_once("zeal")
 run_once("redshift")
 -- }}}
 
