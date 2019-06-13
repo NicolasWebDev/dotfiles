@@ -88,6 +88,7 @@ alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-ini
 alias odoo_reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgres ; dropdb --if-exists -p 5434 testing ; createdb -p 5434 -T demo testing"'
 alias odoo_server='./odoo.py -c .openerp_serverrc'
 alias firefox='firefox-aurora'
+alias connect_flip4='bluetoothctl connect F8:DF:15:E9:D3:BA'
 alias t='todo.sh'
 alias public_ip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias d='sudo docker'
