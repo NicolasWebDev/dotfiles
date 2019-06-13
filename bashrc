@@ -100,8 +100,8 @@ alias scope_ready="backlog_scope \"$HOME/todo.txt-cli/*.backlog.todo.txt\" '\+re
 alias dc='sudo docker-compose'
 alias tree1='tree -L 1'
 alias svd='EDITOR="nvim -d" sudoedit'
+alias sv='sudoedit'
 alias v='nvim'
-alias n='nvim'
 alias tree2='tree -L 2'
 alias psgrep='ps aux | grep -v grep | grep'
 alias vimwaiting="$EDITOR $HOME/todo.txt-cli/waiting.txt"
