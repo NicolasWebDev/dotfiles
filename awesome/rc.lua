@@ -32,6 +32,7 @@ run_once("whatsie")
 run_once("slack")
 run_once("nm-applet")
 run_once("redshift")
+run_once("blueman-applet")
 -- }}}
 
 -- {{{ Error handling
