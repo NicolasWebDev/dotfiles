@@ -78,8 +78,9 @@ esac
 #---------------------------- PATH ------------------------------
 
 #------------------------- ALIASES --------------------------------
-alias transtes='trans :es'
-alias transfes='trans es:'
+alias tts='trans :es'
+alias tfs='trans es:'
+alias ts='trans es:es'
 # To encode quickly from utf-8 to ascii, trying to keep the right letters (é/ê/è/ë -> e).
 alias utf82ascii='iconv -f utf-8 -t ascii//translit'
 alias x='exit'
