@@ -1,3 +1,9 @@
+:DoMatchParen	matchup.txt	/*:DoMatchParen*
+:MatchupClearTimes	matchup.txt	/*:MatchupClearTimes*
+:MatchupReload	matchup.txt	/*:MatchupReload*
+:MatchupShowTimes	matchup.txt	/*:MatchupShowTimes*
+:MatchupWhereAmI	matchup.txt	/*:MatchupWhereAmI*
+:NoMatchParen	matchup.txt	/*:NoMatchParen*
 <plug>(matchup-hi-surround)	matchup.txt	/*<plug>(matchup-hi-surround)*
 Na%	matchup.txt	/*Na%*
 Ni%	matchup.txt	/*Ni%*
@@ -55,8 +61,11 @@ match-up	matchup.txt	/*match-up*
 matchup	matchup.txt	/*matchup*
 matchup#util#patch_match_words	matchup.txt	/*matchup#util#patch_match_words*
 matchup-%	matchup.txt	/*matchup-%*
+matchup-:DoMatchParen	matchup.txt	/*matchup-:DoMatchParen*
+matchup-:NoMatchParen	matchup.txt	/*matchup-:NoMatchParen*
 matchup-N%	matchup.txt	/*matchup-N%*
 matchup-acknowledgments	matchup.txt	/*matchup-acknowledgments*
+matchup-commands	matchup.txt	/*matchup-commands*
 matchup-contents	matchup.txt	/*matchup-contents*
 matchup-custom-mappings	matchup.txt	/*matchup-custom-mappings*
 matchup-default-mappings	matchup.txt	/*matchup-default-mappings*
