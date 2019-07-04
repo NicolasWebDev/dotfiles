@@ -13,7 +13,7 @@ source /usr/share/doc/pkgfile/command-not-found.bash
 #------------------------- PROMPT ---------------------------------
 PS1="${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
 #------------------------- ALIASES --------------------------------
-## Pacman aliases ##
+## PC ADMINISTRATION
 alias pac='sudo /usr/bin/pacman -S'
 alias ya='/usr/bin/yay -S'
 alias pacu='sudo /usr/bin/pacman -Syu'
@@ -140,6 +140,10 @@ alias gbr='git branch'
 alias glf="git lf"
 function github {
     git clone --depth 1 https://github.com/$1
+}
+function vdate {
+    NAME=$1
+    $EDITOR $(date +%F)_$NAME.md
 }
 alias lc='ls --color=auto --format=single-column'
 alias hist='history | grep'
@@ -284,6 +288,8 @@ alias mount='mount | column -t'
 alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m - \2|g'"
 alias grep="grep --color=auto"
 alias sort_someday="awk '{print \$NF,\$0}' ~/todo.txt-cli/someday_maybe.txt | sort -nr | cut -f2- -d' ' > ~/todo.txt-cli/someday_maybe.txt.back ; mv -f ~/todo.txt-cli/someday_maybe.txt{.back,}"
+# Find packages I have installed which are not in aur anymore. (ref: https://wiki.archlinux.org/index.php/Arch_User_Repository#How_do_I_find_out_if_any_of_my_installed_packages_disappeared_from_AUR?)
+alias dropped_packages="comm -23 <(pacman -Qqm | sort) <(curl https://aur.archlinux.org/packages.gz | gzip -cd | sort)"
 alias egrep="egrep --color=auto"
 alias notify-send="notify-send -t 10000"
 export TERM_ICON="/usr/share/icons/Mint-X/apps/96/bash.svg"
