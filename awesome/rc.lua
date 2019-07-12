@@ -29,7 +29,7 @@ end
 run_once("setxkbmap -option caps:swapescape")
 run_once("urxvtd -q -o")
 run_once("slack")
-run_once("franz")
+run_once("whatsapp-nativefier")
 run_once("nm-applet")
 run_once("redshift")
 run_once("blueman-applet")
@@ -426,8 +426,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Pause", function () awful.util.spawn("gnome-pomodoro --pause-resume") end),
     awful.key({ }, "XF86AudioNext", function () awful.util.spawn("playerctl next") end),
     awful.key({ }, "XF86AudioPrev", function () awful.util.spawn("playerctl previous") end),
-    awful.key({ modkey }, "p", function () awful.util.spawn_with_shell("pkill -SIGSTOP franz ; pkill -SIGSTOP slack") end),
-    awful.key({ modkey, "Shift" }, "p", function () awful.util.spawn_with_shell("pkill -SIGCONT franz ; pkill -SIGCONT slack") end),
+    awful.key({ modkey }, "p", function () awful.util.spawn_with_shell("pkill -SIGSTOP whats-app ; pkill -SIGSTOP slack") end),
+    awful.key({ modkey, "Shift" }, "p", function () awful.util.spawn_with_shell("pkill -SIGCONT whats-app ; pkill -SIGCONT slack") end),
     -- Multimedia keys for alsawidget
     awful.key({ }, "XF86AudioRaiseVolume", function()
         awful.util.spawn("amixer sset " .. alsawidget.channel .. " " .. alsawidget.step .. "+")
@@ -607,7 +607,7 @@ awful.rules.rules = {
     -- Set Firefox to always map on tags number 2 of screen 1.
     { rule = { class = "Firefox" }, properties = { tag = tags[1][1] } },
     { rule = { class = "Slack" }, properties = { tag = tags[1][8] } },
-    { rule = { class = "Franz" }, properties = { tag = tags[1][8] } },
+    { rule = { class = "whats-app-nativefier-d52542" }, properties = { tag = tags[1][8] } },
     { rule = { class = "qBittorrent" }, properties = { tag = tags[1][6] } },
     { rule = { class = "Uget-gtk" }, properties = { tag = tags[1][6] } },
     { rule = { class = "Pdfpc", role = "presentation" },
