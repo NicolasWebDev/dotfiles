@@ -85,6 +85,8 @@ alias te='trans en:en'
 # To encode quickly from utf-8 to ascii, trying to keep the right letters (é/ê/è/ë -> e).
 alias utf82ascii='iconv -f utf-8 -t ascii//translit'
 alias x='exit'
+alias mount_galaxy='jmtpfs ~/mnt/galaxy'
+alias umount_galaxy='fusermount -u ~/mnt/galaxy'
 alias o='mimeo'
 alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
 alias odoo_reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgres ; dropdb --if-exists -p 5434 testing ; createdb -p 5434 -T demo testing"'
