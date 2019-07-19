@@ -166,6 +166,12 @@ function cue2flac() {
 
     shnsplit -f "$CUE_FILE" -t "%n %t" -o flac "$AUDIO_FILE"
 }
+function cue2ogg() {
+    CUE_FILE="$1"
+    AUDIO_FILE="$2"
+
+    shnsplit -f "$CUE_FILE" -t "%n %t" -o "cust ext=ogg oggenc -o %f -" "$AUDIO_FILE"
+}
 function titlecase() {
     sed 's/.*/\L&/; s/[a-z]*/\u&/g'
 }
