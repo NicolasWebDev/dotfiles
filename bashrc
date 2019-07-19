@@ -84,6 +84,8 @@ alias ts='trans es:es'
 alias te='trans en:en'
 # To encode quickly from utf-8 to ascii, trying to keep the right letters (é/ê/è/ë -> e).
 alias utf82ascii='iconv -f utf-8 -t ascii//translit'
+alias mount_backup='sudo mount /dev/sda6 /mnt/data ; sudo mount /dev/sdb5 /mnt/backup'
+alias vds="$EDITOR ~/work/gtd/processes.md -c ':tabedit ~/work/gtd/experiments.md'"
 alias x='exit'
 alias mount_galaxy='jmtpfs ~/mnt/galaxy'
 alias umount_galaxy='fusermount -u ~/mnt/galaxy'
