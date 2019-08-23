@@ -119,6 +119,11 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
         autocmd!
         autocmd FileType vim setlocal foldmethod=marker
     augroup END
+
+    augroup filetype_sh
+        autocmd!
+        autocmd FileType sh setlocal foldmethod=marker
+    augroup END
 " }}}
 
 " MAPPINGS {{{
