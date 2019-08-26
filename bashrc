@@ -196,7 +196,8 @@
     alias hist='history | grep'
     alias lc='ls --color=auto --format=single-column'
     alias ll='ls --color=auto -lX'
-    alias mount_backup='sudo mount /dev/sda6 /mnt/data ; sudo mount /dev/sdb5 /mnt/backup'
+    alias backup_mount='sudo mount /dev/sda6 /mnt/data ; sudo mount /dev/sdb5 /mnt/backup'
+    alias backup_umount='sudo umount /mnt/backup'
     alias mount_galaxy='jmtpfs ~/mnt/galaxy'
     alias notify-completion="/usr/bin/notify-send -t 10000 -i $TERM_ICON Task completed ; beep"
     alias notify-send="notify-send -t 10000"
@@ -210,7 +211,7 @@
     alias scanimage="scanimage --device 'pixma:04A9176C_A5C6D3'"
     alias snakecase="tr '[:upper:]' '[:lower:]' | tr ' ' '_'"
     alias sus='setxkbmap us ; echo "keyboard switched to us"'
-    alias suspend="sflock -c ' ' -h ; systemctl suspend"
+    alias s="sflock -c ' ' -h ; systemctl suspend"
     alias sv='sudoedit'
     alias svd='EDITOR="nvim -d" sudoedit'
     alias svim='sudo /usr/bin/nvim'
