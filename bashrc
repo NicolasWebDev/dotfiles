@@ -38,6 +38,7 @@
 # }}}
 
 # RUBY CONFIGURATION {{{
+    export RUBYLIB="$HOME/work/my_scripts:$RUBYLIB"
     alias b='bundle exec'
 # }}}
 
@@ -45,7 +46,6 @@
     PS1="${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
     export PATH="$HOME/.rbenv/bin:$HOME/todo.txt-cli:$HOME/work/my_scripts:$HOME/.cabal/bin:$HOME/.local/bin:$PATH"
     export TERM_ICON="/usr/share/icons/Mint-X/apps/96/bash.svg"
-    export RUBYLIB="$HOME/work/my_scripts:$RUBYLIB"
     export MOZ_DISABLE_PANGO=1
     export WINEARCH=win32
     export WINEPREFIX=$HOME/.wine
@@ -70,10 +70,15 @@
 
 # GTD {{{
     alias vimgtd="cd $HOME/todo.txt-cli ; $EDITOR waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt' -c ':tabedit general.backlog.todo.txt' -c ':tabedit ziembra.backlog.todo.txt' -c ':tabedit marketing.backlog.todo.txt' -c ':tabedit growth.backlog.todo.txt'"
+    alias scope_a="backlog_scope \"$HOME/todo.txt-cli/todo.txt $HOME/todo.txt-cli/*.backlog.todo.txt\" '\(A\) ' | sum_digits"
+    alias scope_b="backlog_scope \"$HOME/todo.txt-cli/todo.txt $HOME/todo.txt-cli/*.backlog.todo.txt\" '\(B\) ' | sum_digits"
+    alias scope_ready="backlog_scope \"$HOME/todo.txt-cli/*.backlog.todo.txt\" '\+ready'"
     alias vimsomeday="$EDITOR $HOME/todo.txt-cli/someday_maybe.txt"
+    alias sort_someday="awk '{print \$NF,\$0}' ~/todo.txt-cli/someday_maybe.txt | sort -nr | cut -f2- -d' ' > ~/todo.txt-cli/someday_maybe.txt.back ; mv -f ~/todo.txt-cli/someday_maybe.txt{.back,}"
     alias vimtodo="$EDITOR $HOME/todo.txt-cli/todo.txt"
     alias vimvimrc="$EDITOR $HOME/.config/nvim/init.vim"
     alias vimwaiting="$EDITOR $HOME/todo.txt-cli/waiting.txt"
+    alias gtdprojects="rg -o '\+\S+' ~/todo.txt-cli/someday.todo.txt | sort | uniq -c | sort -n | tac"
     function project_time() {
         pomodori2time $(grep -c "$1" $HOME/work/documentation/journal.md)
     }
@@ -174,58 +179,39 @@
         alias yaw='/usr/bin/yay -Syuw --repo --answerupgrade None --noconfirm' # Download only.
     # }}}
 
+    # SCREEN {{{
+        alias screen_detach='xrandr --output eDP-1 --auto --output HDMI-1 --off'
+        alias screen_detach_projector='xrandr --output eDP-1 --auto --output DP-2 --off'
+        alias screen_hdmi='xrandr | grep -q "HDMI-1 connected" && xrandr --output eDP-1 --off --output HDMI-1 --auto || echo "HDMI-1 is not connected"'
+        alias screen_mirror="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --same-as eDP-1"
+        alias screen_projector='xrandr --output eDP-1 --mode 1920x1080 --output DP-2 --mode 1280x800 --right-of eDP-1'
+        alias screen_split="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --right-of eDP-1"
+    # }}}
+
     alias be='setxkbmap fr bepo ; echo "keyboard switched to bepo"'
-    alias beep='aplay /usr/share/sounds/alsa/finished.wav'
-    alias cat="bat"
     alias connect_flip4='bluetoothctl connect F8:DF:15:E9:D3:BA'
-    alias cp='cp -i'
     alias d='sudo docker'
     alias dc='sudo docker-compose'
     alias dfh='df -h'
-    alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m - \2|g'"
-    alias egrep="egrep --color=auto"
-    alias firefox='firefox-aurora'
-    alias grep="grep --color=auto"
-    alias gtdprojects="rg -o '\+\S+' ~/todo.txt-cli/someday.todo.txt | sort | uniq -c | sort -n | tac"
     alias hist='history | grep'
     alias lc='ls --color=auto --format=single-column'
     alias ll='ls --color=auto -lX'
-    alias ln='ln -i'
-    alias ls='ls --color=auto'
-    alias mkdir='mkdir -pv'
-    alias mount='mount | column -t'
     alias mount_backup='sudo mount /dev/sda6 /mnt/data ; sudo mount /dev/sdb5 /mnt/backup'
     alias mount_galaxy='jmtpfs ~/mnt/galaxy'
-    alias mv='mv -i'
     alias notify-completion="/usr/bin/notify-send -t 10000 -i $TERM_ICON Task completed ; beep"
     alias notify-send="notify-send -t 10000"
     alias o='mimeo'
     alias odoo_reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgres ; dropdb --if-exists -p 5434 testing ; createdb -p 5434 -T demo testing"'
     alias odoo_server='./odoo.py -c .openerp_serverrc'
     alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
-    alias ping="ping www.archlinux.org"
     alias poweroff='systemctl poweroff'
     alias psgrep='ps aux | grep -v grep | grep'
     alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
     alias public_ip='dig +short myip.opendns.com @resolver1.opendns.com'
     alias reboot='systemctl reboot'
-    alias rm='rm -I'
     alias rsync-backup='rsync -av --progress --delete --stats'
     alias scanimage="scanimage --device 'pixma:04A9176C_A5C6D3'"
-    alias scope_a="backlog_scope \"$HOME/todo.txt-cli/todo.txt $HOME/todo.txt-cli/*.backlog.todo.txt\" '\(A\) ' | sum_digits"
-    alias scope_b="backlog_scope \"$HOME/todo.txt-cli/todo.txt $HOME/todo.txt-cli/*.backlog.todo.txt\" '\(B\) ' | sum_digits"
-    alias scope_ready="backlog_scope \"$HOME/todo.txt-cli/*.backlog.todo.txt\" '\+ready'"
-    alias screen_detach='xrandr --output eDP-1 --auto --output HDMI-1 --off'
-    alias screen_detach_projector='xrandr --output eDP-1 --auto --output DP-2 --off'
-    alias screen_hdmi='xrandr | grep -q "HDMI-1 connected" && xrandr --output eDP-1 --off --output HDMI-1 --auto || echo "HDMI-1 is not connected"'
-    alias screen_mirror="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --same-as eDP-1"
-    alias screen_projector='xrandr --output eDP-1 --mode 1920x1080 --output DP-2 --mode 1280x800 --right-of eDP-1'
-    alias screen_split="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --right-of eDP-1"
     alias snakecase="tr '[:upper:]' '[:lower:]' | tr ' ' '_'"
-    alias sort_someday="awk '{print \$NF,\$0}' ~/todo.txt-cli/someday_maybe.txt | sort -nr | cut -f2- -d' ' > ~/todo.txt-cli/someday_maybe.txt.back ; mv -f ~/todo.txt-cli/someday_maybe.txt{.back,}"
-    alias spotify='PULSE_PROP="module-stream-restore.id=spotify" /usr/bin/spotify' # To avoid spotify muting chrome, per the issue https://github.com/serialoverflow/blockify/issues/92.
-    alias ssh='TERM=xterm-256color ssh'
-    alias subdl="subdl --download=best-rating"
     alias suspend="sflock -c ' ' -h ; systemctl suspend"
     alias sv='sudoedit'
     alias svd='EDITOR="nvim -d" sudoedit'
@@ -234,7 +220,6 @@
     alias te='trans en:en'
     alias term_colors='for x in 0 1 4 5 7 8; do for i in `seq 30 37`; do for a in `seq 40 47`; do echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "; done; echo; done; done; echo "";'
     alias tfs='trans es:'
-    alias top="htop"
     alias tree1='tree -L 1'
     alias tree2='tree -L 2'
     alias ts='trans es:es'
@@ -280,14 +265,35 @@
     }
 # }}}
 
-# FUNCTIONS {{{
-    function sum_digits() { # Echoes standard input, and print the sum of the numbers it contains.
-        tee /dev/tty | rg -o '\d+(\.\d+)?' | paste -sd+ | bc
-    }
+# OVERWRITE COMMANDS {{{
+    alias beep='aplay /usr/share/sounds/alsa/finished.wav'
+    alias cat="bat"
+    alias cp='cp -i'
+    alias egrep="egrep --color=auto"
+    alias firefox='firefox-aurora'
+    alias grep="grep --color=auto"
+    alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m - \2|g'"
+    alias ln='ln -i'
+    alias spotify='PULSE_PROP="module-stream-restore.id=spotify" /usr/bin/spotify' # To avoid spotify muting chrome, per the issue https://github.com/serialoverflow/blockify/issues/92.
+    alias ssh='TERM=xterm-256color ssh'
+    alias subdl="subdl --download=best-rating"
+    alias ls='ls --color=auto'
+    alias mkdir='mkdir -pv'
+    alias mount='mount | column -t'
+    alias mv='mv -i'
+    alias rm='rm -I'
+    alias ping="ping www.archlinux.org"
+    alias top="htop"
     function mutt () {
         cd $HOME/Downloads
         /usr/bin/mutt "$@"
         cd -
+    }
+# }}}
+
+# FUNCTIONS {{{
+    function sum_digits() { # Echoes standard input, and print the sum of the numbers it contains.
+        tee /dev/tty | rg -o '\d+(\.\d+)?' | paste -sd+ | bc
     }
     function github {
         git clone --depth 1 https://github.com/$1
