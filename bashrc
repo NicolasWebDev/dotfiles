@@ -78,6 +78,7 @@
     alias vimtodo="$EDITOR $HOME/todo.txt-cli/todo.txt"
     alias vimvimrc="$EDITOR $HOME/.config/nvim/init.vim"
     alias vimwaiting="$EDITOR $HOME/todo.txt-cli/waiting.txt"
+    alias vds="$EDITOR ~/work/gtd/processes.md -c ':tabedit ~/work/gtd/experiments.md'"
     alias gtdprojects="rg -o '\+\S+' ~/todo.txt-cli/someday.todo.txt | sort | uniq -c | sort -n | tac"
     function project_time() {
         pomodori2time $(grep -c "$1" $HOME/work/documentation/journal.md)
@@ -188,7 +189,6 @@
         alias screen_split="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --right-of eDP-1"
     # }}}
 
-    alias be='setxkbmap fr bepo ; echo "keyboard switched to bepo"'
     alias connect_flip4='bluetoothctl connect F8:DF:15:E9:D3:BA'
     alias d='sudo docker'
     alias dc='sudo docker-compose'
@@ -201,17 +201,15 @@
     alias notify-completion="/usr/bin/notify-send -t 10000 -i $TERM_ICON Task completed ; beep"
     alias notify-send="notify-send -t 10000"
     alias o='mimeo'
-    alias odoo_reset_test_db='sudo -u postgres -H bash -c "export PGPASSWORD=postgres ; dropdb --if-exists -p 5434 testing ; createdb -p 5434 -T demo testing"'
-    alias odoo_server='./odoo.py -c .openerp_serverrc'
-    alias odoo_tests_install='./openerp-server -c .openerp_serverrc --stop-after-init -d testing -i'
     alias poweroff='systemctl poweroff'
     alias psgrep='ps aux | grep -v grep | grep'
-    alias pu='setxkbmap es ; echo "keyboard switched to spanish"'
     alias public_ip='dig +short myip.opendns.com @resolver1.opendns.com'
     alias reboot='systemctl reboot'
     alias rsync-backup='rsync -av --progress --delete --stats'
+    alias sbe='setxkbmap fr bepo ; echo "keyboard switched to bepo"'
     alias scanimage="scanimage --device 'pixma:04A9176C_A5C6D3'"
     alias snakecase="tr '[:upper:]' '[:lower:]' | tr ' ' '_'"
+    alias sus='setxkbmap us ; echo "keyboard switched to us"'
     alias suspend="sflock -c ' ' -h ; systemctl suspend"
     alias sv='sudoedit'
     alias svd='EDITOR="nvim -d" sudoedit'
@@ -228,7 +226,6 @@
     alias utf82ascii='iconv -f utf-8 -t ascii//translit' # To encode quickly from utf-8 to ascii, trying to keep the right letters (é/ê/è/ë -> e).
     alias v='nvim'
     alias vd='nvim -d'
-    alias vds="$EDITOR ~/work/gtd/processes.md -c ':tabedit ~/work/gtd/experiments.md'"
     alias vimbashrc="$EDITOR $HOME/.bashrc ; source $HOME/.bashrc"
     alias x='exit'
     alias xb="xsel -b"
@@ -305,12 +302,6 @@
     function titlecase() {
         sed 's/.*/\L&/; s/[a-z]*/\u&/g'
     }
-    function guard_python() {
-        watchmedo shell-command -R --patterns="*.py" --command='[ ${watch_event_type} = modified ] && green -r'
-    }
-    function bzrd() {
-        bzr diff "$1" | less -r
-    }
     function test_rc_lua() {
         Xephyr -ac -br -noreset -screen 800x600 :1 &
         sleep 1
@@ -336,9 +327,6 @@
         lpr -P pdf_printer "$@"
         sleep 1
         evince $(ls -t /var/spool/cups-pdf/sathors/*.pdf | head -n1) &
-    }
-    function odoo-kill() {
-        kill -s SIGKILL $(ps aux | grep openerp | grep python | awk '{print $2}')
     }
     function du_sorted() {
         du -hs "$@" | sort -h
