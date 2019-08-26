@@ -6,7 +6,7 @@
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     source "/usr/share/fzf/key-bindings.bash"
     source "/usr/share/fzf/completion.bash"
-    bind -x '"\C-p": nvim $(fzf);' # C-p is used to open a file using nvim.
+    bind -x '"\C-p": mimeo "$(fzf)";' # C-p is used to open a file using nvim.
 # }}}
 
 # GCALCLI CONFIGURATION {{{
