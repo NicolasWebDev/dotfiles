@@ -80,6 +80,35 @@
     alias vimwaiting="$EDITOR $HOME/todo.txt-cli/waiting.txt"
     alias vds="$EDITOR ~/work/gtd/processes.md -c ':tabedit ~/work/gtd/experiments.md'"
     alias gtdprojects="rg -o '\+\S+' ~/todo.txt-cli/someday.todo.txt | sort | uniq -c | sort -n | tac"
+    function transpose_lilypond_from_c_to_eb() {
+        LILYPOND_SHEET="$1"
+
+        cat $LILYPOND_SHEET | \
+            sed "s/\ba\(is\|es\|[0-9 :',]\)/la\1/g" | \
+            sed "s/\bb\(is\|es\|[0-9 :',]\)/si\1/g" | \
+            sed "s/\bc\(is\|es\|[0-9 :',]\)/do\1/g" | \
+            sed "s/\bd\(is\|es\|[0-9 :',]\)/re\1/g" | \
+            sed "s/\be\(is\|es\|[0-9 :',]\)/mi\1/g" | \
+            sed "s/\bf\(is\|es\|[0-9 :',]\)/fa\1/g" | \
+            sed "s/\bg\(is\|es\|[0-9 :',]\)/sol\1/g" | \
+            sed 's/\bdo/a/g' | \
+            sed 's/\bdois/ais/g' | \
+            sed 's/\brees/bes/g' | \
+            sed 's/\bre\([^lp]\)/b\1/g' | \
+            sed 's/\breis/c/g' | \
+            sed 's/\bees/c/g' | \
+            sed 's/\bmi\([^nd]\)/cis\1/g' | \
+            sed 's/\bfa/d/g' | \
+            sed 's/\bfais/dis/g' | \
+            sed 's/\bsoles/ees/g' | \
+            sed 's/\bsol/e/g' | \
+            sed 's/\bsolis/f/g' | \
+            sed 's/\blaes/f/g' | \
+            sed 's/\bla\([^y]\)/fis\1/g' | \
+            sed 's/\blais/g/g' | \
+            sed 's/\bsies/g/g' | \
+            sed 's/\bsi/gis/g'
+    }
     function project_time() {
         pomodori2time $(grep -c "$1" $HOME/work/documentation/journal.md)
     }
