@@ -1,5 +1,16 @@
 [[ $- != *i* ]] && return # If not running interactively, don't do anything.
 
+# XDG INITIALIZATION {{{
+    # https://wiki.archlinux.org/index.php/XDG_Base_Directory
+    export XDG_CONFIG_HOME="$HOME/.config"
+    export XDG_CACHE_HOME="$HOME/.cache"
+    export XDG_DATA_HOME="$HOME/.local/share"
+# }}}
+
+# RIPGREP CONFIGURATION {{{
+    export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgreprc"
+# }}}
+
 # FZF CONFIGURATION {{{
     set -o vi # Taken from http://owen.cymru/fzf-ripgrep-navigate-with-bash-faster-than-ever-before. Has to be set before sourcing the key-bindings else they will not work.
     export FZF_DEFAULT_COMMAND='rg --files 2>/dev/null'
@@ -76,7 +87,7 @@
     alias vimsomeday="$EDITOR $HOME/todo.txt-cli/someday_maybe.txt"
     alias sort_someday="awk '{print \$NF,\$0}' ~/todo.txt-cli/someday_maybe.txt | sort -nr | cut -f2- -d' ' > ~/todo.txt-cli/someday_maybe.txt.back ; mv -f ~/todo.txt-cli/someday_maybe.txt{.back,}"
     alias vimtodo="$EDITOR $HOME/todo.txt-cli/todo.txt"
-    alias vimvimrc="$EDITOR $HOME/.config/nvim/init.vim"
+    alias vimvimrc="$EDITOR $XDG_CONFIG_HOME/nvim/init.vim"
     alias vimwaiting="$EDITOR $HOME/todo.txt-cli/waiting.txt"
     alias vds="$EDITOR ~/work/gtd/processes.md -c ':tabedit ~/work/gtd/experiments.md'"
     alias gtdprojects="rg -o '\+\S+' ~/todo.txt-cli/someday.todo.txt | sort | uniq -c | sort -n | tac"
@@ -335,7 +346,7 @@
     function test_rc_lua() {
         Xephyr -ac -br -noreset -screen 800x600 :1 &
         sleep 1
-        DISPLAY=:1.0 awesome -c ~/.config/awesome/rc.lua.new
+        DISPLAY=:1.0 awesome -c "$XDG_CONFIG_HOME/awesome/rc.lua.new"
     }
     function markdown2html() {
         MD_FILE=$1
