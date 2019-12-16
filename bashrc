@@ -242,7 +242,12 @@
         alias screen_split="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --right-of eDP-1"
     # }}}
 
-    alias connect_flip4='bluetoothctl connect F8:DF:15:E9:D3:BA'
+    # PYTHON {{{
+        alias activate='source venv/bin/activate'
+    # }}}
+
+    alias flip4_disconnect='bluetoothctl disconnect F8:DF:15:E9:D3:BA'
+    alias flip4_connect='bluetoothctl connect F8:DF:15:E9:D3:BA'
     alias d='sudo docker'
     alias dc='sudo docker-compose'
     alias dfh='df -h'
