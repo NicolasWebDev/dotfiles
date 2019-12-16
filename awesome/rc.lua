@@ -33,6 +33,8 @@ run_once("whatsapp-nativefier")
 run_once("nm-applet")
 run_once("redshift")
 run_once("blueman-applet")
+-- To be able to control mpd using playerctl.
+run_once("mpDris2")
 -- }}}
 
 -- {{{ Error handling
@@ -422,7 +424,10 @@ root.buttons(awful.util.table.join(
 globalkeys = awful.util.table.join(
     -- Perso bindings
     awful.key({ "Control", "Mod1" }, "l", function () awful.util.spawn(screenlock_cmd) end),
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("sudo xbacklight -dec 10") end),
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("sudo xbacklight -inc 10") end),
     awful.key({ }, "XF86AudioPlay", function () awful.util.spawn("playerctl play-pause") end),
+    awful.key({ modkey,           }, "a", function() awful.util.spawn("playerctl play-pause") end),
     awful.key({ modkey,           }, "Pause", function () awful.util.spawn("gnome-pomodoro --pause-resume") end),
     awful.key({ }, "XF86AudioNext", function () awful.util.spawn("playerctl next") end),
     awful.key({ }, "XF86AudioPrev", function () awful.util.spawn("playerctl previous") end),
@@ -508,9 +513,9 @@ globalkeys = awful.util.table.join(
                   mypromptbox[mouse.screen].widget,
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
-              end),
+              end)
     -- Menubar
-    awful.key({ modkey,           }, "a", function() menubar.show() end)
+    -- awful.key({ modkey,           }, "a", function() menubar.show() end)
 )
 
 clientkeys = awful.util.table.join(
