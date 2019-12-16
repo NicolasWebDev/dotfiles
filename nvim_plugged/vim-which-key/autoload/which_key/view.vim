@@ -1,5 +1,5 @@
 let s:TYPE = g:which_key#util#TYPE
-let s:displaynames = {
+let s:default_displaynames = {
       \ ' ': 'SPC',
       \ '<C-H>': 'BS',
       \ '<C-I>': 'TAB',
@@ -13,21 +13,35 @@ function! which_key#view#prepare(runtime) abort
   return [layout, rows]
 endfunction
 
+function! which_key#view#get_displaynames()
+  if exists('g:which_key_display_names')
+    return g:which_key_display_names
+  else
+    return s:default_displaynames
+  endif
+endfunction
+
 function! s:calc_layout(mappings) abort " {{{
   let layout = {}
   let smap = filter(copy(a:mappings), 'v:key !=# "name" && !(type(v:val) == s:TYPE.list && v:val[1] == "which_key_ignore")')
   let layout.n_items = len(smap)
-  let length = values(map(smap,
-        \ 'strdisplaywidth(get(s:displaynames, toupper(v:key), v:key).'.
-        \ '(type(v:val) == s:TYPE.dict ? v:val["name"] : v:val[1]))'))
+  let displaynames = which_key#view#get_displaynames()
 
-  let maxlength = max(length) + g:which_key_hspace
+  let prefix_length = values(map(copy(smap),
+        \ 'strdisplaywidth(get(displaynames, toupper(v:key), v:key))'))
+  let suffix_length = values(map(smap,
+        \ 'strdisplaywidth(type(v:val) ==s:TYPE.dict ?'.
+        \ 'get(v:val, "name", "") : v:val[1])'))
+
+  let maxlength = max(prefix_length) + max(suffix_length)
+        \ + strdisplaywidth(g:which_key_sep) + 2
   if g:which_key_vertical
     let layout.n_rows = winheight(0) - 2
     let layout.n_cols = layout.n_items / layout.n_rows + (layout.n_items != layout.n_rows)
     let layout.col_width = maxlength
     let layout.win_dim = layout.n_cols * layout.col_width
   else
+    let maxlength += g:which_key_hspace
     let layout.n_cols = winwidth(0) / maxlength
     let layout.n_rows = layout.n_items / layout.n_cols + (fmod(layout.n_items,layout.n_cols) > 0 ? 1 : 0)
     let layout.col_width = winwidth(0) / layout.n_cols
@@ -55,12 +69,32 @@ function! s:create_rows(layout, mappings) abort
   let col = 0
   let smap = sort(filter(keys(mappings), 'v:val !=# "name"'),'1')
 
+  let displaynames = which_key#view#get_displaynames()
+  if get(g:, 'which_key_align_by_seperator', 1)
+    let key_max_len = 0
+    for k in smap
+      let key = get(displaynames, toupper(k), k)
+      let width = strdisplaywidth(key)
+      if width > key_max_len
+        let key_max_len = width
+      endif
+    endfor
+  endif
+
   for k in smap
-    let key = get(s:displaynames, toupper(k), k)
-    let desc = type(mappings[k]) == type({}) ? mappings[k].name : mappings[k][1]
+    let key = get(displaynames, toupper(k), k)
+    let desc = type(mappings[k]) == s:TYPE.dict ? get(mappings[k], "name", "") : mappings[k][1]
     if desc == 'which_key_ignore'
       continue
     endif
+
+    if get(g:, 'which_key_align_by_seperator', 1)
+      let width = strdisplaywidth(key)
+      if key_max_len > width
+        let key = repeat(' ', key_max_len - width).key
+      endif
+    endif
+
     let item = s:combine(key, desc)
 
     let crow = get(rows, row, [])
@@ -89,30 +123,9 @@ function! s:create_rows(layout, mappings) abort
         let col += 1
       endif
     endif
-    silent execute "cnoremap <nowait> <buffer> ".substitute(k, "|", "<Bar>", ""). " " . s:escape_keys(k) ."<CR>"
+    " This would cause bugs when using vim popup
+    "silent execute "cnoremap <nowait> <buffer> ".substitute(k, "|", "<Bar>", ""). " " . s:escape_keys(k) ."<CR>"
   endfor
-
-  if get(g:, 'which_key_align_by_seperator', 1)
-    for i in range(0, col-1)
-      let cur_col = []
-      for j in range(0, n_rows)
-        if i < len(rows[j])
-          call add(cur_col, rows[j][i])
-        endif
-      endfor
-      let cur_col_keys = map(cur_col, 'strdisplaywidth(split(v:val)[0])')
-      let [max_key_len, min_key_len] = [max(cur_col_keys), min(cur_col_keys)]
-      if max_key_len != min_key_len
-        for j in range(0, n_rows)
-          if i < len(rows[j])
-            let key = split(rows[j][i])[0]
-            let len = strdisplaywidth(key)
-            let rows[j][i] = repeat(' ', max_key_len-len).rows[j][i][0:(l.col_width + 1 - (max_key_len -len))]
-          endif
-        endfor
-      endif
-    endfor
-  endif
 
   call map(rows, 'join(v:val, "")')
 

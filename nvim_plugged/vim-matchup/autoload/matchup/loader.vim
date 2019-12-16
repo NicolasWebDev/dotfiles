@@ -84,7 +84,8 @@ let s:match_word_cache = {}
 " }}}1
 
 function! s:init_delim_lists(...) abort " {{{1
-  let l:lists = { 'delim_tex': { 'regex': [], 'regex_backref': [] } }
+  let l:lists = { 'delim_tex': { 'regex': [], 'regex_backref': [],
+        \ 'midmap': {} } }
 
   " very tricky examples:
   " good: let b:match_words = '\(\(foo\)\(bar\)\):\3\2:end\1'
@@ -158,7 +159,10 @@ function! s:init_delim_lists(...) abort " {{{1
     let l:extra_list = map(range(len(l:words)), '{}')
 
     " pre-process various \g{special} instructions
-    let l:replacement = { 'hlend': '\%(hlend\)\{0}' }
+    let l:replacement = {
+          \ 'hlend': '\%(hlend\)\{0}',
+          \ 'syn': ''
+          \}
     for l:i in range(len(l:words))
       let l:special_flags = []
       let l:words[l:i] = substitute(l:words[l:i],
@@ -434,10 +438,19 @@ function! s:init_delim_lists(...) abort " {{{1
       \})
   endfor
 
+  if exists('b:match_midmap') && type(b:match_midmap) == type([])
+    let l:elems = deepcopy(b:match_midmap)
+    let l:lists.delim_tex.midmap = {
+          \ 'elements': l:elems,
+          \ 'strike': '\%(' . join(map(range(len(l:elems)),
+          \   '"\\(".l:elems[v:val][1]."\\)"'), '\|') . '\)'
+          \}
+  endif
+
   " generate combined lists
   let l:lists.delim_all = {}
   let l:lists.all = {}
-  for l:k in ['regex', 'regex_backref']
+  for l:k in ['regex', 'regex_backref', 'midmap']
     let l:lists.delim_all[l:k] = l:lists.delim_tex[l:k]
     let l:lists.all[l:k] = l:lists.delim_all[l:k]
   endfor

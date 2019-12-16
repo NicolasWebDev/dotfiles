@@ -20,7 +20,7 @@ function! which_key#start(vis, bang, prefix) " {{{
   endif
 
   let key = a:prefix
-  let s:which_key_trigger = key ==# ' ' ? 'SPC' : key
+  let s:which_key_trigger = key ==# ' ' ? '<space>' : key
 
   if !has_key(s:cache, key) || g:which_key_run_map_on_popup
     " First run
@@ -39,8 +39,7 @@ function! which_key#start(vis, bang, prefix) " {{{
       catch /^Vim:Interrupt$/
         return ''
       endtry
-      " <Esc>, <C-[>: 27
-      if c == 27
+      if s:is_exit_code(c)
         return ''
       endif
       let char = c == 9 ? '<Tab>' : nr2char(c)
@@ -51,6 +50,9 @@ function! which_key#start(vis, bang, prefix) " {{{
         let s:runtime = next_level
       elseif ty == s:TYPE.list
         call s:execute(next_level[0])
+        return
+      elseif g:which_key_fallback_to_native_key
+        call s:execute_native_fallback()
         return
       else
         call which_key#util#undefined(s:which_key_trigger)
@@ -64,6 +66,39 @@ function! which_key#start(vis, bang, prefix) " {{{
 
   let s:last_runtime_stack = [copy(s:runtime)]
   call which_key#window#open(s:runtime)
+endfunction
+
+" Argument: number
+function! s:is_exit_code(raw_char) abort
+  if !exists('s:exit_code')
+    if exists('g:which_key_exit')
+      let ty = type(g:which_key_exit)
+      if ty == s:TYPE.number || ty == s:TYPE.string
+        let s:exit_code = [g:which_key_exit]
+      elseif ty == s:TYPE.list
+        let s:exit_code = g:which_key_exit
+      else
+        echohl ErrorMsg
+        echom '[which-key] '.a:raw_char.' is invalid for option g:which_key_exit'
+        echohl None
+        return 1
+      endif
+    else
+      " <Esc>, <C-[>: 27
+      let s:exit_code = [27]
+    endif
+  endif
+
+  for e in s:exit_code
+    let ty = type(e)
+    if ty == s:TYPE.number && e == a:raw_char
+      return 1
+    elseif ty == s:TYPE.string && e == nr2char(a:raw_char)
+      return 1
+    endif
+  endfor
+
+  return 0
 endfunction
 
 function! s:create_runtime(key)
@@ -166,8 +201,7 @@ function! s:getchar() abort
     return ''
   endtry
 
-  " <Esc>, <C-[>: 27
-  if c == 27
+  if s:is_exit_code(c)
     call which_key#window#close()
     redraw!
     return ''
@@ -194,14 +228,11 @@ function! s:getchar() abort
     return ''
   endif
 
-  " <Tab>, <C-I> = 9
-  let input .= c == 9 ? '<Tab>' : nr2char(c)
-
+  let input .= which_key#util#parse_getchar(c)
   if s:has_children(input)
     while 1
       if !s:wait_with_timeout(g:which_key_timeout)
-        let c = getchar()
-        let input .= c == 9 ? '<Tab>' : nr2char(c)
+        let input .= which_key#util#parse_getchar(getchar())
       else
         break
       endif
@@ -215,8 +246,8 @@ function! which_key#wait_for_input() " {{{
   " redraw is needed!
   redraw
 
-  " Append the prompt in the buffer at last when using floating wnidow,
-  " or else show it in the cmdline.
+  " Append the prompt in the buffer at last when using floating or
+  " popup wnidow, otherwise show it in the cmdline.
   if !g:which_key_use_floating_win
     call s:prompt()
   endif
@@ -235,7 +266,7 @@ function! s:handle_input(input) " {{{
   let ty = type(a:input)
 
   if ty ==? s:TYPE.dict
-    let s:which_key_trigger .= ' '. (s:cur_char ==# ' ' ? 'SPC' : s:cur_char)
+    let s:which_key_trigger .= ' '. (s:cur_char ==# ' ' ? '<space>' : s:cur_char)
     call add(s:last_runtime_stack, copy(s:runtime))
     let s:runtime = a:input
     call which_key#window#fill(s:runtime)
@@ -245,6 +276,11 @@ function! s:handle_input(input) " {{{
   if ty ==? s:TYPE.list
     call which_key#window#close()
     call s:execute(a:input[0])
+  elseif g:which_key_fallback_to_native_key
+    call which_key#window#close()
+    " Is redraw needed here?
+    " redraw!
+    call s:execute_native_fallback()
   else
     if g:which_key_ignore_invalid_key
       call which_key#wait_for_input()
@@ -254,6 +290,18 @@ function! s:handle_input(input) " {{{
       call which_key#util#undefined(s:which_key_trigger)
     endif
   endif
+endfunction
+
+function! s:execute_native_fallback() abort
+  let l:reg = which_key#util#get_register()
+  let l:fallback_cmd = s:vis.l:reg.s:count.substitute(s:which_key_trigger, ' ', '', '').get(s:, 'cur_char', '')
+  try
+    execute 'normal! '.l:fallback_cmd
+  catch
+    echohl ErrorMsg
+    echom '[which-key] Exception: '.v:exception.' occurs for the fallback mapping: '.l:fallback_cmd
+    echohl None
+  endtry
 endfunction
 
 function! s:join(...) abort

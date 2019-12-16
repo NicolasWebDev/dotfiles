@@ -8,9 +8,15 @@ if !exists('g:loaded_matchup') || !exists('b:did_ftplugin')
   finish
 endif
 
-if matchup#util#check_match_words('bb2bcbee')
-  call matchup#util#append_match_words('/\*:\*/')
-endif
+let s:save_cpo = &cpo
+set cpo&vim
+
+let b:match_midmap = [
+      \ ['luaFunction', 'return'],
+      \]
+let b:undo_ftplugin .= '| unlet! b:match_midmap'
+
+let &cpo = s:save_cpo
 
 " vim: fdm=marker sw=2
 
