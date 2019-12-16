@@ -22,6 +22,7 @@ endfunction
     Plug 'tpope/vim-surround'
     Plug 'jiangmiao/auto-pairs'
     Plug 'morhetz/gruvbox'
+    Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
     Plug 'tpope/vim-abolish'
     Plug 'moll/vim-node'
     Plug 'chrisbra/csv.vim'
@@ -29,7 +30,6 @@ endfunction
     Plug 'w0rp/ale'
     Plug 'scrooloose/nerdtree'
     Plug 'Xuyuanp/nerdtree-git-plugin'
-    Plug 'python-rope/ropevim', { 'for': 'python' }
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
     Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-line'
     Plug 'tpope/vim-bundler'
@@ -186,6 +186,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
         \   'text': ['proselint', 'vale'],
         \   'markdown': ['mdl', 'proselint', 'remark-lint', 'vale'],
         \   'typescript': ['tslint'],
+        \   'python': ['pylint', 'flake8']
         \}
         let g:ale_fixers = {
         \   'javascript': ['prettier'],
@@ -253,7 +254,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
         let g:NERDTreeMapJumpNextSibling = '<C-s>'
         let g:NERDTreeMapJumpPrevSibling = '<C-t>'
         noremap <leader>n :NERDTreeToggle<cr>
-        let NERDTreeIgnore = ['\.pyc$']
+        let NERDTreeIgnore = ['\.pyc$', '__pycache__$']
         let NERDTreeShowLineNumbers = 1
     " }}}
 
@@ -278,7 +279,15 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
         let g:UltiSnipsSnippetsDir = $HOME."/.config/nvim/UltiSnips"
         let g:UltiSnipsSnippetDirectories = ['UltiSnips', $HOME.'/.config/nvim/UltiSnips']
     " }}}
-
+    
+    " PYTHON-MODE {{{
+        let g:pymode_python = 'python3' 
+        let g:pymode_virtualenv = 1
+        let g:pymode_lint_cwindow = 0
+        let g:pymode_doc_bind='Q'
+        let g:pymode_lint = 0
+    " }}}
+    
     " XML-EDIT {{{
         let xml_tag_completion_map = "»"
         let g:xml_syntax_folding=1
