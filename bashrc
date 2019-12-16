@@ -147,6 +147,19 @@
     function validate_todo_format() {
         ! (grep -v "^@" todo.txt-cli/todo.txt | grep -v "^x " | grep -v "^([A-D]).* #[a-z] +[a-z_]\+ .* \*[0-9]\+")
     }
+    function substract_times () {
+        # Usage: substract_times 15:27:33 13:46:51
+        # returns: 1:40:42
+        IFS=: read hour1 min1 sec1 <<< "$1"
+        IFS=: read hour2 min2 sec2 <<< "$2"
+        total_sec1=$((hour1*60*60 + min1*60 + sec1))
+        total_sec2=$((hour2*60*60 + min2*60 + sec2))
+        difference_sec=$((total_sec1 - total_sec2))
+        hours=$((difference_sec / 60 / 60))
+        mins=$((difference_sec / 60 % 60))
+        secs=$((difference_sec % 60))
+        printf "%02d:%02d:%02d\n" $hours $mins $secs
+    }
     function todo_times () {
         validate_todo_format || return 1
         echo "A:        $(todo_time '(A)')"
