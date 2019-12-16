@@ -249,6 +249,9 @@
     alias flip4_disconnect='bluetoothctl disconnect F8:DF:15:E9:D3:BA'
     alias flip4_connect='bluetoothctl connect F8:DF:15:E9:D3:BA'
     alias d='sudo docker'
+    alias docker_clean_images='sudo docker rmi $(sudo docker images -q)'
+    alias docker_clean_containers='sudo docker rm $(sudo docker ps -qa)'
+    alias docker_clean_volumes='sudo docker volume rm $(sudo docker volume ls -q)'
     alias dc='sudo docker-compose'
     alias dfh='df -h'
     alias hist='history | grep'
@@ -260,6 +263,7 @@
     alias notify-completion="/usr/bin/notify-send -t 10000 -i $TERM_ICON Task completed ; beep"
     alias notify-send="notify-send -t 10000"
     alias o='mimeo'
+    alias passl="pass | less -r"
     alias poweroff='systemctl poweroff'
     alias psgrep='ps aux | grep -v grep | grep'
     alias public_ip='dig +short myip.opendns.com @resolver1.opendns.com'
@@ -286,6 +290,7 @@
     alias v='nvim'
     alias vd='nvim -d'
     alias vimbashrc="$EDITOR $HOME/.bashrc ; source $HOME/.bashrc"
+    alias wine_diablo3="mesa_glthread=true WINEDEBUG=-all DRI_PRIME=1 WINEARCH=win32 WINEPREFIX=/home/sathors/.wine_diablo3 wine /home/sathors/.wine_diablo3/drive_c/'Program Files/Diablo III/Diablo III.exe' -opengl -launch"
     alias x='exit'
     alias xb="xsel -b"
     alias xp="xsel"
