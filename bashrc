@@ -210,26 +210,22 @@
     # }}}
 
     # PACMAN {{{
-        alias dropped_packages="comm -23 <(pacman -Qqm | sort) <(curl https://aur.archlinux.org/packages.gz | gzip -cd | sort)" # Find packages I have installed which are not in aur anymore. (ref: https://wiki.archlinux.org/index.php/Arch_User_Repository#How_do_I_find_out_if_any_of_my_installed_packages_disappeared_from_AUR?)
-        alias pac='sudo /usr/bin/pacman -S'
-        alias pacc='sudo /usr/bin/pacman -Scc'
-        alias paci='/usr/bin/pacman -Si'
-        alias paclf='/usr/bin/pacman -Ql'
-        alias paclo='/usr/bin/pacman -Qdt'   # list all orphaned packages
-        alias pacman_size='pacgraph -c' # print installed packages by size
-        alias pacq='/usr/bin/pacman -Q | grep'
-        alias pacr='sudo /usr/bin/pacman -Rs'
-        alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')" # Recursively remove ALL orphaned packages.
-        alias pacs='/usr/bin/pacman -Ss'
-        alias pacu='sudo /usr/bin/pacman -Syu'
-        alias pacuu='sudo /usr/bin/pacman -U *.pkg.*'
         alias ya='/usr/bin/yay -S'
+        alias ya_dropped_packages="comm -23 <(pacman -Qqm | sort) <(curl https://aur.archlinux.org/packages.gz | gzip -cd | sort)" # Find packages I have installed which are not in aur anymore. (ref: https://wiki.archlinux.org/index.php/Arch_User_Repository#How_do_I_find_out_if_any_of_my_installed_packages_disappeared_from_AUR?)
+        alias ya_size='pacgraph -c' # print installed packages by size
+        alias yac='/usr/bin/yay -Scc'
         alias yag='/usr/bin/yay -G'
         alias yai='/usr/bin/yay -Si'
+        alias yalf='/usr/bin/yay -Ql'
+        alias yalo='/usr/bin/yay -Qdt'   # list all orphaned packages
         alias yan='/usr/bin/yay -Pww' # Archlinux news.
         alias yao='for file in `pacman -Qmq` ; do yas $file | grep "installed:" ; done' # List obsolete packages from the AUR.
+        alias yaq='/usr/bin/yay -Q | grep'
+        alias yar='/usr/bin/yay -Rs'
+        alias yaro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')" # Recursively remove ALL orphaned packages.
         alias yas='/usr/bin/yay'
         alias yau='/usr/bin/yay'
+        alias yauu='/usr/bin/yay -U *.pkg.*'
         alias yaw='/usr/bin/yay -Syuw --repo --answerupgrade None --noconfirm' # Download only.
     # }}}
 
