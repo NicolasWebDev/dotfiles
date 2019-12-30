@@ -76,6 +76,7 @@
     complete -cf sudo # That line is used to enable auto-completion after sudo command.
     source "$HOME/.tmuxinator.bash" # Completion file for tmuxinator.
     eval $(keychain --eval --quiet id_rsa) # Used to keep rsa keys opened once for each boot.
+    eval $(keychain --eval --quiet second_id_rsa) # Used to keep rsa keys opened once for each boot.
     eval $(dircolors -b $HOME/.dircolors) # Set the colors used by ls and tree.
 # }}}
 
