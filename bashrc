@@ -231,12 +231,12 @@
     # }}}
 
     # SCREEN {{{
-        alias screen_detach='xrandr --output eDP-1 --auto --output HDMI-1 --off'
-        alias screen_detach_projector='xrandr --output eDP-1 --auto --output DP-2 --off'
-        alias screen_hdmi='xrandr | grep -q "HDMI-1 connected" && xrandr --output eDP-1 --off --output HDMI-1 --auto || echo "HDMI-1 is not connected"'
-        alias screen_mirror="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --same-as eDP-1"
-        alias screen_projector='xrandr --output eDP-1 --mode 1920x1080 --output DP-2 --mode 1280x800 --right-of eDP-1'
-        alias screen_split="xrandr --output eDP-1 --mode 1920x1080 --output HDMI-1 --mode 1920x1080 --right-of eDP-1"
+        alias screen_detach='xrandr --output eDP1 --auto --output HDMI1 --off'
+        alias screen_detach_projector='xrandr --output eDP1 --auto --output DP-2 --off'
+        alias screen_hdmi='xrandr | grep -q "HDMI1 connected" && xrandr --output eDP1 --off --output HDMI1 --auto || echo "HDMI1 is not connected"'
+        alias screen_mirror="xrandr --output eDP1 --mode 1920x1080 --output HDMI1 --mode 1920x1080 --same-as eDP1"
+        alias screen_projector='xrandr --output eDP1 --mode 1920x1080 --output DP-2 --mode 1280x800 --right-of eDP1'
+        alias screen_split="xrandr --output eDP1 --mode 1920x1080 --output HDMI1 --mode 1920x1080 --right-of eDP1"
     # }}}
 
     # PYTHON {{{
