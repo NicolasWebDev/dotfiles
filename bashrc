@@ -245,6 +245,8 @@
 
     alias flip4_disconnect='bluetoothctl disconnect F8:DF:15:E9:D3:BA'
     alias flip4_connect='bluetoothctl connect F8:DF:15:E9:D3:BA'
+    alias thonet_and_vander_connect='bluetoothctl connect 23:E6:B1:30:46:CC'
+    alias thonet_and_vander_disconnect='bluetoothctl disconnect 23:E6:B1:30:46:CC'
     alias d='sudo docker'
     alias docker_clean_images='sudo docker rmi $(sudo docker images -q)'
     alias docker_clean_containers='sudo docker rm $(sudo docker ps -qa)'
