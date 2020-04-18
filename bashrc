@@ -1,5 +1,14 @@
 [[ $- != *i* ]] && return # If not running interactively, don't do anything.
 
+# Temporary fix for mdn docsets in Zeal.
+# See https://github.com/zealdocs/zeal/issues/1155#issuecomment-553213420
+zeal-docs-fix() {
+    pushd "$HOME/.local/share/Zeal/Zeal/docsets" >/dev/null || return
+    find . -iname 'react-main*.js' -exec rm '{}' \;
+    popd >/dev/null || exit
+}
+# zeal-docs-fix
+
 # XDG INITIALIZATION {{{
     # https://wiki.archlinux.org/index.php/XDG_Base_Directory
     export XDG_CONFIG_HOME="$HOME/.config"
