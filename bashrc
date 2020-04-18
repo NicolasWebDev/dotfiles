@@ -242,8 +242,7 @@ zeal-docs-fix() {
     alias dc='sudo docker-compose'
     alias dfh='df -h'
     alias hist='history | grep'
-    alias lc='ls --color=auto --format=single-column'
-    alias ll='ls --color=auto -lX'
+    alias ll='exa --classify --long'
     alias backup_mount='sudo mount /dev/sda6 /mnt/data ; sudo mount /dev/sdb5 /mnt/backup'
     alias backup_umount='sudo umount /mnt/backup'
     alias mount_galaxy='jmtpfs ~/mnt/galaxy'
@@ -268,8 +267,8 @@ zeal-docs-fix() {
     alias te='trans en:en'
     alias term_colors='for x in 0 1 4 5 7 8; do for i in `seq 30 37`; do for a in `seq 40 47`; do echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "; done; echo; done; done; echo "";'
     alias tfs='trans es:'
-    alias tree1='tree -L 1'
-    alias tree2='tree -L 2'
+    alias tree1='exa --tree --level=1'
+    alias tree2='exa --tree --level=2'
     alias ts='trans es:es'
     alias tts='trans :es'
     alias umount_galaxy='fusermount -u ~/mnt/galaxy'
@@ -313,6 +312,7 @@ zeal-docs-fix() {
 # }}}
 
 # OVERWRITE COMMANDS {{{
+    alias tree='exa --tree'
     alias beep='aplay /usr/share/sounds/alsa/finished.wav'
     alias cat="bat"
     alias cp='cp -i'
@@ -323,7 +323,7 @@ zeal-docs-fix() {
     alias ln='ln -i'
     alias ssh='TERM=xterm-256color ssh'
     alias subdl="subdl --download=best-rating"
-    alias ls='ls --color=auto'
+    alias ls='exa --classify'
     alias mkdir='mkdir -pv'
     alias mount='mount | column -t'
     alias mv='mv -i'
