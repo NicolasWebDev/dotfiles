@@ -33,6 +33,8 @@ run_once("whatsapp-nativefier")
 run_once("nm-applet")
 run_once("redshift")
 run_once("blueman-applet")
+run_once("chromium")
+run_once("zeal")
 -- To be able to control mpd using playerctl.
 run_once("mpDris2")
 -- }}}
