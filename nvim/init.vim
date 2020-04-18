@@ -79,6 +79,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
    set wildmode=list:longest,full
    set cursorline " Highlight cursor line (must come after colorscheme command to take effect).
    set cursorcolumn
+   set termguicolors " Enable TrueColors
 " }}}
 
 " COMMANDS {{{
@@ -187,7 +188,6 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " }}}
 
     " GRUVBOX {{{
-        let g:gruvbox_contrast_dark='hard'
         let g:gruvbox_italic=1
         colorscheme gruvbox
     " }}}

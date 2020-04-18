@@ -27,7 +27,6 @@ end
 -- {{{ Autostart
 -- Swap caps/escape.
 run_once("setxkbmap -option caps:swapescape")
-run_once("urxvtd -q -o")
 run_once("slack")
 run_once("whatsapp-nativefier")
 run_once("nm-applet")
@@ -69,7 +68,7 @@ end
 beautiful.init(awful.util.getdir("config") .. "/themes/perso/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvtc -e tmux"
+terminal = "alacritty -e tmux"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 screenlock_cmd = "sflock -c ' ' -h"
