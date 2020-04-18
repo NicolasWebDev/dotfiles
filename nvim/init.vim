@@ -178,7 +178,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
         \   'javascript': ['eslint'],
         \   'text': ['proselint', 'vale'],
         \   'markdown': ['mdl', 'proselint', 'remark-lint', 'vale'],
-        \   'typescript': ['tslint'],
+        \   'typescript': ['eslint'],
         \   'python': ['pylint', 'flake8']
         \}
         let g:ale_fixers = {
