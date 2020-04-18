@@ -58,14 +58,24 @@ zeal-docs-fix() {
 # }}}
 
 # INITIALIZATION {{{
-    eval "$(rbenv init -)" # Initialize rbenv.
-    source /usr/share/nvm/init-nvm.sh # Initialize nvm.
+    # NVM {{{
+        # To fix slow bash startup time:
+        # https://github.com/nvm-sh/nvm/issues/1277#issuecomment-536218082
+        [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
+        source /usr/share/nvm/nvm.sh --no-use
+        source /usr/share/nvm/bash_completion
+        source /usr/share/nvm/install-nvm-exec
+        export PATH="$NVM_DIR/versions/node/v$(<$NVM_DIR/alias/default)/bin:$PATH"
+        alias nvm="unalias nvm; [ -s '/usr/local/opt/nvm/nvm.sh' ] && . '/usr/local/opt/nvm/nvm.sh'; nvm $@"
+    # }}}
+    # Use bash-completion, if available
+    [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
+            . /usr/share/bash-completion/bash_completion
+
     source /usr/share/doc/pkgfile/command-not-found.bash # Hook to suggest package for an unknown command.
     complete -cf sudo # That line is used to enable auto-completion after sudo command.
     source "$HOME/.tmuxinator.bash" # Completion file for tmuxinator.
-    eval $(keychain --eval --quiet id_rsa) # Used to keep rsa keys opened once for each boot.
-    eval $(keychain --eval --quiet second_id_rsa) # Used to keep rsa keys opened once for each boot.
-    eval $(dircolors -b $HOME/.dircolors) # Set the colors used by ls and tree.
+    eval $(keychain --eval --noask --quiet id_rsa second_id_rsa) # Used to keep rsa keys opened once for each boot.
 # }}}
 
 # GTD {{{
