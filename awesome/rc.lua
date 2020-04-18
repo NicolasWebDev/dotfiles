@@ -615,7 +615,7 @@ awful.rules.rules = {
     -- Set Firefox to always map on tags number 2 of screen 1.
     { rule = { class = "Firefox" }, properties = { tag = tags[1][1] } },
     { rule = { class = "Slack" }, properties = { tag = tags[1][8] } },
-    { rule = { class = "whats-app-nativefier-d52542" }, properties = { tag = tags[1][8] } },
+    { rule = { class = "whatsapp-nativefier-d40211" }, properties = { tag = tags[1][8] } },
     { rule = { class = "qBittorrent" }, properties = { tag = tags[1][6] } },
     { rule = { class = "Uget-gtk" }, properties = { tag = tags[1][6] } },
     { rule = { class = "Pdfpc", role = "presentation" },
