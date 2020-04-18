@@ -7,6 +7,7 @@ endfunction
 " VIM-PLUG {{{
     call plug#begin('~/.local/share/nvim/plugged')
     Plug '/usr/bin/fzf'
+    Plug 'junegunn/fzf.vim'
     Plug 'machakann/vim-highlightedyank'
     Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
     Plug 'RRethy/vim-illuminate'
@@ -15,16 +16,13 @@ endfunction
     Plug 'easymotion/vim-easymotion'
     Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
     Plug 'vim-airline/vim-airline'
-    Plug 'ervandew/supertab'
     Plug 'sheerun/vim-polyglot'
-    Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-surround'
     Plug 'jiangmiao/auto-pairs'
     Plug 'morhetz/gruvbox'
     Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
     Plug 'tpope/vim-abolish'
-    Plug 'moll/vim-node'
     Plug 'chrisbra/csv.vim'
     Plug 'dhruvasagar/vim-table-mode'
     Plug 'w0rp/ale'
@@ -34,10 +32,8 @@ endfunction
     Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-line'
     Plug 'tpope/vim-bundler'
     Plug 'tpope/vim-rails'
-    Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
-    Plug 'slim-template/vim-slim', { 'for': 'slim' }
     Plug 'sukima/xmledit'
-    Plug 'Valloric/YouCompleteMe', { 'do': './install.py --js-completer' }
+    Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --ts-completer' }
     Plug 'andymass/vim-matchup'
     Plug 'Sathors/vim-blockle', { 'for': 'ruby' }
     Plug 'killphi/vim-ruby-refactoring', { 'for': 'ruby' }
@@ -48,11 +44,7 @@ endfunction
     Plug 'chrisbra/Recover.vim'
     Plug 'tmhedberg/SimpylFold'
     Plug 'sunaku/vim-ruby-minitest', { 'for': 'ruby' }
-    Plug 'othree/html5.vim'
-    Plug 'StanAngeloff/php.vim', { 'for': 'php' }
     Plug 'takac/vim-hardtime'
-    Plug 'pangloss/vim-javascript'
-    Plug 'mxw/vim-jsx', { 'for': 'javascript' }
     Plug 'Yggdroot/indentLine'
     Plug 'mileszs/ack.vim'
     Plug 'ryanoasis/vim-devicons'
