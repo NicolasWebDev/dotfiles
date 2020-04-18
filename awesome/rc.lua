@@ -430,6 +430,7 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("sudo xbacklight -inc 10") end),
     awful.key({ }, "XF86AudioPlay", function () awful.util.spawn("playerctl play-pause") end),
     awful.key({ modkey,           }, "a", function() awful.util.spawn("playerctl play-pause") end),
+    awful.key({ modkey, "Shift" }, "a", function() awful.util.spawn_with_shell("sleep 0.5 && gnome-screenshot -a") end),
     awful.key({ modkey,           }, "Pause", function () awful.util.spawn("gnome-pomodoro --pause-resume") end),
     awful.key({ }, "XF86AudioNext", function () awful.util.spawn("playerctl next") end),
     awful.key({ }, "XF86AudioPrev", function () awful.util.spawn("playerctl previous") end),
