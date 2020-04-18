@@ -22,39 +22,19 @@ zeal-docs-fix() {
 
 # FZF CONFIGURATION {{{
     set -o vi # Taken from http://owen.cymru/fzf-ripgrep-navigate-with-bash-faster-than-ever-before. Has to be set before sourcing the key-bindings else they will not work.
-    export FZF_DEFAULT_COMMAND='rg --files 2>/dev/null'
+    export FZF_DEFAULT_COMMAND='fd --type f'
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_DEFAULT_OPTS='--bind ctrl-t:down,ctrl-s:up --reverse --no-height'
+    export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {} | head -500' --select-1"
+    export FZF_ALT_R_OPTS="--select-1 --preview 'echo {}' --preview-window down:3:wrap --bind '?:toggle-preview'"
+    export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
     source "/usr/share/fzf/key-bindings.bash"
-    source "/usr/share/fzf/completion.bash"
-    bind -x '"\C-p": mimeo "$(fzf)";' # C-p is used to open a file using nvim.
-# }}}
-
-# GCALCLI CONFIGURATION {{{
-    _CAL_OPTIONS='--monday --military --width=29'
-    alias cal='gcalcli'
-    alias calm="gcalcli calm $_CAL_OPTIONS"
-    alias cals='gcalcli search'
-    alias calw="gcalcli calw $_CAL_OPTIONS"
-    function calaz() {
-        _caladd Ziembra "$@"
-    }
-    function calai() {
-        _caladd IQBit "$@"
-    }
-    function _caladd() {
-        CALENDAR=$1
-        WHEN=$2
-        TITLE=$3
-        DURATION=${4:-60}
-        OTHERS=("${@:5}")
-        gcalcli --calendar "$CALENDAR" add --title "$TITLE" --when "$WHEN" --reminder 30 --duration "$DURATION" ${OTHERS[*]}
-    }
-    function cala() {
-        gcalcli agenda --military --width=29 --details attendees --details length --details email "$@" | rg -v "Email: info@nicolaswebdev.com|Length: 1 day|Length: 1:00:00"
-    }
-    function calan() {
-        _caladd info@nicolaswebdev.com "$@"
-    }
+    # Disabling because takes too much time and I don't use it.
+    # source "/usr/share/fzf/completion.bash"
+    bind -x '"\C-o": output="$(fzf)" && history -s "mimeo $output" && mimeo "$output"' # C-o is used to open a file using mimeo.
+    bind -x '"\C-p": output="$(fzf)" && history -s "nvim $output" && nvim "$output";' # C-p is used to open a file using nvim.
+    bind '"\er": shell-expand-line' # Necessary for the next bind.
+    bind '"\C-f": "$(fd --type d | fzf | perl -pe chomp | xargs -I @ printf %q "@")\er"' # Search a Folder and places it at the cursor position.
 # }}}
 
 # RUBY CONFIGURATION {{{
