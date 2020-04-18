@@ -1,4 +1,4 @@
-let s:TYPE = g:which_key#util#TYPE
+let s:TYPE = g:which_key#TYPE
 let s:default_displaynames = {
       \ ' ': 'SPC',
       \ '<C-H>': 'BS',
@@ -6,14 +6,14 @@ let s:default_displaynames = {
       \ '<TAB>': 'TAB',
       \ }
 
-function! which_key#view#prepare(runtime) abort
+function! which_key#renderer#prepare(runtime) abort
   let layout = s:calc_layout(a:runtime)
   let rows = s:create_rows(layout, a:runtime)
 
   return [layout, rows]
 endfunction
 
-function! which_key#view#get_displaynames()
+function! which_key#renderer#get_displaynames()
   if exists('g:which_key_display_names')
     return g:which_key_display_names
   else
@@ -23,9 +23,9 @@ endfunction
 
 function! s:calc_layout(mappings) abort " {{{
   let layout = {}
-  let smap = filter(copy(a:mappings), 'v:key !=# "name" && !(type(v:val) == s:TYPE.list && v:val[1] == "which_key_ignore")')
+  let smap = filter(copy(a:mappings), 'v:key !=# "name" && !(type(v:val) == s:TYPE.list && v:val[1] ==# "which_key_ignore")')
   let layout.n_items = len(smap)
-  let displaynames = which_key#view#get_displaynames()
+  let displaynames = which_key#renderer#get_displaynames()
 
   let prefix_length = values(map(copy(smap),
         \ 'strdisplaywidth(get(displaynames, toupper(v:key), v:key))'))
@@ -35,17 +35,42 @@ function! s:calc_layout(mappings) abort " {{{
 
   let maxlength = max(prefix_length) + max(suffix_length)
         \ + strdisplaywidth(g:which_key_sep) + 2
+
   if g:which_key_vertical
-    let layout.n_rows = winheight(0) - 2
+
+    " TODO multiple pages.
+    if g:which_key_floating_relative_win
+      let layout.n_rows = winheight(g:which_key_origin_winid) - 2
+    else
+      let layout.n_rows = winheight(0) - 2
+    endif
+
     let layout.n_cols = layout.n_items / layout.n_rows + (layout.n_items != layout.n_rows)
     let layout.col_width = maxlength
     let layout.win_dim = layout.n_cols * layout.col_width
+
+    let s:target_winwidth = layout.col_width
+
   else
     let maxlength += g:which_key_hspace
-    let layout.n_cols = winwidth(0) / maxlength
+
+    if g:which_key_floating_relative_win
+      let winwidth = winwidth(g:which_key_origin_winid)
+    else
+      let winwidth = &columns
+    endif
+
+    if maxlength > winwidth
+      let layout.n_cols = 1
+    else
+      let layout.n_cols = winwidth / maxlength
+    endif
+
     let layout.n_rows = layout.n_items / layout.n_cols + (fmod(layout.n_items,layout.n_cols) > 0 ? 1 : 0)
-    let layout.col_width = winwidth(0) / layout.n_cols
+    let layout.col_width = winwidth / layout.n_cols
     let layout.win_dim = layout.n_rows
+
+    let s:target_winwidth = winwidth
   endif
 
   if g:which_key_max_size
@@ -69,7 +94,7 @@ function! s:create_rows(layout, mappings) abort
   let col = 0
   let smap = sort(filter(keys(mappings), 'v:val !=# "name"'),'1')
 
-  let displaynames = which_key#view#get_displaynames()
+  let displaynames = which_key#renderer#get_displaynames()
   if get(g:, 'which_key_align_by_seperator', 1)
     let key_max_len = 0
     for k in smap
@@ -83,8 +108,8 @@ function! s:create_rows(layout, mappings) abort
 
   for k in smap
     let key = get(displaynames, toupper(k), k)
-    let desc = type(mappings[k]) == s:TYPE.dict ? get(mappings[k], "name", "") : mappings[k][1]
-    if desc == 'which_key_ignore'
+    let desc = type(mappings[k]) == s:TYPE.dict ? get(mappings[k], 'name', '') : mappings[k][1]
+    if desc ==# 'which_key_ignore'
       continue
     endif
 
@@ -133,13 +158,18 @@ function! s:create_rows(layout, mappings) abort
 endfunction " }}}
 
 function! s:combine(key, desc) abort
-  return join([a:key, g:which_key_sep, a:desc], ' ')
+  let item = join([a:key, g:which_key_sep, a:desc], ' ')
+  if strdisplaywidth(item) > s:target_winwidth
+    return item[ : s:target_winwidth - 4].'..'
+  else
+    return item
+  endif
 endfunction
 
 function! s:escape_keys(inp) abort " {{{
   " :h <>
   let l:ret = a:inp
-  let l:ret = substitute(l:ret, "<", "<lt>", "")
-  let l:ret = substitute(l:ret, "|", "<Bar>", "")
+  let l:ret = substitute(l:ret, '<', '<lt>', '')
+  let l:ret = substitute(l:ret, '|', '<Bar>', '')
   return l:ret
 endfunction " }}}

@@ -1,4 +1,4 @@
-" vim match-up - matchit replacement and more
+" vim match-up - even better matching
 "
 " Maintainer: Andy Massimino
 " Email:      a@normed.space
@@ -48,8 +48,6 @@ function! matchup#matchparen#enable() " {{{1
     autocmd InsertEnter,InsertChange * call s:matchparen.highlight(1, 1)
     autocmd InsertLeave * call s:matchparen.highlight(1)
   augroup END
-
-  call s:ensure_match_popup()
 
   if has('vim_starting')
     " prevent this from autoloading during timer callback at startup
@@ -138,7 +136,8 @@ function! s:matchparen.clear() abort dict " {{{1
     unlet! w:matchup_match_id_list
   endif
 
-  if exists('t:match_popup')
+  if exists('t:match_popup') && (exists('*win_gettype')
+        \ ? win_gettype() !=# 'popup' : &buftype !=# 'terminal')
     call popup_hide(t:match_popup)
   elseif has('nvim')
     call s:close_floating_win()
@@ -370,6 +369,11 @@ function! s:matchparen.highlight(...) abort dict " {{{1
     let l:modes .= "vV\<c-v>"
   endif
   if stridx(l:modes, l:real_mode) >= 0
+    return
+  endif
+
+  " prevent problems in visual block mode at the end of a line
+  if get(matchup#pos#get_cursor(), 4, 0) == 2147483647
     return
   endif
 
@@ -643,7 +647,14 @@ function! s:populate_floating_win(offscreen) " {{{1
     let width = max(map(copy(l:body), 'strdisplaywidth(v:val)'))
     let l:width += wincol()-virtcol('.')
     call nvim_win_set_width(s:float_id, l:width + 1)
-    call nvim_win_set_height(s:float_id, l:height)
+    if &winminheight != 1
+      let l:save_wmh = &winminheight
+      let &winminheight = 1
+      call nvim_win_set_height(s:float_id, l:height)
+      let &winminheight = l:save_wmh
+    else
+      call nvim_win_set_height(s:float_id, l:height)
+    endif
     call nvim_win_set_cursor(s:float_id, [l:lnum, 0])
     call nvim_win_set_option(s:float_id, 'wrap', v:false)
   endif
