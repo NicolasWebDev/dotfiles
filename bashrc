@@ -39,12 +39,11 @@ zeal-docs-fix() {
 
 # RUBY CONFIGURATION {{{
     export RUBYLIB="$HOME/work/my_scripts:$RUBYLIB"
-    alias b='bundle exec'
 # }}}
 
 # VARIABLES {{{
     PS1="${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
-    export PATH="$HOME/.rbenv/bin:$HOME/todo.txt-cli:$HOME/work/my_scripts:$HOME/.cabal/bin:$HOME/.local/bin:$PATH"
+    export PATH="$HOME/todo.txt-cli:$HOME/work/my_scripts:$PATH"
     export TERM_ICON="/usr/share/icons/Mint-X/apps/96/bash.svg"
     export MOZ_DISABLE_PANGO=1
     export WINEARCH=win32
@@ -278,7 +277,6 @@ zeal-docs-fix() {
     alias v='nvim'
     alias vd='nvim -d'
     alias vimbashrc="$EDITOR $HOME/.bashrc ; source $HOME/.bashrc"
-    alias wine_diablo3="mesa_glthread=true WINEDEBUG=-all DRI_PRIME=1 WINEARCH=win32 WINEPREFIX=/home/sathors/.wine_diablo3 wine /home/sathors/.wine_diablo3/drive_c/'Program Files/Diablo III/Diablo III.exe' -opengl -launch"
     alias x='exit'
     alias xb="xsel -b"
     alias xp="xsel"
@@ -323,7 +321,6 @@ zeal-docs-fix() {
     alias grep="grep --color=auto"
     alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m - \2|g'"
     alias ln='ln -i'
-    alias spotify='PULSE_PROP="module-stream-restore.id=spotify" /usr/bin/spotify' # To avoid spotify muting chrome, per the issue https://github.com/serialoverflow/blockify/issues/92.
     alias ssh='TERM=xterm-256color ssh'
     alias subdl="subdl --download=best-rating"
     alias ls='ls --color=auto'
