@@ -204,8 +204,15 @@ zeal-docs-fix() {
         alias gco='git checkout'
         alias gd='git diff'
         alias gdc='git diff --cached'
+        alias gds='git diff --compact-summary'
+        alias gdcs='git diff --cached --compact-summary'
         alias glf="git lf"
         alias gs='git status'
+        alias git2="GIT_SSH_COMMAND='ssh -i /home/sathors/.ssh/second_id_rsa' git"
+    # }}}
+
+    # EXA {{{
+        export LS_COLORS="*.mp3=38;5;135" # To make mp3 more readable in exa.
     # }}}
 
     # PACMAN {{{
@@ -216,6 +223,7 @@ zeal-docs-fix() {
         alias yag='/usr/bin/yay -G'
         alias yai='/usr/bin/yay -Si'
         alias yalf='/usr/bin/yay -Ql'
+        alias yaqi='/usr/bin/yay -Qi'
         alias yalo='/usr/bin/yay -Qdt'   # list all orphaned packages
         alias yan='/usr/bin/yay -Pww' # Archlinux news.
         alias yao='for file in `pacman -Qmq` ; do yas $file | grep "installed:" ; done' # List obsolete packages from the AUR.
@@ -224,7 +232,7 @@ zeal-docs-fix() {
         alias yaro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')" # Recursively remove ALL orphaned packages.
         alias yas='/usr/bin/yay'
         alias yau='/usr/bin/yay'
-        alias yauu='/usr/bin/yay -U *.pkg.*'
+        alias yauu='/usr/bin/yay -U'
         alias yaw='/usr/bin/yay -Syuw --repo --answerupgrade None --noconfirm' # Download only.
     # }}}
 
@@ -241,10 +249,8 @@ zeal-docs-fix() {
         alias activate='source venv/bin/activate'
     # }}}
 
-    alias flip4_disconnect='bluetoothctl disconnect F8:DF:15:E9:D3:BA'
-    alias flip4_connect='bluetoothctl connect F8:DF:15:E9:D3:BA'
-    alias thonet_and_vander_connect='bluetoothctl connect 23:E6:B1:30:46:CC'
-    alias thonet_and_vander_disconnect='bluetoothctl disconnect 23:E6:B1:30:46:CC'
+    alias cloc='scc'
+    alias cp_address='echo "Ed. Almagro Plaza, Suite 1012, Pedro Ponce Carrasco E8-06 y Diego de Almagro Quito, Ecuador" | xb'
     alias d='sudo docker'
     alias docker_clean_images='sudo docker rmi $(sudo docker images -q)'
     alias docker_clean_containers='sudo docker rm $(sudo docker ps -qa)'
@@ -260,9 +266,11 @@ zeal-docs-fix() {
     alias notify-send="notify-send -t 10000"
     alias o='mimeo'
     alias passl="pass | less -r"
+    alias playmidi='aplaymidi -p 128:0'
     alias poweroff='systemctl poweroff'
     alias psgrep='ps aux | grep -v grep | grep'
     alias public_ip='dig +short myip.opendns.com @resolver1.opendns.com'
+    alias random_album="rg '^\d{2,3}\.' docs/lists/music.md | shuf -n 1"
     alias reboot='systemctl reboot'
     alias rsync-backup='rsync -av --progress --delete --stats'
     alias sbe='setxkbmap fr bepo ; echo "keyboard switched to bepo"'
@@ -273,6 +281,8 @@ zeal-docs-fix() {
     alias sv='sudoedit'
     alias svd='EDITOR="nvim -d" sudoedit'
     alias svim='sudo /usr/bin/nvim'
+    alias switch_flip4='switch_bluetooth_device Flip F8:DF:15:E9:D3:BA'
+    alias switch_thonet_and_vander='switch_bluetooth_device Frei 23:E6:B1:30:46:CC'
     alias t='todo.sh'
     alias te='trans en:en'
     alias term_colors='for x in 0 1 4 5 7 8; do for i in `seq 30 37`; do for a in `seq 40 47`; do echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "; done; echo; done; done; echo "";'
@@ -348,6 +358,19 @@ zeal-docs-fix() {
 # }}}
 
 # FUNCTIONS {{{
+    function switch_bluetooth_device() {
+        DEVICE_ALIAS="$1"
+        DEVICE_ID="$2"
+
+        bluetoothctl info | grep -q "$DEVICE_ALIAS" \
+            && bluetoothctl disconnect "$DEVICE_ID" \
+            || bluetoothctl connect "$DEVICE_ID"
+    }
+    function cdiff() {
+        FIRST_FILE="$1"
+        SECOND_FILE="$2"
+        diff -u "$FIRST_FILE" "$SECOND_FILE" | diff-so-fancy
+    }
     function sum_digits() { # Echoes standard input, and print the sum of the numbers it contains.
         tee /dev/tty | rg -o '\d+(\.\d+)?' | paste -sd+ | bc
     }
