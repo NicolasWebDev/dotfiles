@@ -268,7 +268,8 @@
     alias notify-completion="/usr/bin/notify-send -t 10000 -i $TERM_ICON Task completed ; beep"
     alias notify-send="notify-send -t 10000"
     alias o='mimeo'
-    alias passl="pass | less -r"
+    alias passc='pass -c $(fd -t f . .password-store/ | sed -r "s/(\.password-store\/|\.gpg)//g" | fzf)'
+    alias passs='pass $(fd -t f . .password-store/ | sed -r "s/(\.password-store\/|\.gpg)//g" | fzf)'
     alias playmidi='aplaymidi -p 128:0'
     alias poweroff='systemctl poweroff'
     alias psgrep='ps aux | grep -v grep | grep'
