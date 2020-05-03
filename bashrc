@@ -47,14 +47,60 @@
 
 # INITIALIZATION {{{
     # NVM {{{
-        # To fix slow bash startup time:
-        # https://github.com/nvm-sh/nvm/issues/1277#issuecomment-536218082
-        [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
-        source /usr/share/nvm/nvm.sh --no-use
+        source /usr/share/nvm/nvm.sh
         source /usr/share/nvm/bash_completion
         source /usr/share/nvm/install-nvm-exec
-        export PATH="$NVM_DIR/versions/node/v$(<$NVM_DIR/alias/default)/bin:$PATH"
-        alias nvm="unalias nvm; [ -s '/usr/local/opt/nvm/nvm.sh' ] && . '/usr/local/opt/nvm/nvm.sh'; nvm $@"
+
+        find-up () {
+            path=$(pwd)
+            while [[ "$path" != "" && ! -e "$path/$1" ]]; do
+                path=${path%/*}
+            done
+            echo "$path"
+        }
+
+        cdnvm(){
+            cd "$@";
+            nvm_path=$(find-up .nvmrc | tr -d '[:space:]')
+
+            # If there are no .nvmrc file, use the default nvm version
+            if [[ ! $nvm_path = *[^[:space:]]* ]]; then
+
+                declare default_version;
+                default_version=$(nvm version default);
+
+                # If there is no default version, set it to `node`
+                # This will use the latest version on your machine
+                if [[ $default_version == "N/A" ]]; then
+                    nvm alias default node;
+                    default_version=$(nvm version default);
+                fi
+
+                # If the current version is not the default version, set it to use the default version
+                if [[ $(nvm current) != "$default_version" ]]; then
+                    nvm use default;
+                fi
+
+                elif [[ -s $nvm_path/.nvmrc && -r $nvm_path/.nvmrc ]]; then
+                declare nvm_version
+                nvm_version=$(<"$nvm_path"/.nvmrc)
+
+                declare locally_resolved_nvm_version
+                # `nvm ls` will check all locally-available versions
+                # If there are multiple matching versions, take the latest one
+                # Remove the `->` and `*` characters and spaces
+                # `locally_resolved_nvm_version` will be `N/A` if no local versions are found
+                locally_resolved_nvm_version=$(nvm ls --no-colors "$nvm_version" | tail -1 | tr -d '\->*' | tr -d '[:space:]')
+
+                # If it is not already installed, install it
+                # `nvm install` will implicitly use the newly-installed version
+                if [[ "$locally_resolved_nvm_version" == "N/A" ]]; then
+                    nvm install "$nvm_version";
+                elif [[ $(nvm current) != "$locally_resolved_nvm_version" ]]; then
+                    nvm use "$nvm_version";
+                fi
+            fi
+        }
     # }}}
     # Use bash-completion, if available
     [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
@@ -292,6 +338,7 @@
     alias tree='exa --tree'
     alias beep='aplay /usr/share/sounds/alsa/finished.wav'
     alias cat="bat"
+    alias cd='cdnvm'
     alias cp='cp -i'
     alias egrep="egrep --color=auto"
     alias firefox='firefox-aurora'
