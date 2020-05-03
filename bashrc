@@ -33,10 +33,8 @@
 # }}}
 
 # VARIABLES {{{
-    PS1="${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
     export PATH="$HOME/todo.txt-cli:$HOME/work/my_scripts:$PATH"
     export TERM_ICON="/usr/share/icons/Mint-X/apps/96/bash.svg"
-    export MOZ_DISABLE_PANGO=1
     export WINEARCH=win32
     export WINEPREFIX=$HOME/.wine
     source "$HOME/.secrets.sh"
@@ -44,7 +42,6 @@
     export EDITOR=nvim
     export BROWSER=/usr/bin/chromium
     export HISTSIZE=5000
-    export DO=104.236.197.222
     export CALIBRE_USE_SYSTEM_THEME="true"
 # }}}
 
@@ -71,9 +68,6 @@
 
 # GTD {{{
     alias vimgtd="cd $HOME/todo.txt-cli ; $EDITOR waiting.todo.txt -o someday.todo.txt -c ':vs projects.todo.txt' -c ':wincmd j' -c ':vs todo.txt' -c ':tabedit general.backlog.todo.txt' -c ':tabedit ziembra.backlog.todo.txt' -c ':tabedit marketing.backlog.todo.txt' -c ':tabedit growth.backlog.todo.txt'"
-    alias scope_a="backlog_scope \"$HOME/todo.txt-cli/todo.txt $HOME/todo.txt-cli/*.backlog.todo.txt\" '\(A\) ' | sum_digits"
-    alias scope_b="backlog_scope \"$HOME/todo.txt-cli/todo.txt $HOME/todo.txt-cli/*.backlog.todo.txt\" '\(B\) ' | sum_digits"
-    alias scope_ready="backlog_scope \"$HOME/todo.txt-cli/*.backlog.todo.txt\" '\+ready'"
     alias vimsomeday="$EDITOR $HOME/todo.txt-cli/someday_maybe.txt"
     alias sort_someday="awk '{print \$NF,\$0}' ~/todo.txt-cli/someday_maybe.txt | sort -nr | cut -f2- -d' ' > ~/todo.txt-cli/someday_maybe.txt.back ; mv -f ~/todo.txt-cli/someday_maybe.txt{.back,}"
     alias vimtodo="$EDITOR $HOME/todo.txt-cli/todo.txt"
@@ -81,35 +75,6 @@
     alias vimwaiting="$EDITOR $HOME/todo.txt-cli/waiting.txt"
     alias vds="$EDITOR ~/work/gtd/processes.md -c ':tabedit ~/work/gtd/experiments.md'"
     alias gtdprojects="rg -o '\+\S+' ~/todo.txt-cli/someday.todo.txt | sort | uniq -c | sort -n | tac"
-    function transpose_lilypond_from_c_to_eb() {
-        LILYPOND_SHEET="$1"
-
-        cat $LILYPOND_SHEET | \
-            sed "s/\ba\(is\|es\|[0-9 :',]\)/la\1/g" | \
-            sed "s/\bb\(is\|es\|[0-9 :',]\)/si\1/g" | \
-            sed "s/\bc\(is\|es\|[0-9 :',]\)/do\1/g" | \
-            sed "s/\bd\(is\|es\|[0-9 :',]\)/re\1/g" | \
-            sed "s/\be\(is\|es\|[0-9 :',]\)/mi\1/g" | \
-            sed "s/\bf\(is\|es\|[0-9 :',]\)/fa\1/g" | \
-            sed "s/\bg\(is\|es\|[0-9 :',]\)/sol\1/g" | \
-            sed 's/\bdo/a/g' | \
-            sed 's/\bdois/ais/g' | \
-            sed 's/\brees/bes/g' | \
-            sed 's/\bre\([^lp]\)/b\1/g' | \
-            sed 's/\breis/c/g' | \
-            sed 's/\bees/c/g' | \
-            sed 's/\bmi\([^nd]\)/cis\1/g' | \
-            sed 's/\bfa/d/g' | \
-            sed 's/\bfais/dis/g' | \
-            sed 's/\bsoles/ees/g' | \
-            sed 's/\bsol/e/g' | \
-            sed 's/\bsolis/f/g' | \
-            sed 's/\blaes/f/g' | \
-            sed 's/\bla\([^y]\)/fis\1/g' | \
-            sed 's/\blais/g/g' | \
-            sed 's/\bsies/g/g' | \
-            sed 's/\bsi/gis/g'
-    }
     function project_time() {
         pomodori2time $(grep -c "$1" $HOME/work/documentation/journal.md)
     }
@@ -199,6 +164,7 @@
         alias gdcs='git diff --cached --compact-summary'
         alias glf="git lf"
         alias gs='git status'
+        alias gr='git restore'
         alias git2="GIT_SSH_COMMAND='ssh -i /home/sathors/.ssh/second_id_rsa' git"
     # }}}
 
