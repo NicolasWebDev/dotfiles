@@ -13,6 +13,6 @@ setlocal formatoptions+=t
 " Highlight lines over 80 characters.
 let &l:colorcolumn=join(range(81,999),",")
 
-setlocal softtabstop=4
-setlocal shiftwidth=4
-setlocal tabstop=4
+setlocal softtabstop=2
+setlocal shiftwidth=2
+setlocal tabstop=2

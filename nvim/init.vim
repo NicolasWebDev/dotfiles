@@ -90,7 +90,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " Add my monthly tasks.
     command! GtdMonthly read ~/work/gtd/monthly_tasks.md
 " }}}
-   
+
 " AUTOCOMMANDS {{{
     " Disable YCM in the journal, because it makes editing really slow.
     autocmd BufReadPre ~/work/documentation/journal.md let b:ycm_largefile = 1
@@ -123,7 +123,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " Toggle line numbers and fold column for easy copying:
     nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
     " Open found file in a vertical split.
-    cnoremap vfind vertical sfind 
+    cnoremap vfind vertical sfind
     " Print the letters in english by lowest frequency to know where to jump.
     noremap <F6> :echo "Z J Q X K V B P G W Y F M C U L D H R S N I O A T E"<cr>
     noremap <leader>qq :bd<cr>
@@ -152,7 +152,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
         vmap <C-t> <Plug>MoveBlockDown
         vmap <C-s> <Plug>MoveBlockUp
     " }}}
-    
+
     " VIM-WHICH-KEY {{{
         nnoremap <silent> <leader> :WhichKey '\'<CR>
         nnoremap <silent> <localleader> :WhichKey '-'<CR>
@@ -179,10 +179,14 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
         \   'text': ['proselint', 'vale'],
         \   'markdown': ['mdl', 'proselint', 'remark-lint', 'vale'],
         \   'typescript': ['eslint'],
-        \   'python': ['pylint', 'flake8']
+        \   'python': ['pylint', 'flake8'],
+        \   'scala': ['fsc', 'sbtserver', 'scalac', 'scalastyle'],
         \}
         let g:ale_fixers = {
+        \   '*': ['remove_trailing_lines', 'trim_whitespace'],
         \   'javascript': ['prettier'],
+        \   'scala': ['scalafmt', 'remove_trailing_lines', 'trim_whitespace'],
+        \   'typescript': ['prettier'],
         \}
         let g:ale_fix_on_save = 1
     " }}}
@@ -203,6 +207,18 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
     " VIM-JAVASCRIPT {{{
         " Enable syntax highlightning of flow types.
         let g:javascript_plugin_flow = 1
+        let g:javascript_conceal_function             = "ƒ"
+        let g:javascript_conceal_null                 = "ø"
+        let g:javascript_conceal_this                 = "@"
+        let g:javascript_conceal_return               = "⇚"
+        let g:javascript_conceal_undefined            = "¿"
+        let g:javascript_conceal_NaN                  = "ℕ"
+        let g:javascript_conceal_prototype            = "¶"
+        let g:javascript_conceal_static               = "•"
+        let g:javascript_conceal_super                = "Ω"
+        let g:javascript_conceal_arrow_function       = "⇒"
+        let g:javascript_conceal_noarg_arrow_function = "🞅"
+        let g:javascript_conceal_underscore_arrow_function = "🞅"
     " }}}
 
     " VIM-HARDTIME {{{
@@ -256,7 +272,7 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
         let g:ycm_key_list_previous_completion = ['<C-s>', '<Down>']
         let g:SuperTabDefaultCompletionType = '<C-t>'
     " }}}
-    
+
     " ULTISNIPS {{{
         " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
         " better key bindings for UltiSnipsExpandTrigger
@@ -264,22 +280,22 @@ source ~/.vimrc_bepo " remappage des touches de navigation pour le bépo
         let g:UltiSnipsJumpForwardTrigger = "<tab>"
         let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
         let g:UltiSnipsListSnippets="<c-b>"
-        
+
         " If you want :UltiSnipsEdit to split your window.
         let g:UltiSnipsEditSplit="vertical"
         let g:ultisnips_python_style="sphinx"
         let g:UltiSnipsSnippetsDir = $HOME."/.config/nvim/UltiSnips"
         let g:UltiSnipsSnippetDirectories = ['UltiSnips', $HOME.'/.config/nvim/UltiSnips']
     " }}}
-    
+
     " PYTHON-MODE {{{
-        let g:pymode_python = 'python3' 
+        let g:pymode_python = 'python3'
         let g:pymode_virtualenv = 1
         let g:pymode_lint_cwindow = 0
         let g:pymode_doc_bind='Q'
         let g:pymode_lint = 0
     " }}}
-    
+
     " XML-EDIT {{{
         let xml_tag_completion_map = "»"
         let g:xml_syntax_folding=1
